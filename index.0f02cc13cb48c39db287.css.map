@@ -1,0 +1,1 @@
+{"version":3,"file":"index.0f02cc13cb48c39db287.css","mappings":"AAAA,KACE,sB","sources":["webpack://range-slider/./src/assets/styles/style.scss"],"sourcesContent":["body{\r\n  background-color:rgb(255, 170, 170);\r\n}"],"names":[],"sourceRoot":""}

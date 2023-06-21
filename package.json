@@ -6,7 +6,9 @@
   "scripts": {
     "start": "cross-env NODE_ENV=development webpack serve --open",
     "dev": "cross-env NODE_ENV=development webpack ",
-    "build": "cross-env NODE_ENV=production webpack "
+    "build": "cross-env NODE_ENV=production webpack ",
+    "predeploy": "npm run build",
+    "deploy": "gh-pages -d dist"
   },
   "browserslist": [
     "last 2 versions",

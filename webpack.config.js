@@ -3,7 +3,7 @@ const webpack = require("webpack");
 const fs = require("fs");
 const HtmlWebpackPlugin = require("html-webpack-plugin");
 const MiniCssExtractPlugin = require("mini-css-extract-plugin");
-// const { CleanWebpackPlugin } = require("clean-webpack-plugin");
+const { CleanWebpackPlugin } = require("clean-webpack-plugin");
 const CopyWebpackPlugin = require("copy-webpack-plugin");
 // const FileLoader = require("file-loader");
 
@@ -15,7 +15,7 @@ if (process.env.NODE_ENV === "production") {
 module.exports = {
   mode,
   entry: {
-    index: "/src/index.ts"
+    index: "./src/index.ts"
   },
   output: {
     path: path.resolve(__dirname, "dist"),
@@ -49,19 +49,26 @@ module.exports = {
     rules: [
       {
         test: /\.ts$/,
-        use: "ts-loader",
+        use: {
+          loader: "ts-loader",
+          options: {
+            transpileOnly: false
+          }
+        },
         include: [path.resolve(__dirname, "src")]
       },
-      {
-        test: /\.(ts|js)x?$/,
-        exclude: /node_modules/,
-        use: {
-          loader: "babel-loader",
-          options: {
-            presets: ["@babel/preset-env"]
-          }
-        }
-      },
+      // {
+      //   test: /\.(js|jsx|tsx|ts)$/,
+      //   exclude: /node_modules/,
+      //   use: {
+      //     loader: "babel-loader",
+      //     options: {
+      //       presets: [
+      //         ["@babel/preset-env", { targets: "defaults" }], "@babel/preset-typescript"
+      //       ]
+      //     }
+      //   }
+      // },
       {
         test: /\.html$/i,
         loader: "html-loader"
@@ -126,6 +133,9 @@ module.exports = {
             .replace(/\\/g, "/")
         }
       ]
+    }),
+    new CleanWebpackPlugin({
+      cleanOnceBeforeBuildPatterns: [path.join(__dirname, "dist/**/*")]
     })
   ]
 };

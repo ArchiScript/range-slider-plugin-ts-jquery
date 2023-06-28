@@ -1,18 +1,18 @@
-import { IRangeSlider } from "../types/IRangeSlider";
+import { IRangeSlider } from "../types/IModels/IRangeSlider";
 import { IObserver } from "../types/IObserver";
 
-class RangeSlider implements IRangeSlider {
-  private leftValue: number = 0;
-  private rightValue: number = 100;
+export class RangeSlider implements IRangeSlider {
+  private value: number = 0;
+  // private rightValue: number = 100;
   private observers: IObserver[] = [];
 
   setValue(value: number): void {
-    this.rightValue = value;
+    this.value = value;
     this.notifyObservers();
   }
 
   getValue(): number {
-    return this.leftValue;
+    return this.value;
   }
 
   addObserver(observer: IObserver): void {
@@ -25,7 +25,13 @@ class RangeSlider implements IRangeSlider {
 
   private notifyObservers(): void {
     this.observers.forEach((observer) => {
-      observer.update(this.leftValue, this.rightValue);
+      observer.update(this.value);
     });
+  }
+  test<T>(value: T): void {
+    console.log(value);
+  }
+  increment(): void {
+    this.value++;
   }
 }

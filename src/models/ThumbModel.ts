@@ -1,24 +1,21 @@
 import { IObserver } from "../types/IObserver";
 import { IThumbModel } from "../types/IModels/IThumbModel";
 export class ThumbModel implements IThumbModel {
-  public $element: HTMLElement;
-  public position: number;
+  private position: number;
   private observers: IObserver[] = [];
 
-  constructor(element: HTMLElement, position: number) {
-    this.$element = element;
-    this.position = position;
+  constructor() {
+    this.position = 0;
   }
 
-  public updatePosition(position: number): void {
-    this.position = position;
-  }
   getPosition(): number {
     return this.position;
   }
   setPosition(position: number): void {
     this.position = position;
+    this.notifyObservers();
   }
+
   enableDrag(): void {}
   disableDrag(): void {}
   addObserver(observer: IObserver): void {
@@ -27,5 +24,13 @@ export class ThumbModel implements IThumbModel {
 
   removeObserver(observer: IObserver): void {
     this.observers = this.observers.filter((obs) => obs !== observer);
+  }
+  private notifyObservers(): void {
+    for (const observer of this.observers) {
+      observer.update(this.position);
+    }
+  }
+  incrementPos(): void {
+    this.position++;
   }
 }

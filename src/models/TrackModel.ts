@@ -3,7 +3,7 @@ import { IObserver } from "../types/IObserver";
 
 export class TrackModel implements ITrackModel {
   public width: number = 200;
-  public height: number = 15;
+  public height: number = 10;
   private observers: IObserver[] = [];
 
   getWidth(): number {

@@ -5,18 +5,22 @@ import { RangeSliderPresenter } from "./presenters/RangeSliderPresenter";
 import { TrackPresenter } from "./presenters/TrackPresenter";
 import { TrackModel } from "./models/TrackModel";
 import { TrackView } from "./views/TrackView";
+import { ThumbModel } from "./models/ThumbModel";
+import { ThumbPresenter } from "./presenters/ThumbPresenter";
 // import { rangeSlider } from "./plugin-wrapper/plugin-wrapper";
-console.log("hi ts webpack!");
-console.log("hi ts wedgefbpack!");
-console.log("hi ts wedgefbpack!");
 
 const cont: HTMLElement = document.querySelector(".range-slider__container")!;
 const view = new RangeSliderView(cont);
 const model = new RangeSlider();
-const trackView = new TrackView(cont);
+const trackView = view.getTrackView();
 const trackModel = new TrackModel();
 const trackPresenter = new TrackPresenter(trackModel, trackView);
-const presenter = new RangeSliderPresenter(model, view, trackPresenter);
-presenter.init();
-// model.test();
-// rangeSlider();
+const thumbView = view.getThumbView();
+const thumbModel = new ThumbModel();
+const thumbPresenter = new ThumbPresenter(thumbModel, thumbView);
+const presenter = new RangeSliderPresenter(
+  model,
+  view,
+  trackPresenter,
+  thumbPresenter
+);

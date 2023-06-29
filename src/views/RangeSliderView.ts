@@ -1,18 +1,23 @@
 import { IRangeSliderView } from "../types/IViews/IRangeSliderView";
 import { TrackView } from "./TrackView";
+import { ThumbView } from "./ThumbView";
 export class RangeSliderView implements IRangeSliderView {
+  private $container: HTMLElement;
   private $element: HTMLElement;
-  private $input: HTMLElement;
-  private title: HTMLElement;
-  private track: TrackView;
+  private $title: HTMLElement;
+  private $trackView: TrackView;
+  private $thumbView: ThumbView;
+  private $trackElement: HTMLElement;
 
-  constructor(element: HTMLElement) {
-    this.$element = element;
-    this.track = new TrackView(this.$element);
-    this.$input = document.createElement("div");
-    this.$input.setAttribute("class", "range-slider");
-    // this.$input.dataset.value = "1";
-    this.title = document.createElement("h1");
+  constructor(container: HTMLElement) {
+    this.$container = container;
+
+    this.$element = document.createElement("div");
+    this.$element.setAttribute("class", "range-slider");
+    this.$trackView = new TrackView(this.$element);
+    this.$trackElement = this.$trackView.getTrackElement();
+    this.$thumbView = new ThumbView(this.$element);
+    this.$title = document.createElement("h1");
   }
 
   render(value: number): void {
@@ -20,14 +25,22 @@ export class RangeSliderView implements IRangeSliderView {
     RangeSlider--${value}
     `;
 
-    this.$element.appendChild(this.$input);
-    this.title.textContent = "Range Slider";
-    this.$element.prepend(this.title);
-    this.$input.innerHTML = inner;
+    this.$container.appendChild(this.$element);
+    this.$title.textContent = "Range Slider";
+    this.$container.prepend(this.$title);
+    this.$element.textContent = inner;
+    this.$element.appendChild(this.$trackElement);
+
+    this.$trackElement.appendChild(this.$thumbView.getThumbElement());
   }
-  
+  getTrackView(): TrackView {
+    return this.$trackView;
+  }
+  getThumbView(): ThumbView {
+    return this.$thumbView;
+  }
   addValueChangeListener(listener: Function): void {
-    this.$input.addEventListener("click", () => {
+    this.$element.addEventListener("click", () => {
       console.log("clicked on input");
       listener();
     });

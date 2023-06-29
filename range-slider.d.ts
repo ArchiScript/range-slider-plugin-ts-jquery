@@ -1,6 +1,6 @@
-interface JQuery<TElement = HTMLElement> {
-  rangeSlider(options?: RangeSliderOptions): this;
-}
+// interface JQuery<TElement = HTMLElement> {
+//   rangeSlider(options?: RangeSliderOptions): this;
+// }
 
 // interface RangeSliderOptions {
 //   min?: number;

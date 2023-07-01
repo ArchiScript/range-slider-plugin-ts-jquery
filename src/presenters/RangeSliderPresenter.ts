@@ -6,6 +6,7 @@ import { TrackPresenter } from "./TrackPresenter";
 import { ThumbPresenter } from "./ThumbPresenter";
 import { TrackModel } from "../models/TrackModel";
 import { TrackView } from "../views/TrackView";
+import { timers } from "jquery";
 
 export class RangeSliderPresenter implements IPresenter, IObserver {
   constructor(
@@ -23,7 +24,7 @@ export class RangeSliderPresenter implements IPresenter, IObserver {
 
   init(): void {
     this.model.addObserver(this);
-    this.view.addValueChangeListener(this.incrementHandler.bind(this));
+    this.thumbPresenter.addObserver(this);
     this.view.addValueChangeListener(this.updateView.bind(this));
 
     this.updateView();
@@ -31,12 +32,14 @@ export class RangeSliderPresenter implements IPresenter, IObserver {
   }
 
   update(value: number): void {
-    this.updateView();
+    this.view.render(value);
+    console.log(`observer works ${value}`);
   }
 
   updateValue(value: number): void {
     this.model.setValue(value);
   }
+
   incrementHandler(): void {
     this.model.increment();
     this.thumbPresenter.updatePosition(this.model.getValue());
@@ -44,7 +47,6 @@ export class RangeSliderPresenter implements IPresenter, IObserver {
   }
   private updateView(): void {
     const value = this.model.getValue();
-
     this.view.render(value);
   }
 }

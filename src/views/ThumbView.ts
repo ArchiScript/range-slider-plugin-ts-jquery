@@ -1,27 +1,32 @@
 import { IThumbView } from "../types/IViews/IThumbView";
 
 export class ThumbView implements IThumbView {
-  private $element: HTMLElement;
+  private $thumb: HTMLElement;
   private $parent: HTMLElement;
 
   constructor(parentElement: HTMLElement) {
-    this.$element = document.createElement("div");
-    this.$element.setAttribute("class", "range-slider__thumb");
+    this.$thumb = document.createElement("div");
+    this.$thumb.setAttribute("class", "range-slider__thumb");
     this.$parent = parentElement;
-    this.$parent.appendChild(this.$element);
+    this.$parent.appendChild(this.$thumb);
   }
 
   render(value: number): void {
-    this.$element.style.left = `${value}px`;
+    this.$thumb.style.left = `${value}px`;
   }
 
   addValueChangeListener(listener: Function): void {
-    this.$element.addEventListener("click", () => {
-      listener();
+    this.$thumb.addEventListener("click", () => {
+      // listener();
+    });
+  }
+  addStartDragListener(listener: Function): void {
+    this.$thumb.addEventListener("mousedown", (e) => {
+      listener(e);
     });
   }
 
   getThumbElement(): HTMLElement {
-    return this.$element;
+    return this.$thumb;
   }
 }

@@ -17,7 +17,10 @@ const trackModel = new TrackModel();
 const trackPresenter = new TrackPresenter(trackModel, trackView);
 const thumbView = view.getThumbView();
 const thumbModel = new ThumbModel();
-const thumbPresenter = new ThumbPresenter(thumbModel, thumbView);
+const thumbPresenter = new ThumbPresenter(
+  thumbModel,
+  thumbView
+);
 const presenter = new RangeSliderPresenter(
   model,
   view,

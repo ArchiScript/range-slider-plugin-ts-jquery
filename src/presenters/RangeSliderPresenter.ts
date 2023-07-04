@@ -5,9 +5,9 @@ import { IObserver } from "../types/IObserver";
 import { TrackPresenter } from "./TrackPresenter";
 import { ThumbPresenter } from "./ThumbPresenter";
 import { IOptions } from "../types/IOptions";
+import { ConfigService } from "../ConfigService/ConfigService";
 
 export class RangeSliderPresenter implements IPresenter, IObserver {
-  private defaultOptions: IOptions;
   constructor(
     private model: IRangeSlider,
     private view: IRangeSliderView,
@@ -19,20 +19,9 @@ export class RangeSliderPresenter implements IPresenter, IObserver {
     this.view = view;
     this.trackPresenter = trackPresenter;
     this.thumbPresenter = thumbPresenter;
-    this.defaultOptions = this.getDefaultOptions();
-    this.options = options
-      ? Object.assign({}, this.defaultOptions, options)
-      : this.defaultOptions;
+    this.options = options;
 
     this.init();
-  }
-  private getDefaultOptions(): IOptions {
-    return {
-      max: 200,
-      min: 0,
-      orientation: "horizontal",
-      tooltip: true
-    };
   }
   init(): void {
     this.model.addObserver(this);

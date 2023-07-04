@@ -5,8 +5,6 @@ import { IObserver } from "../types/IObserver";
 export class ThumbPresenter implements IThumbPresenter, IObserver {
   private model: IThumbModel;
   private view: IThumbView;
-  // private initialPosition: number;
-  // private currentPosition: number;
   private position: number;
   private dragBound!: EventListenerOrEventListenerObject;
   private stopDragBound!: EventListenerOrEventListenerObject;
@@ -15,8 +13,6 @@ export class ThumbPresenter implements IThumbPresenter, IObserver {
   constructor(model: IThumbModel, view: IThumbView) {
     this.model = model;
     this.view = view;
-    // this.initialPosition = this.model.getInitialPosition();
-    // this.currentPosition = this.model.getCurrentPosition();
     this.position = this.model.getPosition();
     this.init();
     console.log(this.observers);

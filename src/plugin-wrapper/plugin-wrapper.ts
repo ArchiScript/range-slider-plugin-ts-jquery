@@ -7,13 +7,16 @@ import { TrackView } from "../views/TrackView";
 import { ThumbModel } from "../models/ThumbModel";
 import { ThumbPresenter } from "../presenters/ThumbPresenter";
 import { IOptions } from "../types/IOptions";
+import { ConfigService } from "../ConfigService/ConfigService";
 
 import $ from "jquery";
-export function rangeSlider(
+function rangeSlider(
   this: JQuery<HTMLElement>,
-  opts: IOptions
+  opts?: IOptions
 ): JQuery<HTMLElement> {
   this.each(function () {
+    const options = new ConfigService(opts).getOptions();
+    console.log(options);
     const container = this;
     const view = new RangeSliderView(container);
     const model = new RangeSlider();
@@ -28,10 +31,13 @@ export function rangeSlider(
       view,
       trackPresenter,
       thumbPresenter,
-      opts
+      options
     );
   });
   return this;
 }
 
 $.fn.rangeSlider = rangeSlider;
+// $.fn.rangeSlider = function (opts?: IOptions) {
+//   return rangeSlider.call(this, opts);
+// };

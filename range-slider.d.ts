@@ -1,13 +1,5 @@
-// interface JQuery<TElement = HTMLElement> {
-//   rangeSlider(options?: RangeSliderOptions): this;
-// }
+import { IOptions } from "./src/types/IOptions";
 
-// interface RangeSliderOptions {
-//   min?: number;
-//   max?: number;
-//   value?: number | [number, number];
-//   step?: number;
-//   orientation?: "horizontal" | "vertical";
-//   range?: boolean;
-//   // Add more options as needed
-// }
+interface JQuery<TElement = HTMLElement> {
+  rangeSliderPlugin(options?: IOptions): this;
+}

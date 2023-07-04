@@ -1,6 +1,7 @@
 import { IRangeSliderView } from "../types/IViews/IRangeSliderView";
 import { TrackView } from "./TrackView";
 import { ThumbView } from "./ThumbView";
+import * as $ from "jquery";
 export class RangeSliderView implements IRangeSliderView {
   private $container: HTMLElement;
   private $element: HTMLElement;

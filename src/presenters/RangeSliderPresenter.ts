@@ -4,32 +4,34 @@ import { IRangeSliderView } from "../types/IViews/IRangeSliderView";
 import { IObserver } from "../types/IObserver";
 import { TrackPresenter } from "./TrackPresenter";
 import { ThumbPresenter } from "./ThumbPresenter";
-import { IOptions } from "../types/IOptions";
+import { IOptions } from "../types/IConfigurationService/IOptions";
 import { ConfigService } from "../ConfigService/ConfigService";
 
 export class RangeSliderPresenter implements IPresenter, IObserver {
+  private options: IOptions;
   constructor(
     private model: IRangeSlider,
     private view: IRangeSliderView,
     private trackPresenter: TrackPresenter,
-    private thumbPresenter: ThumbPresenter,
-    private options?: IOptions
+    private thumbPresenter: ThumbPresenter
   ) {
     this.model = model;
     this.view = view;
     this.trackPresenter = trackPresenter;
     this.thumbPresenter = thumbPresenter;
-    this.options = options;
+    this.options = ConfigService.getInstance().getOptions();
 
     this.init();
   }
   init(): void {
     this.model.addObserver(this);
+
     this.thumbPresenter.addObserver(this);
+    this.thumbPresenter.updatePosition(Number(this.options.min));
     this.view.addValueChangeListener(this.updateView.bind(this));
     this.updateView();
     this.thumbPresenter.updateView();
-
+    console.log("RanegsliderPresenter options:");
     console.log(this.options);
   }
 

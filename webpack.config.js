@@ -96,6 +96,13 @@ module.exports = {
           "sass-loader"
         ]
       },
+      {
+        test: /favicon\.ico$/,
+        type: "asset/resource",
+        generator: {
+          filename: "assets/favicons/[hash][ext][query]"
+        }
+      },
 
       {
         test: /\.(png|svg|jpg|jpeg|gif)/i,
@@ -121,7 +128,11 @@ module.exports = {
     new MiniCssExtractPlugin({
       filename: "[name].[contenthash].css"
     }),
-
+    // new CleanWebpackPlugin({
+    //   cleanOnceBeforeBuildPatterns: [path.join(__dirname, "dist/**/*")],
+    //   dangerouslyAllowCleanPatternsOutsideProject: true
+    // }
+    // ),
     new CopyWebpackPlugin({
       patterns: [
         {
@@ -133,9 +144,6 @@ module.exports = {
             .replace(/\\/g, "/")
         }
       ]
-    }),
-    new CleanWebpackPlugin({
-      cleanOnceBeforeBuildPatterns: [path.join(__dirname, "dist/**/*")]
     })
   ]
 };

@@ -6,7 +6,7 @@ import { TrackModel } from "../models/TrackModel";
 import { TrackView } from "../views/TrackView";
 import { ThumbModel } from "../models/ThumbModel";
 import { ThumbPresenter } from "../presenters/ThumbPresenter";
-import { IOptions } from "../types/IOptions";
+import { IOptions } from "../types/IConfigurationService/IOptions";
 import { ConfigService } from "../ConfigService/ConfigService";
 
 import $ from "jquery";
@@ -15,8 +15,7 @@ function rangeSlider(
   opts?: IOptions
 ): JQuery<HTMLElement> {
   this.each(function () {
-    const options = new ConfigService(opts).getOptions();
-    console.log(options);
+    const options = ConfigService.setInstance(opts).getOptions();
     const container = this;
     const view = new RangeSliderView(container);
     const model = new RangeSlider();
@@ -30,8 +29,7 @@ function rangeSlider(
       model,
       view,
       trackPresenter,
-      thumbPresenter,
-      options
+      thumbPresenter
     );
   });
   return this;

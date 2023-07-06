@@ -4,4 +4,5 @@ export interface IThumbPresenter {
   update(value: number): void;
   incrementHandler(): void;
   addObserver(observer: IObserver): void;
+  onTrackClick(clickPosition: number): void;
 }

@@ -6,8 +6,10 @@ import { TrackPresenter } from "./TrackPresenter";
 import { ThumbPresenter } from "./ThumbPresenter";
 import { IOptions } from "../types/IConfigurationService/IOptions";
 import { ConfigService } from "../ConfigService/ConfigService";
+import { Mediator } from "./Mediator";
 
 export class RangeSliderPresenter implements IPresenter, IObserver {
+  private mediator: Mediator;
   private options: IOptions;
   constructor(
     private model: IRangeSlider,
@@ -19,21 +21,21 @@ export class RangeSliderPresenter implements IPresenter, IObserver {
     this.view = view;
     this.trackPresenter = trackPresenter;
     this.thumbPresenter = thumbPresenter;
+    this.mediator = new Mediator(this.trackPresenter, this.thumbPresenter);
     this.options = ConfigService.getInstance().getOptions();
-
     this.init();
   }
   init(): void {
     this.model.addObserver(this);
-
     this.thumbPresenter.addObserver(this);
-    this.thumbPresenter.updatePosition(Number(this.options.min));
     this.view.addValueChangeListener(this.updateView.bind(this));
+    this.thumbPresenter.setMediator(this.mediator);
+    this.trackPresenter.setMediator(this.mediator);
     this.updateView();
     this.thumbPresenter.updateView();
-    console.log("RanegsliderPresenter options:");
-    console.log(this.options);
   }
+
+
 
   update(value: number): void {
     this.view.render(value);

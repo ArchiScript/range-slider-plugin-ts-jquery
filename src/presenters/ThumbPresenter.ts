@@ -2,28 +2,36 @@ import { IThumbPresenter } from "../types/IPresenters/IThumbPresenter";
 import { IThumbModel } from "../types/IModels/IThumbModel";
 import { IThumbView } from "../types/IViews/IThumbView";
 import { IObserver } from "../types/IObserver";
+import { ConfigService } from "../ConfigService/ConfigService";
+import { IOptions } from "../types/IConfigurationService/IOptions";
+import { Mediator } from "./Mediator";
 export class ThumbPresenter implements IThumbPresenter, IObserver {
   private model: IThumbModel;
   private view: IThumbView;
+  private mediator?: Mediator;
   private position: number;
+  // private startPosition: number;
   private dragBound!: EventListenerOrEventListenerObject;
   private stopDragBound!: EventListenerOrEventListenerObject;
   private observers: IObserver[] = [];
-
+  private options: IOptions = ConfigService.getInstance().getOptions();
   constructor(model: IThumbModel, view: IThumbView) {
     this.model = model;
     this.view = view;
-    this.position = this.model.getPosition();
+    this.position = Number(this.options.valueMin);
     this.init();
-    console.log(this.observers);
   }
 
   init(): void {
     this.model.addObserver(this);
-    this.updateView();
+    this.model.setPosition(this.position);
     this.view.addStartDragListener(this.startDrag.bind(this));
+    this.updateView();
   }
 
+  setMediator(mediator?: Mediator): void {
+    if (mediator) this.mediator = mediator;
+  }
   addObserver(observer: IObserver): void {
     this.observers.push(observer);
   }
@@ -35,9 +43,9 @@ export class ThumbPresenter implements IThumbPresenter, IObserver {
   update(value: number): void {
     this.updateView();
   }
+
   updatePosition(value: number): void {
     this.model.setPosition(value);
-    console.log(`pos - ${this.model.getPosition()}`);
   }
   updateView(): void {
     this.view.render(this.model.getPosition());
@@ -69,13 +77,16 @@ export class ThumbPresenter implements IThumbPresenter, IObserver {
 
     const currentPosition =
       event instanceof MouseEvent ? event.clientX : event.touches[0].clientX;
-    let movementX = currentPosition - this.position - this.model.getThumbSize();
+    console.log(`current position: ${currentPosition}`);
+    let movementX =
+      currentPosition - this.model.getMin() - this.model.getThumbSize();
     if (movementX < 0) {
       movementX = 0;
     } else if (movementX > this.model.getMax()) {
       movementX = this.model.getMax();
     }
     this.updatePosition(movementX);
+    console.log(movementX);
     this.notifyObservers();
   }
   private stopDrag(): void {
@@ -85,5 +96,10 @@ export class ThumbPresenter implements IThumbPresenter, IObserver {
     document.removeEventListener("mouseup", this.stopDragBound);
     document.removeEventListener("touchend", this.stopDragBound);
     console.log(`is dragging: ${this.model.isDragging}`);
+  }
+  public onTrackClick(clickPosition: number): void {
+    const pos = clickPosition - this.model.getThumbSize();
+    console.log(`clickPosition ${pos}`);
+    this.updatePosition(pos);
   }
 }

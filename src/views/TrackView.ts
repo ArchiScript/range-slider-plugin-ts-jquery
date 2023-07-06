@@ -16,7 +16,10 @@ export class TrackView implements ITrackView {
     this.$element.appendChild(this.$track);
     this.$track.style.width = `${width}px`;
     this.$track.style.height = `${height}px`;
-    // this.$track.style.backgroundColor = "grey";
-    console.log(`width: ${width}px, height: ${height}px`);
+  }
+  addPositionChangeListener(listener: Function): void {
+    this.$element.addEventListener("click", (e) => {
+      listener(e);
+    });
   }
 }

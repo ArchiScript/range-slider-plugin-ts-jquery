@@ -28,4 +28,9 @@ export class TrackModel implements ITrackModel {
   removeObserver(observer: IObserver): void {
     this.observers = this.observers.filter((obs) => obs !== observer);
   }
+  // notifyObservers(): void {
+  //   for (let observer of this.observers) {
+  //     observer.update();
+  //   }
+  // }
 }

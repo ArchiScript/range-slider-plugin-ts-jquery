@@ -3,13 +3,13 @@ import { IObserver } from "../types/IObserver";
 import { IOptions } from "../types/IConfigurationService/IOptions";
 import { ConfigService } from "../ConfigService/ConfigService";
 export class RangeSlider implements IRangeSlider {
-  private value: number = 0;
+  private value: number;
   private observers: IObserver[] = [];
-  private options: IOptions;
+  private options: IOptions = ConfigService.getInstance().getOptions();
 
   constructor() {
-    this.options = ConfigService.getInstance().getOptions();
-    this.setValue(Number(this.options.min));
+    this.value = Number(this.options.valueMin);
+    this.setValue(Number(this.options.valueMin));
   }
 
   setValue(value: number): void {

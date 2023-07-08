@@ -11,4 +11,5 @@ export interface IOptions {
   tooltip?: boolean;
   label?: string;
   input?: boolean;
+  containerWidth?: number;
 }

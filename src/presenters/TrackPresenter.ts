@@ -31,7 +31,6 @@ export class TrackPresenter implements ITrackPresenter, IObserver {
   }
   trackClickHandler(e: MouseEvent | TouchEvent): void {
     if (e instanceof MouseEvent) {
-      
       console.log(`trackClickHandler ${e.clientX}`);
       this.onThumbPositionChange(e.clientX);
       this.mediator?.notifyTrackClick(e.clientX);

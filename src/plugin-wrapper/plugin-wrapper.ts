@@ -15,8 +15,9 @@ function rangeSlider(
   opts?: IOptions
 ): JQuery<HTMLElement> {
   this.each(function () {
-    const options = ConfigService.setInstance(opts).getOptions();
     const container = this;
+    const c = container as Element;
+    const options = ConfigService.setInstance(opts, c).getOptions();
     const view = new RangeSliderView(container);
     const model = new RangeSlider();
     const trackView = view.getTrackView();

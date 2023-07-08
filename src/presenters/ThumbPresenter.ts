@@ -48,7 +48,8 @@ export class ThumbPresenter implements IThumbPresenter, IObserver {
     this.model.setPosition(value);
   }
   updateView(): void {
-    this.view.render(this.model.getPosition());
+    // this.view.render(this.model.getPosition());
+    this.view.render(this.model.getPositionObj());
   }
   incrementHandler(): void {
     this.model.incrementPos();
@@ -75,18 +76,20 @@ export class ThumbPresenter implements IThumbPresenter, IObserver {
   private drag(event: MouseEvent | TouchEvent): void {
     event.preventDefault();
 
-    const currentPosition =
+    let currentPosition =
       event instanceof MouseEvent ? event.clientX : event.touches[0].clientX;
-    console.log(`current position: ${currentPosition}`);
+
     let movementX =
       currentPosition - this.model.getMin() - this.model.getThumbSize();
+
+    let max = this.model.getMax();
     if (movementX < 0) {
       movementX = 0;
-    } else if (movementX > this.model.getMax()) {
-      movementX = this.model.getMax();
+    } else if (movementX > max - this.model.getThumbSize()) {
+      movementX = max - this.model.getThumbSize();
     }
     this.updatePosition(movementX);
-    console.log(movementX);
+    console.log(this.model.calculatePositionPercent(movementX));
     this.notifyObservers();
   }
   private stopDrag(): void {
@@ -101,5 +104,9 @@ export class ThumbPresenter implements IThumbPresenter, IObserver {
     const pos = clickPosition - this.model.getThumbSize();
     console.log(`clickPosition ${pos}`);
     this.updatePosition(pos);
+  }
+  forwardContainerWidth(width: number): void {
+    this.model.setContainerWidth(width);
+    console.log(`thumbPresenter: containerWidth: ${width}`);
   }
 }

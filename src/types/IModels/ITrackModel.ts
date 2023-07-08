@@ -1,7 +1,5 @@
 import { IObserver } from "../../types/IObserver";
 export interface ITrackModel {
-  width: number;
-  height: number;
   getWidth(): number;
   setWidth(width: number): void;
   getHeight(): number;

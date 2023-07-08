@@ -1,23 +1,27 @@
-body{
-  background-color:rgb(255, 170, 170);
+body {
+  background-color: rgb(255, 170, 170);
 }
-.range-slider{
 
-  height: 2rem;
+.range-slider-container {
   width: 300px;
-  cursor: pointer;
-  &__track{
-    position: relative;
-    background: rgb(167, 167, 167);
-    border-radius: 5px;
-    margin: 20px 0;
-  }
-  &__thumb{
-    position: absolute;
-    width: 15px;
-    height: 15px;
-    top: -2px;
-    border-radius: 50%;
-    background-color: red;
+
+  .range-slider {
+    cursor: pointer;
+
+    &__track {
+      position: relative;
+      background: rgb(167, 167, 167);
+      border-radius: 5px;
+      margin: 20px 0;
+    }
+
+    &__thumb {
+      position: absolute;
+      width: 15px;
+      height: 15px;
+      top: -2px;
+      border-radius: 50%;
+      background-color: red;
+    }
   }
 }

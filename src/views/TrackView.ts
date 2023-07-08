@@ -14,7 +14,7 @@ export class TrackView implements ITrackView {
 
   render(width: number, height: number): void {
     this.$element.appendChild(this.$track);
-    this.$track.style.width = `${width}px`;
+    this.$track.style.width = `${width}%`;
     this.$track.style.height = `${height}px`;
   }
   addPositionChangeListener(listener: Function): void {

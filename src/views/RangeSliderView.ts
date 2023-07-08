@@ -1,7 +1,6 @@
 import { IRangeSliderView } from "../types/IViews/IRangeSliderView";
 import { TrackView } from "./TrackView";
 import { ThumbView } from "./ThumbView";
-import * as $ from "jquery";
 export class RangeSliderView implements IRangeSliderView {
   private $container: HTMLElement;
   private $element: HTMLElement;
@@ -12,7 +11,7 @@ export class RangeSliderView implements IRangeSliderView {
 
   constructor(container: HTMLElement) {
     this.$container = container;
-
+    console.log(`containerWidth: ${getComputedStyle(this.$container).width}`);
     this.$element = document.createElement("div");
     this.$element.setAttribute("class", "range-slider");
     this.$trackView = new TrackView(this.$element);
@@ -45,5 +44,8 @@ export class RangeSliderView implements IRangeSliderView {
       console.log("clicked on input");
       listener();
     });
+  }
+  getContainerWidth(): number {
+    return parseInt(getComputedStyle(this.$container).width);
   }
 }

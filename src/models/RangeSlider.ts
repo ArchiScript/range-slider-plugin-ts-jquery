@@ -4,14 +4,17 @@ import { IOptions } from "../types/IConfigurationService/IOptions";
 import { ConfigService } from "../ConfigService/ConfigService";
 export class RangeSlider implements IRangeSlider {
   private value: number;
+  
   private observers: IObserver[] = [];
   private options: IOptions = ConfigService.getInstance().getOptions();
 
   constructor() {
     this.value = Number(this.options.valueMin);
-    this.setValue(Number(this.options.valueMin));
+    this.setValue(this.value);
+    console.log(this.value);
+    
   }
-
+  
   setValue(value: number): void {
     this.value = value;
     this.notifyObservers();

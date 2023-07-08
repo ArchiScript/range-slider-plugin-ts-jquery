@@ -1,5 +1,5 @@
 import { IThumbView } from "../types/IViews/IThumbView";
-
+import { IPositionObj } from "../types/IConfigurationService/IPositionObj";
 export class ThumbView implements IThumbView {
   private $thumb: HTMLElement;
   private $parent: HTMLElement;
@@ -11,8 +11,12 @@ export class ThumbView implements IThumbView {
     this.$parent.appendChild(this.$thumb);
   }
 
-  render(value: number): void {
-    this.$thumb.style.left = `${value}px`;
+  // render(value: number): void {
+  //   this.$thumb.style.left = `${value}%`;
+  // }
+  render(positionObj: IPositionObj): void {
+    this.$thumb.style.left = `${positionObj.percent}%`;
+    console.log(positionObj.percent);
   }
 
   addValueChangeListener(listener: Function): void {

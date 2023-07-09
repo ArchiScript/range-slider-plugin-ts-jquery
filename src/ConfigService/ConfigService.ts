@@ -9,7 +9,7 @@ export class ConfigService implements IConfig {
     orientation: "horizontal",
     min: 0,
     max: 100,
-    valueMin: 0,
+    value: 0,
     trackHeight: 10,
     tooltip: true
   };

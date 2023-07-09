@@ -4,8 +4,9 @@ export interface IOptions {
   trackHeight?: number;
   max?: number;
   min?: number;
-  valueMin?: number;
-  valueMax?: number;
+  // valueMin?: number;
+  // valueMax?: number;
+  value?: number | number[];
   ticks?: number;
   step?: number;
   tooltip?: boolean;

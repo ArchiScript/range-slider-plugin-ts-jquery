@@ -3,7 +3,7 @@ import $ from "jquery";
 import "./plugin-wrapper/plugin-wrapper";
 
 $(".range-slider-container").rangeSlider({
-  valueMin: 126,
-  max: 253,
+  value: 100,
+  max: 800,
   step: 4
 });

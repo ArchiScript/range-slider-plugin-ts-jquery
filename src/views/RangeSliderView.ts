@@ -24,7 +24,7 @@ export class RangeSliderView implements IRangeSliderView {
     const inner = `
     RangeSlider--${value}
     `;
-
+    console.log(value);
     this.$container.appendChild(this.$element);
     this.$title.textContent = "Range Slider";
     this.$container.prepend(this.$title);

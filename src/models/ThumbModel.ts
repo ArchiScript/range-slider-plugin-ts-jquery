@@ -2,7 +2,6 @@ import { IObserver } from "../types/IObserver";
 import { IThumbModel } from "../types/IModels/IThumbModel";
 import { IOptions } from "../types/IConfigurationService/IOptions";
 import { ConfigService } from "../ConfigService/ConfigService";
-import { IPositionObj } from "../types/IConfigurationService/IPositionObj";
 export class ThumbModel implements IThumbModel {
   private position: number;
   private observers: IObserver[] = [];
@@ -10,25 +9,28 @@ export class ThumbModel implements IThumbModel {
   private thumbSize: number = 15;
   private min: number;
   private max: number;
-  private containerWidth: number = 0;
-  private positionObj: IPositionObj = {};
+  private value: number;
+  private containerWidth: number;
   private options: IOptions = ConfigService.getInstance().getOptions();
 
   constructor() {
-    this.min = Number(this.options.min);
-    this.max = Number(this.options.max);
-    this.position = Number(this.options.valueMin);
-    this.positionObj = {
-      position: this.position,
-      percent: this.calculatePositionPercent(this.position)
-    };
+    this.min = this.options.min as number;
+    this.max = this.options.max as number;
+    this.position = this.options.value as number;
+    this.containerWidth = this.getContainerWidth() - this.getThumbSize();
+
+    this.value = this.options.value as number;
+
     this.test();
   }
 
   // ===========test====
   test(): void {
-    console.log(`=======--- ${this.positionObj.percent}`);
-    console.log(`====Proportion=== ${this.getProportionValue()}`);
+    console.log(
+      `containerWidth: ${this.containerWidth}====Position:${
+        this.position
+      }====Proportion=== ${this.getProportionValue(this.position)}`
+    );
   }
 
   getThumbSize(): number {
@@ -45,15 +47,15 @@ export class ThumbModel implements IThumbModel {
   }
   setPosition(position: number): void {
     this.position = position;
-    this.setPositionObj(position);
+    // this.notifyObservers();
+  }
+
+  setValue(value: number): void {
+    this.value = Math.round(value / this.getProportion());
     this.notifyObservers();
   }
-  getPositionObj(): IPositionObj {
-    return this.positionObj;
-  }
-  setPositionObj(position: number): void {
-    this.positionObj.position = position;
-    this.positionObj.percent = this.calculatePositionPercent(position);
+  getValue(): number {
+    return this.value;
   }
   enableDrag(): void {
     this.dragging = true;
@@ -73,42 +75,24 @@ export class ThumbModel implements IThumbModel {
   }
   private notifyObservers(): void {
     for (const observer of this.observers) {
-      observer.update(this.position);
+      observer.update(this.value);
     }
   }
-  incrementPos(): void {
-    this.position++;
-  }
-  calculatePositionPercent(position?: number): number {
-    const val = position ? position : this.position;
-    const max = this.getMax();
-    const min = this.getMin();
-    let pos = Math.round(((val - min) / (max - min)) * 100);
-    console.log(`pos====${pos}`);
-    return pos;
-  }
-  getPositionFromPercent(percent: number): number {
-    const max = this.getMax();
-    const min = this.getMin();
-    const scale = percent / 100;
-    let pos = scale * (max - min);
 
-    return pos;
-  }
-  setContainerWidth(containerWidth: number): void {
-    this.containerWidth = containerWidth;
-    console.log(`Thumb model: containerWidth: ${containerWidth}`);
-  }
   getContainerWidth(): number {
-    return Number(this.options.containerWidth);
+    return this.options.containerWidth as number;
   }
 
-  getPercentFromPx(elWidth: number, px: number): number {
-    return (px / elWidth) * 100;
+  getProportionValue(value: number): number {
+    const max = this.getMax();
+    const min = this.getMin();
+    const proportionValue = ((value - min) / (max - min)) * this.containerWidth;
+    return proportionValue;
   }
-  getProportionValue(): number {
-    const valueRange = this.max - this.min;
-    const pixelsPerValue = this.getContainerWidth() / valueRange;
-    return this.min + Math.round(this.getPosition() / pixelsPerValue);
+  getProportion(): number {
+    const max = this.getMax();
+    const min = this.getMin();
+    const proportion = this.containerWidth / (max - min);
+    return proportion;
   }
 }

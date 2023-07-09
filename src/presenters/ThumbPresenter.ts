@@ -10,6 +10,7 @@ export class ThumbPresenter implements IThumbPresenter, IObserver {
   private view: IThumbView;
   private mediator?: Mediator;
   private position: number;
+  private value: number;
   // private startPosition: number;
   private dragBound!: EventListenerOrEventListenerObject;
   private stopDragBound!: EventListenerOrEventListenerObject;
@@ -18,7 +19,8 @@ export class ThumbPresenter implements IThumbPresenter, IObserver {
   constructor(model: IThumbModel, view: IThumbView) {
     this.model = model;
     this.view = view;
-    this.position = Number(this.options.valueMin);
+    this.position = this.model.getProportionValue(this.options.value as number);
+    this.value = this.model.getValue();
     this.init();
   }
 
@@ -37,7 +39,8 @@ export class ThumbPresenter implements IThumbPresenter, IObserver {
   }
   private notifyObservers(): void {
     for (const observer of this.observers) {
-      observer.update(this.model.getPosition());
+      observer.update(this.model.getValue());
+      console.log(`notifyobserver: ${this.model.getValue()}`);
     }
   }
   update(value: number): void {
@@ -49,11 +52,9 @@ export class ThumbPresenter implements IThumbPresenter, IObserver {
   }
   updateView(): void {
     // this.view.render(this.model.getPosition());
-    this.view.render(this.model.getPositionObj());
+    this.view.render(this.model.getPosition());
   }
-  incrementHandler(): void {
-    this.model.incrementPos();
-  }
+
   getCurrentPosition(): number {
     return this.position;
   }
@@ -82,14 +83,18 @@ export class ThumbPresenter implements IThumbPresenter, IObserver {
     let movementX =
       currentPosition - this.model.getMin() - this.model.getThumbSize();
 
-    let max = this.model.getMax();
+    let max = this.model.getContainerWidth() - this.model.getThumbSize();
     if (movementX < 0) {
       movementX = 0;
-    } else if (movementX > max - this.model.getThumbSize()) {
-      movementX = max - this.model.getThumbSize();
+    } else if (movementX > max) {
+      movementX = max;
     }
     this.updatePosition(movementX);
-    console.log(this.model.calculatePositionPercent(movementX));
+    this.model.setValue(movementX);
+
+    console.log(
+      `========= getValue${this.model.getValue()}+++++++ movementX: ${movementX}`
+    );
     this.notifyObservers();
   }
   private stopDrag(): void {
@@ -104,9 +109,8 @@ export class ThumbPresenter implements IThumbPresenter, IObserver {
     const pos = clickPosition - this.model.getThumbSize();
     console.log(`clickPosition ${pos}`);
     this.updatePosition(pos);
-  }
-  forwardContainerWidth(width: number): void {
-    this.model.setContainerWidth(width);
-    console.log(`thumbPresenter: containerWidth: ${width}`);
+    this.model.setValue(pos);
+    this.notifyObservers();
+    console.log(`----set value: ${pos}`);
   }
 }

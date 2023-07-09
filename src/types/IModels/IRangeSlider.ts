@@ -5,5 +5,4 @@ export interface IRangeSlider {
   getValue(): number;
   addObserver(observer: IObserver): void;
   removeObserver(observer: IObserver): void;
-  increment(): void;
 }

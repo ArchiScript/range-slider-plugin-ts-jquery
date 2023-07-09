@@ -28,8 +28,6 @@ export class RangeSliderPresenter implements IPresenter, IObserver {
   init(): void {
     this.model.addObserver(this);
     this.thumbPresenter.addObserver(this);
-    this.view.addValueChangeListener(this.updateView.bind(this));
-    this.frowardContainerWidth();
     this.thumbPresenter.setMediator(this.mediator);
     this.trackPresenter.setMediator(this.mediator);
     this.updateView();
@@ -40,26 +38,15 @@ export class RangeSliderPresenter implements IPresenter, IObserver {
     );
   }
 
-  frowardContainerWidth(): void {
-    const width = this.view.getContainerWidth();
-    this.thumbPresenter.forwardContainerWidth(width);
-    console.log(`rangeSliderPresenter: containerWidth: ${width}`);
-  }
-
   update(value: number): void {
     this.view.render(value);
-    console.log(`observer works ${value}`);
+    console.log(`observer works----- ${value}`);
   }
 
   updateValue(value: number): void {
     this.model.setValue(value);
   }
 
-  incrementHandler(): void {
-    this.model.increment();
-    this.thumbPresenter.updatePosition(this.model.getValue());
-    console.log(this.model.getValue());
-  }
   private updateView(): void {
     const value = this.model.getValue();
     this.view.render(value);

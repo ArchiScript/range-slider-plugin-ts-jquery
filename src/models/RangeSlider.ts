@@ -11,7 +11,6 @@ export class RangeSlider implements IRangeSlider {
   constructor() {
     this.value = this.options.value as number;
     this.setValue(this.value);
-    console.log(this.value);
   }
 
   setValue(value: number): void {

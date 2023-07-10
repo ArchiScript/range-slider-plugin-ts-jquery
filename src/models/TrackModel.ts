@@ -23,7 +23,6 @@ export class TrackModel implements ITrackModel {
   }
 
   getHeight(): number {
-    console.log(this.height);
     return this.height;
   }
 

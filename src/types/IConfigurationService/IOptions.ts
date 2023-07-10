@@ -4,8 +4,7 @@ export interface IOptions {
   trackHeight?: number;
   max?: number;
   min?: number;
-  // valueMin?: number;
-  // valueMax?: number;
+  thumbSize?: number;
   value?: number | number[];
   ticks?: number;
   step?: number;

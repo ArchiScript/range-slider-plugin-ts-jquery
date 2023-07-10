@@ -6,6 +6,9 @@ import { TrackModel } from "../models/TrackModel";
 import { TrackView } from "../views/TrackView";
 import { ThumbModel } from "../models/ThumbModel";
 import { ThumbPresenter } from "../presenters/ThumbPresenter";
+import { FillModel } from "../models/FillModel";
+import { FillPresenter } from "../presenters/FillPresenter";
+import { FillView } from "../views/FillView";
 import { IOptions } from "../types/IConfigurationService/IOptions";
 import { ConfigService } from "../ConfigService/ConfigService";
 
@@ -26,11 +29,15 @@ function rangeSlider(
     const thumbView = view.getThumbView();
     const thumbModel = new ThumbModel();
     const thumbPresenter = new ThumbPresenter(thumbModel, thumbView);
+    const fillView = view.getFillView();
+    const fillModel = new FillModel();
+    const fillPresenter = new FillPresenter(fillModel, fillView);
     const presenter = new RangeSliderPresenter(
       model,
       view,
       trackPresenter,
-      thumbPresenter
+      thumbPresenter,
+      fillPresenter
     );
   });
   return this;

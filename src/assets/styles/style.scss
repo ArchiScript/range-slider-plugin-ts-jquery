@@ -24,5 +24,11 @@ body {
       border-radius: 50%;
       background-color: red;
     }
+    &__fill{
+      height: 10px;
+      
+      background-color:rgb(255, 73, 73);
+      border-radius: 5px;
+    }
   }
 }

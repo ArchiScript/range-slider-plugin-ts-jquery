@@ -28,10 +28,13 @@ export class ThumbPresenter implements IThumbPresenter, IObserver {
     this.model.addObserver(this);
     this.model.setPosition(this.position);
     this.view.addStartDragListener(this.startDrag.bind(this));
+    this.test();
     this.updateView();
   }
-
-  setMediator(mediator?: Mediator): void {
+  getValue(): number {
+    return this.value;
+  }
+  setMediator(mediator: Mediator): void {
     if (mediator) this.mediator = mediator;
   }
   addObserver(observer: IObserver): void {
@@ -51,11 +54,10 @@ export class ThumbPresenter implements IThumbPresenter, IObserver {
     this.model.setPosition(value);
   }
   updateView(): void {
-    // this.view.render(this.model.getPosition());
     this.view.render(this.model.getPosition());
   }
 
-  getCurrentPosition(): number {
+  public getCurrentPosition(): number {
     return this.position;
   }
   private startDrag(e: MouseEvent | TouchEvent): void {
@@ -91,12 +93,14 @@ export class ThumbPresenter implements IThumbPresenter, IObserver {
     }
     this.updatePosition(movementX);
     this.model.setValue(movementX);
+    this.mediator?.setFill(movementX + (this.options.thumbSize as number));
 
     console.log(
       `========= getValue${this.model.getValue()}+++++++ movementX: ${movementX}`
     );
     this.notifyObservers();
   }
+
   private stopDrag(): void {
     this.model.disableDrag();
     document.removeEventListener("mousemove", this.dragBound);
@@ -112,5 +116,11 @@ export class ThumbPresenter implements IThumbPresenter, IObserver {
     this.model.setValue(pos);
     this.notifyObservers();
     console.log(`----set value: ${pos}`);
+  }
+  getInitPosition(): number {
+    return this.model.getProportionValue(this.position);
+  }
+  private test(): void {
+    this.mediator?.setFill(44);
   }
 }

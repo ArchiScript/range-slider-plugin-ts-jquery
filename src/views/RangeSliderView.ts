@@ -1,6 +1,7 @@
 import { IRangeSliderView } from "../types/IViews/IRangeSliderView";
 import { TrackView } from "./TrackView";
 import { ThumbView } from "./ThumbView";
+import { FillView } from "./FillView";
 export class RangeSliderView implements IRangeSliderView {
   private $container: HTMLElement;
   private $element: HTMLElement;
@@ -8,6 +9,8 @@ export class RangeSliderView implements IRangeSliderView {
   private $trackView: TrackView;
   private $thumbView: ThumbView;
   private $trackElement: HTMLElement;
+  private $fillView: FillView;
+  private $fillElement: HTMLElement;
 
   constructor(container: HTMLElement) {
     this.$container = container;
@@ -17,6 +20,8 @@ export class RangeSliderView implements IRangeSliderView {
     this.$trackView = new TrackView(this.$element);
     this.$trackElement = this.$trackView.getTrackElement();
     this.$thumbView = new ThumbView(this.$element);
+    this.$fillView = new FillView(this.$trackElement);
+    this.$fillElement = this.$fillView.getFillElement();
     this.$title = document.createElement("h1");
   }
 
@@ -38,6 +43,9 @@ export class RangeSliderView implements IRangeSliderView {
   }
   getThumbView(): ThumbView {
     return this.$thumbView;
+  }
+  getFillView(): FillView {
+    return this.$fillView;
   }
   addValueChangeListener(listener: Function): void {
     this.$element.addEventListener("click", () => {

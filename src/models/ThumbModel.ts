@@ -6,7 +6,7 @@ export class ThumbModel implements IThumbModel {
   private position: number;
   private observers: IObserver[] = [];
   private dragging: boolean = false;
-  private thumbSize: number = 15;
+  private thumbSize: number;
   private min: number;
   private max: number;
   private value: number;
@@ -16,8 +16,9 @@ export class ThumbModel implements IThumbModel {
   constructor() {
     this.min = this.options.min as number;
     this.max = this.options.max as number;
+    this.thumbSize = this.options.thumbSize as number;
     this.position = this.options.value as number;
-    this.containerWidth = this.getContainerWidth() - this.getThumbSize();
+    this.containerWidth = this.getContainerWidth() - this.thumbSize;
 
     this.value = this.options.value as number;
 

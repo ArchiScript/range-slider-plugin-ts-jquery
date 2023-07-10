@@ -11,7 +11,8 @@ export class ConfigService implements IConfig {
     max: 100,
     value: 0,
     trackHeight: 10,
-    tooltip: true
+    tooltip: true,
+    thumbSize: 15
   };
   private constructor(options?: IOptions, container?: Element) {
     this.userOptions = options;

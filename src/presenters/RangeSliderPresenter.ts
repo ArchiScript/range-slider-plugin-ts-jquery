@@ -40,16 +40,20 @@ export class RangeSliderPresenter implements IPresenter, IObserver {
     this.fillPresenter.setMediator(this.mediator);
     this.updateView();
     this.thumbPresenter.updateView();
-    this.fillPresenter.update(
-      this.thumbPresenter.getCurrentPosition() +
-        (this.options.thumbSize as number)
-    );
+
+    const finalPos =
+      typeof this.thumbPresenter.getCurrentPosition() == "number"
+        ? (this.thumbPresenter.getCurrentPosition() as number) +
+          (this.options.thumbSize as number)
+        : (this.thumbPresenter.getCurrentPosition() as number[]);
+
+    this.fillPresenter.update(finalPos);
     console.log(
       `decorated static containerWidth: ${this.options.containerWidth}`
     );
   }
 
-  update(value: number): void {
+  update(value: number | number[]): void {
     this.view.render(value);
     console.log(`observer works----- ${value}`);
   }

@@ -16,7 +16,7 @@ export class FillPresenter implements IFillPresenter, IObserver {
     this.model.addObserver(this);
     this.update(this.model.getFillWidth());
   }
-  update(value: number): void {
+  update(value: number | number[]): void {
     this.view.render(value);
   }
   updateValue(value: number): void {

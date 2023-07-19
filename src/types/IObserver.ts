@@ -1,3 +1,3 @@
 export interface IObserver {
-  update(value: number): void;
+  update(value: number | number[]): void;
 }

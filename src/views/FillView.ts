@@ -7,7 +7,7 @@ export class FillView implements IFillView {
     this.$fill.setAttribute("class", "range-slider__fill");
     this.$parent = parent;
   }
-  render(value: number): void {
+  render(value: number | number[]): void {
     this.$parent.appendChild(this.$fill);
     this.$fill.style.width = `${value}px`;
   }

@@ -2,36 +2,51 @@ import { IThumbPresenter } from "../types/IPresenters/IThumbPresenter";
 import { IThumbModel } from "../types/IModels/IThumbModel";
 import { IThumbView } from "../types/IViews/IThumbView";
 import { IObserver } from "../types/IObserver";
+import { ThumbView } from "../views/ThumbView";
 import { ConfigService } from "../ConfigService/ConfigService";
 import { IOptions } from "../types/IConfigurationService/IOptions";
 import { Mediator } from "./Mediator";
+import { timers } from "jquery";
 export class ThumbPresenter implements IThumbPresenter, IObserver {
   private model: IThumbModel;
-  private view: IThumbView;
+  private view: ThumbView | ThumbView[];
   private mediator?: Mediator;
-  private position: number;
-  private value: number;
+  private position: number | number[];
+  private value: number | number[];
   // private startPosition: number;
   private dragBound!: EventListenerOrEventListenerObject;
   private stopDragBound!: EventListenerOrEventListenerObject;
   private observers: IObserver[] = [];
   private options: IOptions = ConfigService.getInstance().getOptions();
-  constructor(model: IThumbModel, view: IThumbView) {
+
+  constructor(model: IThumbModel, view: ThumbView | ThumbView[]) {
     this.model = model;
     this.view = view;
-    this.position = this.model.getProportionValue(this.options.value as number);
+
+    this.position = this.model.getProportionValue(
+      this.options.value as number | number[]
+    );
     this.value = this.model.getValue();
+
     this.init();
   }
 
   init(): void {
     this.model.addObserver(this);
     this.model.setPosition(this.position);
-    this.view.addStartDragListener(this.startDrag.bind(this));
+    if (this.view instanceof ThumbView) {
+      this.view.addStartDragListener(this.startDrag.bind(this));
+    } else if (Array.isArray(this.view)) {
+      this.view.forEach((thumbView) => {
+        thumbView.addStartDragListener(this.startDrag.bind(this));
+      });
+    }
+
     this.test();
     this.updateView();
   }
-  getValue(): number {
+
+  getValue(): number | number[] {
     return this.value;
   }
   setMediator(mediator: Mediator): void {
@@ -42,7 +57,12 @@ export class ThumbPresenter implements IThumbPresenter, IObserver {
   }
   private notifyObservers(): void {
     for (const observer of this.observers) {
-      observer.update(this.model.getValue());
+      if (typeof this.model.getValue() == "number") {
+        observer.update(this.model.getValue() as number);
+      } else if (Array.isArray(this.model.getValue())) {
+        observer.update(this.model.getValue() as number[]);
+      }
+
       console.log(`notifyobserver: ${this.model.getValue()}`);
     }
   }
@@ -50,14 +70,20 @@ export class ThumbPresenter implements IThumbPresenter, IObserver {
     this.updateView();
   }
 
-  updatePosition(value: number): void {
+  updatePosition(value: number | number[]): void {
     this.model.setPosition(value);
   }
   updateView(): void {
-    this.view.render(this.model.getPosition());
+    if (this.view instanceof ThumbView) {
+      this.view.render(this.model.getPosition());
+    } else if (Array.isArray(this.view)) {
+      this.view.forEach((thumbView) =>
+        thumbView.render(this.model.getPosition())
+      );
+    }
   }
 
-  public getCurrentPosition(): number {
+  public getCurrentPosition(): number | number[] {
     return this.position;
   }
   private startDrag(e: MouseEvent | TouchEvent): void {
@@ -91,8 +117,14 @@ export class ThumbPresenter implements IThumbPresenter, IObserver {
     } else if (movementX > max) {
       movementX = max;
     }
+    // if(Array.isArray(this.view)){
+    //   this.updatePosition([])
+    // }
     this.updatePosition(movementX);
     this.model.setValue(movementX);
+    console.log(
+      `-------drag-------getPosition  ${this.model.getPosition()}---------getValue ${this.model.getValue()}`
+    );
     this.mediator?.setFill(movementX + (this.options.thumbSize as number));
 
     console.log(
@@ -117,9 +149,9 @@ export class ThumbPresenter implements IThumbPresenter, IObserver {
     this.notifyObservers();
     console.log(`----set value: ${pos}`);
   }
-  getInitPosition(): number {
-    return this.model.getProportionValue(this.position);
-  }
+  // getInitPosition(): number {
+  //   return this.model.getProportionValue(this.position);
+  // }
   private test(): void {
     this.mediator?.setFill(44);
   }

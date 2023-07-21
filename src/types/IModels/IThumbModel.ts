@@ -12,7 +12,8 @@ export interface IThumbModel {
   getMax(): number;
   getContainerWidth(): number;
   getValue(): number | number[];
-  setValue(value: number): void;
+  setValue(value: number | number[]): void;
   getProportion(): number;
   getProportionValue(value: number | number[]): number | number[];
+  getStep(): number;
 }

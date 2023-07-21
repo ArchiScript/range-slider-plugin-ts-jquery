@@ -26,8 +26,7 @@ function rangeSlider(
     const trackView = view.getTrackView();
     const trackModel = new TrackModel();
     const trackPresenter = new TrackPresenter(trackModel, trackView);
-    if(options.doublePoint == true) {
-      
+    if (options.doublePoint == true) {
     }
     const thumbView = view.getThumbView();
     const thumbModel = new ThumbModel();

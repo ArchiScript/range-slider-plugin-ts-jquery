@@ -11,11 +11,13 @@ export class ThumbModel implements IThumbModel {
   private max: number;
   private value?: number | number[];
   private containerWidth: number;
+  private step: number;
   private options: IOptions = ConfigService.getInstance().getOptions();
 
   constructor() {
     this.min = this.options.min as number;
     this.max = this.options.max as number;
+    this.step = this.options.step as number;
     this.thumbSize = this.options.thumbSize as number;
     this.position = this.options.value as number | number[];
     this.containerWidth = this.getContainerWidth() - this.thumbSize;
@@ -35,6 +37,9 @@ export class ThumbModel implements IThumbModel {
       )}=====Value:${this.getValue()}`
     );
   }
+  getStep(): number {
+    return this.step * this.getProportion();
+  }
 
   getThumbSize(): number {
     return this.thumbSize;
@@ -53,8 +58,13 @@ export class ThumbModel implements IThumbModel {
     // this.notifyObservers();
   }
 
-  setValue(value: number): void {
-    this.value = Math.round(value / this.getProportion());
+  setValue(value: number | number[]): void {
+    if (Array.isArray(value)) {
+      this.value = value.map((v) => Math.round(v / this.getProportion()));
+    } else if (typeof value === "number") {
+      this.value = Math.round(value / this.getProportion());
+    }
+
     this.notifyObservers();
   }
   getValue(): number | number[] {

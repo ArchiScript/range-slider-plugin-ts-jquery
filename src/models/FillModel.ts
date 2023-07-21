@@ -8,14 +8,16 @@ export class FillModel implements IFillModel {
   private endPosition: number;
   private options: IOptions;
   private observers: IObserver[] = [];
+  private thumbSize: number;
   constructor() {
     this.options = ConfigService.getInstance().getOptions();
     this.fillWidth = this.options.value as number;
+    this.thumbSize = this.options.thumbSize as number;
     this.startPosition = this.options.min as number;
     this.endPosition = 0;
   }
   getFillWidth(): number {
-    return this.fillWidth;
+    return this.fillWidth + this.thumbSize;
   }
   setFillWidth(value: number): void {
     this.fillWidth = value;

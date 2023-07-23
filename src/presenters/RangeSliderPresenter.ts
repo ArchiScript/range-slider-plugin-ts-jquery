@@ -41,13 +41,12 @@ export class RangeSliderPresenter implements IPresenter, IObserver {
     this.updateView();
     this.thumbPresenter.updateView();
 
-    const finalPos =
+    const thumbPos: number | number[] =
       typeof this.thumbPresenter.getCurrentFillPosition() == "number"
-        ? (this.thumbPresenter.getCurrentFillPosition() as number) +
-          (this.options.thumbSize as number)
+        ? (this.thumbPresenter.getCurrentFillPosition() as number)
         : (this.thumbPresenter.getCurrentFillPosition() as number[]);
 
-    this.fillPresenter.update(finalPos);
+    this.fillPresenter.updateValue(thumbPos);
     console.log(
       `decorated static containerWidth: ${this.options.containerWidth}`
     );

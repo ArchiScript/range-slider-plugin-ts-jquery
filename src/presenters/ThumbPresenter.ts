@@ -87,14 +87,13 @@ export class ThumbPresenter implements IThumbPresenter, IObserver {
       );
     }
   }
-
   public getCurrentPosition(): number | number[] {
     return this.position;
   }
   public getCurrentFillPosition(): number | number[] {
     let posArr: number[] = this.getCurrentPosition() as number[];
     let thumbSize = this.options.thumbSize as number;
-    return [posArr[0], posArr[1] + thumbSize];
+    return [posArr[0], posArr[1]];
   }
   private startDrag(e: MouseEvent | TouchEvent): void {
     e.preventDefault();
@@ -116,7 +115,6 @@ export class ThumbPresenter implements IThumbPresenter, IObserver {
 
     let movementX =
       currentPosition - this.model.getMin() - this.model.getThumbSize();
-    console.log(`movenent before check ========${movementX}`);
     movementX = this.validateMinMax(movementX);
 
     if (Array.isArray(this.view)) {
@@ -124,17 +122,16 @@ export class ThumbPresenter implements IThumbPresenter, IObserver {
         movementX,
         this.view
       );
-      console.log(`newPositionArr ========${newPositionArr}`);
 
       this.updatePosition(newPositionArr);
       this.model.setValue(newPositionArr);
-      let fillThumbWidth = newPositionArr[1] + this.model.getThumbSize();
+      let fillThumbWidth = newPositionArr[1];
       newPositionArr = [newPositionArr[0], fillThumbWidth];
       this.mediator?.setFill(newPositionArr);
     } else {
       this.updatePosition(movementX);
       this.model.setValue(movementX);
-      this.mediator?.setFill(movementX + this.model.getThumbSize());
+      this.mediator?.setFill(movementX);
     }
 
     this.notifyObservers();
@@ -169,7 +166,6 @@ export class ThumbPresenter implements IThumbPresenter, IObserver {
     document.removeEventListener("touchmove", this.dragBound);
     document.removeEventListener("mouseup", this.stopDragBound);
     document.removeEventListener("touchend", this.stopDragBound);
-    console.log(`is dragging: ${this.model.isDragging}`);
   }
 
   private validateMinMax(movement: number): number {
@@ -183,17 +179,32 @@ export class ThumbPresenter implements IThumbPresenter, IObserver {
   }
 
   public onTrackClick(clickPosition: number): void {
-    const pos = clickPosition - this.model.getThumbSize();
-    console.log(`clickPosition ${pos}`);
+    let pos: number | number[];
+    clickPosition -= this.model.getThumbSize();
+    let intersection: number = 0;
+    if (!Array.isArray(this.model.getPosition())) {
+      pos = clickPosition;
+      intersection = clickPosition;
+    } else {
+      let posArr: number[] = this.model.getPosition() as number[];
+      intersection = posArr[1] - posArr[0];
+
+      if (clickPosition - posArr[0] < intersection / 2) {
+        pos = [clickPosition, posArr[1]];
+      } else if (clickPosition - posArr[0] > intersection / 2) {
+        pos = [posArr[0], clickPosition];
+      } else {
+        pos = [clickPosition, posArr[1]];
+      }
+    }
+
     this.updatePosition(pos);
     this.model.setValue(pos);
+    this.mediator?.setFill(pos);
     this.notifyObservers();
-    console.log(`----set value: ${pos}`);
   }
 
   private test(): void {
     // this.mediator?.setFill(44);
-    console.log(`getPos-------- ${ThumbView.id}`);
-    console.log(`step----------${this.step}`);
   }
 }

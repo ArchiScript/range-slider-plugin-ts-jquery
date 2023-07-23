@@ -3,6 +3,7 @@ import { IFillModel } from "../types/IModels/IFillModel";
 import { IFillView } from "../types/IViews/IFillView";
 import { IObserver } from "../types/IObserver";
 import { Mediator } from "./Mediator";
+import { ThumbPresenter } from "./ThumbPresenter";
 export class FillPresenter implements IFillPresenter, IObserver {
   private model: IFillModel;
   private view: IFillView;
@@ -14,18 +15,19 @@ export class FillPresenter implements IFillPresenter, IObserver {
   }
   init(): void {
     this.model.addObserver(this);
-    this.update(this.model.getFillWidth());
   }
   update(value: number | number[]): void {
-    this.view.render(value);
+    console.log(this.model.getFillWidth());
+    this.view.render(value, this.model.getFillWidth());
   }
-  updateValue(value: number): void {
-    this.model.setFillWidth(value);
+  updateValue(value: number | number[]): void {
+
+    this.model.setFillPosition(value);
   }
   setMediator(mediator: Mediator): void {
     if (mediator) this.mediator = mediator;
   }
-  public onThumbPositionChange(position: number): void {
-    this.update(position);
+  public onThumbPositionChange(position: number | number[]): void {
+    this.updateValue(position);
   }
 }

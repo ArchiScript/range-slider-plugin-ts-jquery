@@ -16,7 +16,9 @@ export class Mediator implements IMediator {
     this.thumbPresenter = thumbPresenter;
     this.fillPresenter = fillPresenter;
   }
-
+  public getThumbPresenter(): ThumbPresenter {
+    return this.thumbPresenter;
+  }
   public notifyTrackClick(clickPosition: number): void {
     this.thumbPresenter.onTrackClick(clickPosition);
   }
@@ -26,6 +28,7 @@ export class Mediator implements IMediator {
     this.fillPresenter.onThumbPositionChange(position);
   }
   public setFill(position: number | number[]): void {
-    this.fillPresenter.update(position);
+    this.fillPresenter.updateValue(position);
+    console.log(`&&&&&&___mediatorSetFill: ${position}`);
   }
 }

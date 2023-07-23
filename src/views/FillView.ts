@@ -7,16 +7,17 @@ export class FillView implements IFillView {
     this.$fill.setAttribute("class", "range-slider__fill");
     this.$parent = parent;
   }
-  render(value: number | number[]): void {
+  render(position: number | number[], width: number): void {
     this.$parent.appendChild(this.$fill);
 
-    if (Array.isArray(value)) {
-      console.log(`fillView-----------${value}`);
-      this.$fill.style.marginLeft = `${value[0]}px`;
-      let width = value[1] - value[0];
+    if (Array.isArray(position)) {
+      console.log(`fillView-----------${position}`);
+      this.$fill.style.marginLeft = `${position[0]}px`;
+      // let width: number = position[1] - position[0];
+      console.log(`------Fillwidth----${width}`);
       this.$fill.style.width = `${width}px`;
     } else {
-      this.$fill.style.width = `${value}px`;
+      this.$fill.style.width = `${position}px`;
     }
   }
   getFillElement(): HTMLElement {

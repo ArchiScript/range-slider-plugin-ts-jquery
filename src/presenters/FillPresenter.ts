@@ -21,7 +21,6 @@ export class FillPresenter implements IFillPresenter, IObserver {
     this.view.render(value, this.model.getFillWidth());
   }
   updateValue(value: number | number[]): void {
-
     this.model.setFillPosition(value);
   }
   setMediator(mediator: Mediator): void {

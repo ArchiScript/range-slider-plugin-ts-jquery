@@ -34,13 +34,13 @@ export class RangeSliderView implements IRangeSliderView {
 
   getThumbViews(): ThumbView | ThumbView[] {
     if (!this.options.doublePoint) {
-      return new ThumbView(this.$element);
+      return new ThumbView(this.$element) as ThumbView;
     } else {
       let thumbs = [];
       for (let i = 1; i <= 2; i++) {
         thumbs.push(new ThumbView(this.$element));
       }
-      return thumbs;
+      return thumbs as ThumbView[];
     }
   }
   test(): void {
@@ -70,7 +70,11 @@ export class RangeSliderView implements IRangeSliderView {
     return this.$trackView;
   }
   getThumbView(): ThumbView | ThumbView[] {
-    return this.$thumbView;
+    if (this.$thumbView instanceof ThumbView) {
+      return this.$thumbView as ThumbView;
+    } else {
+      return this.$thumbView as ThumbView[];
+    }
   }
   getFillView(): FillView {
     return this.$fillView;

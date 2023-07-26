@@ -55,14 +55,23 @@ export class ThumbModel implements IThumbModel {
   }
   setPosition(position: number | number[]): void {
     this.position = position;
-    // this.notifyObservers();
+    console.log(`_____!!!!___SetPosition: ${this.position}`);
+    this.notifyObservers();
   }
 
   setValue(value: number | number[]): void {
     if (Array.isArray(value)) {
       this.value = value.map((v) => Math.round(v / this.getProportion()));
-    } else if (typeof value === "number") {
+    } else if (typeof value === "number" && value > 0) {
       this.value = Math.round(value / this.getProportion());
+      console.log(
+        `-----setValue if number > 0: value ${value} / this.getProportion() ${this.getProportion()}  =  ${
+          this.value
+        }`
+      );
+    } else if (value == 0) {
+      this.value = 0;
+      console.log(`-----setValue if number == 0:  ${this.value}`);
     }
 
     this.notifyObservers();
@@ -118,6 +127,9 @@ export class ThumbModel implements IThumbModel {
     const max = this.getMax();
     const min = this.getMin();
     const proportion = this.containerWidth / (max - min);
+    console.log(
+      `proportion: containerWidth: ${this.containerWidth} / max ${max} - min ${min} = ${proportion}`
+    );
     return proportion;
   }
 }

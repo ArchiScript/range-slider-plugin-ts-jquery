@@ -12,4 +12,5 @@ export interface IOptions {
   label?: string;
   input?: boolean;
   containerWidth?: number;
+  containerViewportLeft?: number;
 }

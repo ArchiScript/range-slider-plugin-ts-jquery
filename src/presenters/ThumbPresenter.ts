@@ -6,20 +6,20 @@ import { ThumbView } from "../views/ThumbView";
 import { ConfigService } from "../ConfigService/ConfigService";
 import { IOptions } from "../types/IConfigurationService/IOptions";
 import { Mediator } from "./Mediator";
-import { timers } from "jquery";
+
 export class ThumbPresenter implements IThumbPresenter, IObserver {
   private model: IThumbModel;
   private view: ThumbView | ThumbView[];
   private mediator?: Mediator;
   private position: number | number[];
   private activeThumb?: HTMLElement;
-  private static position: number | number[];
   private value: number | number[];
   private dragBound!: EventListenerOrEventListenerObject;
   private stopDragBound!: EventListenerOrEventListenerObject;
   private observers: IObserver[] = [];
   private options: IOptions = ConfigService.getInstance().getOptions();
   private step: number;
+  public isDoubleThumb: boolean;
 
   constructor(model: IThumbModel, view: ThumbView | ThumbView[]) {
     this.model = model;
@@ -29,7 +29,7 @@ export class ThumbPresenter implements IThumbPresenter, IObserver {
       this.options.value as number | number[]
     );
     this.value = this.model.getValue();
-
+    this.isDoubleThumb = this.isDouble;
     this.init();
   }
 
@@ -54,12 +54,18 @@ export class ThumbPresenter implements IThumbPresenter, IObserver {
   getValue(): number | number[] {
     return this.value;
   }
+
+  private get isDouble(): boolean {
+    return Array.isArray(this.view);
+  }
   setMediator(mediator: Mediator): void {
     if (mediator) this.mediator = mediator;
   }
+
   addObserver(observer: IObserver): void {
     this.observers.push(observer);
   }
+
   private notifyObservers(): void {
     for (const observer of this.observers) {
       if (typeof this.model.getValue() == "number") {
@@ -71,13 +77,27 @@ export class ThumbPresenter implements IThumbPresenter, IObserver {
       console.log(`notifyobserver: ${this.model.getValue()}`);
     }
   }
+
   update(value: number): void {
     this.updateView();
   }
 
   updatePosition(value: number | number[]): void {
     this.model.setPosition(value);
+    console.log(`^^^^^updatePosition___${value}`);
   }
+
+  setThumbDataValue(thumb: ThumbView | ThumbView[]): void {
+    const currentVal: number | number[] = this.model.getValue();
+    if (thumb instanceof ThumbView && typeof currentVal == "number") {
+      thumb.getThumbElement().dataset.value = currentVal.toString();
+    } else if (Array.isArray(thumb) && Array.isArray(currentVal)) {
+      for (let i = 0; i <= thumb.length - 1; i++) {
+        thumb[i].getThumbElement().dataset.value = currentVal[i].toString();
+      }
+    }
+  }
+
   updateView(): void {
     if (this.view instanceof ThumbView) {
       this.view.render(this.model.getPosition());
@@ -86,15 +106,24 @@ export class ThumbPresenter implements IThumbPresenter, IObserver {
         thumbView.render(this.model.getPosition())
       );
     }
+
+    this.setThumbDataValue(this.view);
   }
+
   public getCurrentPosition(): number | number[] {
     return this.position;
   }
+
   public getCurrentFillPosition(): number | number[] {
-    let posArr: number[] = this.getCurrentPosition() as number[];
+    let posArr: number | number[] = this.getCurrentPosition();
     let thumbSize = this.options.thumbSize as number;
-    return [posArr[0], posArr[1]];
+    if (Array.isArray(posArr)) {
+      return [posArr[0], posArr[1]];
+    } else {
+      return posArr;
+    }
   }
+
   private startDrag(e: MouseEvent | TouchEvent): void {
     e.preventDefault();
     this.activeThumb = e.target as HTMLElement;
@@ -109,12 +138,28 @@ export class ThumbPresenter implements IThumbPresenter, IObserver {
 
   private drag(event: MouseEvent | TouchEvent): void {
     event.preventDefault();
+    const viewportDistanceLeft: number = this.options
+      .containerViewportLeft as number;
+    console.log(`______${viewportDistanceLeft}`);
+    let startPoint: number = viewportDistanceLeft;
 
     let currentPosition =
       event instanceof MouseEvent ? event.clientX : event.touches[0].clientX;
 
+    // let movementX =
+    //   currentPosition - this.model.getMin() - this.model.getThumbSize();
     let movementX =
-      currentPosition - this.model.getMin() - this.model.getThumbSize();
+      currentPosition -
+      this.model.getMin() -
+      this.model.getThumbSize() / 2 -
+      startPoint;
+
+    console.log(
+      `:::::: movementX = clientX: ${currentPosition} - thumbSize/2:   ${
+        this.model.getThumbSize() / 2
+      } - startPoint ${startPoint} = movementX ${movementX} `
+    );
+
     movementX = this.validateMinMax(movementX);
 
     if (Array.isArray(this.view)) {
@@ -178,13 +223,32 @@ export class ThumbPresenter implements IThumbPresenter, IObserver {
     return movement;
   }
 
+  private validateMinMaxPos(pos: number): number {
+    let max: number = this.model.getProportionValue(
+      this.model.getMax()
+    ) as number;
+    // let min: number = 0;
+    let min: number = this.options.containerViewportLeft as number;
+    console.log(max);
+    if (pos > max) {
+      pos = max;
+    } else if (pos < min) {
+      pos = 0;
+    }
+    return pos;
+  }
   public onTrackClick(clickPosition: number): void {
     let pos: number | number[];
     clickPosition -= this.model.getThumbSize();
+    clickPosition = this.validateMinMax(clickPosition);
+    console.log(`____clickpos__${clickPosition}`);
     let intersection: number = 0;
+
     if (!Array.isArray(this.model.getPosition())) {
       pos = clickPosition;
-      intersection = clickPosition;
+      // pos = this.validateMinMax(pos);
+
+      // intersection = clickPosition;
     } else {
       let posArr: number[] = this.model.getPosition() as number[];
       intersection = posArr[1] - posArr[0];

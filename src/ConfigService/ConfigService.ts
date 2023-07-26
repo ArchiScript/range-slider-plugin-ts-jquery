@@ -4,6 +4,7 @@ export class ConfigService implements IConfig {
   private userOptions?: IOptions;
   private static container?: Element;
   private containerWidth?: number;
+  private containerViewportLeft?: number;
   private static instance: ConfigService;
   private static defaultOptions: IOptions = {
     orientation: "horizontal",
@@ -41,7 +42,10 @@ export class ConfigService implements IConfig {
       this.containerWidth = parseInt(
         getComputedStyle(ConfigService.container).width
       );
+      this.containerViewportLeft =
+        ConfigService.container.getBoundingClientRect().left;
       options.containerWidth = this.containerWidth;
+      options.containerViewportLeft = this.containerViewportLeft;
       return options;
     }
     return options;

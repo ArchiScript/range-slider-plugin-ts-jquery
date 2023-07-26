@@ -20,7 +20,9 @@ export class FillModel implements IFillModel {
   private calculateFillWidth(fillPos: number | number[]): number {
     if (Array.isArray(fillPos)) {
       return fillPos[1] - fillPos[0] + this.thumbSize;
-    } else return fillPos + this.thumbSize;
+    } else {
+      return fillPos + this.thumbSize;
+    }
   }
   getFillWidth(): number {
     return this.calculateFillWidth(this.fillPosition);

@@ -14,16 +14,15 @@ export class ThumbView implements IThumbView {
     this.$thumb.setAttribute("data-id", `${this.id}`);
     this.$parent = parentElement;
     this.$parent.appendChild(this.$thumb);
+    this.$thumb.setAttribute("data-value", `0`);
   }
 
   render(position: number | number[]): void {
     if (Array.isArray(position)) {
       const thisId: number = this.id - 1;
       this.$thumb.style.left = `${position[thisId]}px`;
-      // console.log(`thisId: ${thisId} Renderposition is array: ${position[1]}`);
     }
     this.$thumb.style.left = `${position}px`;
-    // console.log(`renderThumView argument-----:${position}`);
   }
   getThumbViewId(): number {
     return this.id;
@@ -41,13 +40,7 @@ export class ThumbView implements IThumbView {
   getThumbCurrentPosition(): number {
     return parseFloat(this.$thumb.style.left);
   }
-  // onStartDragGetId(listener: Function): number {
-  //   this.$thumb.addEventListener("mousedown", function(e):number{
-  //     listener();
-  //     return this.getThumbViewId();
-  //   });
 
-  // }
   getThumbElement(): HTMLElement {
     return this.$thumb;
   }

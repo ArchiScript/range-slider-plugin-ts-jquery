@@ -52,7 +52,6 @@ export class RangeSliderView implements IRangeSliderView {
     const inner = `
     RangeSlider--${valueStr}
     `;
-    console.log(value);
     this.$container.appendChild(this.$element);
     this.$title.textContent = "Range Slider";
     this.$container.prepend(this.$title);
@@ -81,7 +80,6 @@ export class RangeSliderView implements IRangeSliderView {
   }
   addValueChangeListener(listener: Function): void {
     this.$element.addEventListener("click", () => {
-      console.log("clicked on input");
       listener();
     });
   }

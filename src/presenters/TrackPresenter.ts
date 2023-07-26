@@ -36,11 +36,8 @@ export class TrackPresenter implements ITrackPresenter, IObserver {
   }
   trackClickHandler(e: MouseEvent | TouchEvent): void {
     if (e instanceof MouseEvent) {
-      console.log(`------trackClickHandler ${e.clientX}`);
-
       let position: number =
         e.clientX - this.startPoint + (this.options.thumbSize as number) / 2;
-      console.log(`^^^^^^^trackClickHandler ------ pos ${position}`);
 
       this.onThumbPositionChange(position);
       this.mediator?.notifyTrackClick(position);

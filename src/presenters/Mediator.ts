@@ -29,6 +29,5 @@ export class Mediator implements IMediator {
   }
   public setFill(position: number | number[]): void {
     this.fillPresenter.updateValue(position);
-    console.log(`&&&&&&___mediatorSetFill: ${position}`);
   }
 }

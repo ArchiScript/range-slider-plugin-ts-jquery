@@ -62,16 +62,8 @@ export class ThumbModel implements IThumbModel {
   setValue(value: number | number[]): void {
     if (Array.isArray(value)) {
       this.value = value.map((v) => Math.round(v / this.getProportion()));
-    } else if (typeof value === "number" && value > 0) {
+    } else if (typeof value === "number") {
       this.value = Math.round(value / this.getProportion());
-      console.log(
-        `-----setValue if number > 0: value ${value} / this.getProportion() ${this.getProportion()}  =  ${
-          this.value
-        }`
-      );
-    } else if (value == 0) {
-      this.value = 0;
-      console.log(`-----setValue if number == 0:  ${this.value}`);
     }
 
     this.notifyObservers();

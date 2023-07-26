@@ -3,9 +3,9 @@ import $ from "jquery";
 import "./plugin-wrapper/plugin-wrapper";
 
 $(".range-slider-container").rangeSlider({
-  value: [100, 250],
-  // value: 0,
+  // value: [100, 250],
+  value: 0,
   max: 800,
-  step: 10,
-  doublePoint: true
+  step: 20,
+  doublePoint: false
 });

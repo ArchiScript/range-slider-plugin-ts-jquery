@@ -84,7 +84,6 @@ export class ThumbPresenter implements IThumbPresenter, IObserver {
 
   updatePosition(value: number | number[]): void {
     this.model.setPosition(value);
-    console.log(`^^^^^updatePosition___${value}`);
   }
 
   setThumbDataValue(thumb: ThumbView | ThumbView[]): void {
@@ -138,16 +137,12 @@ export class ThumbPresenter implements IThumbPresenter, IObserver {
 
   private drag(event: MouseEvent | TouchEvent): void {
     event.preventDefault();
-    const viewportDistanceLeft: number = this.options
-      .containerViewportLeft as number;
-    console.log(`______${viewportDistanceLeft}`);
-    let startPoint: number = viewportDistanceLeft;
+    const startPoint: number = this.options.containerViewportLeft as number;
+    console.log(`______${startPoint}`);
 
     let currentPosition =
       event instanceof MouseEvent ? event.clientX : event.touches[0].clientX;
 
-    // let movementX =
-    //   currentPosition - this.model.getMin() - this.model.getThumbSize();
     let movementX =
       currentPosition -
       this.model.getMin() -
@@ -161,7 +156,7 @@ export class ThumbPresenter implements IThumbPresenter, IObserver {
     );
 
     movementX = this.validateMinMax(movementX);
-
+    movementX = this.setStep(movementX);
     if (Array.isArray(this.view)) {
       let newPositionArr: number[] = this.setDoubleThumbPosition(
         movementX,
@@ -181,7 +176,10 @@ export class ThumbPresenter implements IThumbPresenter, IObserver {
 
     this.notifyObservers();
   }
-
+  private setStep(position: number): number {
+    let step: number = this.model.getStep();
+    return Math.round(position / step) * step;
+  }
   private setDoubleThumbPosition(
     movement: number,
     viewArr: ThumbView[]
@@ -213,30 +211,16 @@ export class ThumbPresenter implements IThumbPresenter, IObserver {
     document.removeEventListener("touchend", this.stopDragBound);
   }
 
-  private validateMinMax(movement: number): number {
+  private validateMinMax(pos: number): number {
     let max = this.model.getContainerWidth() - this.model.getThumbSize();
-    if (movement < 0) {
-      movement = 0;
-    } else if (movement > max) {
-      movement = max;
-    }
-    return movement;
-  }
-
-  private validateMinMaxPos(pos: number): number {
-    let max: number = this.model.getProportionValue(
-      this.model.getMax()
-    ) as number;
-    // let min: number = 0;
-    let min: number = this.options.containerViewportLeft as number;
-    console.log(max);
-    if (pos > max) {
-      pos = max;
-    } else if (pos < min) {
+    if (pos < 0) {
       pos = 0;
+    } else if (pos > max) {
+      pos = max;
     }
     return pos;
   }
+
   public onTrackClick(clickPosition: number): void {
     let pos: number | number[];
     clickPosition -= this.model.getThumbSize();
@@ -246,19 +230,17 @@ export class ThumbPresenter implements IThumbPresenter, IObserver {
 
     if (!Array.isArray(this.model.getPosition())) {
       pos = clickPosition;
-      // pos = this.validateMinMax(pos);
-
-      // intersection = clickPosition;
+      pos = this.setStep(pos);
     } else {
       let posArr: number[] = this.model.getPosition() as number[];
       intersection = posArr[1] - posArr[0];
 
       if (clickPosition - posArr[0] < intersection / 2) {
-        pos = [clickPosition, posArr[1]];
+        pos = [this.setStep(clickPosition), posArr[1]];
       } else if (clickPosition - posArr[0] > intersection / 2) {
-        pos = [posArr[0], clickPosition];
+        pos = [posArr[0], this.setStep(clickPosition)];
       } else {
-        pos = [clickPosition, posArr[1]];
+        pos = [this.setStep(clickPosition), posArr[1]];
       }
     }
 

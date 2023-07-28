@@ -2,6 +2,7 @@ import { IObserver } from "../types/IObserver";
 import { IThumbModel } from "../types/IModels/IThumbModel";
 import { IOptions } from "../types/IConfigurationService/IOptions";
 import { ConfigService } from "../ConfigService/ConfigService";
+import { Config } from "../ConfigService/Config";
 export class ThumbModel implements IThumbModel {
   private position: number | number[];
   private observers: IObserver[] = [];
@@ -12,7 +13,7 @@ export class ThumbModel implements IThumbModel {
   private value?: number | number[];
   private containerWidth: number;
   private step: number;
-  private options: IOptions = ConfigService.getInstance().getOptions();
+  private options: IOptions = Config.getInstance().getOptions();
 
   constructor() {
     this.min = this.options.min as number;

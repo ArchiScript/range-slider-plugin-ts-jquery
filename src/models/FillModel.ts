@@ -1,6 +1,7 @@
 import { IFillModel } from "../types/IModels/IFillModel";
 import { IOptions } from "../types/IConfigurationService/IOptions";
 import { ConfigService } from "../ConfigService/ConfigService";
+import { Config } from "../ConfigService/Config";
 import { IObserver } from "../types/IObserver";
 export class FillModel implements IFillModel {
   private fillPosition: number | number[];
@@ -9,7 +10,7 @@ export class FillModel implements IFillModel {
   private observers: IObserver[] = [];
   private thumbSize: number;
   constructor() {
-    this.options = ConfigService.getInstance().getOptions();
+    this.options = Config.getInstance().getOptions();
     this.thumbSize = this.options.thumbSize as number;
     this.fillPosition = this.getProportionValue(
       this.options.value as number | number[]

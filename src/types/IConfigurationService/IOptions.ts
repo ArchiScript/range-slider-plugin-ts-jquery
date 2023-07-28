@@ -13,4 +13,5 @@ export interface IOptions {
   input?: boolean;
   containerWidth?: number;
   containerViewportLeft?: number;
+  instanceId?: number;
 }

@@ -2,13 +2,14 @@ import { ITrackModel } from "../types/IModels/ITrackModel";
 import { IObserver } from "../types/IObserver";
 import { IOptions } from "../types/IConfigurationService/IOptions";
 import { ConfigService } from "../ConfigService/ConfigService";
+import { Config } from "../ConfigService/Config";
 
 export class TrackModel implements ITrackModel {
   private width: number = 100;
   private height: number;
 
   private observers: IObserver[] = [];
-  private options: IOptions = ConfigService.getInstance().getOptions();
+  private options: IOptions = Config.getInstance().getOptions();
 
   constructor() {
     this.height = Number(this.options.trackHeight);

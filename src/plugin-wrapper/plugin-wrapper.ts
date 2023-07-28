@@ -11,23 +11,23 @@ import { FillPresenter } from "../presenters/FillPresenter";
 import { FillView } from "../views/FillView";
 import { IOptions } from "../types/IConfigurationService/IOptions";
 import { ConfigService } from "../ConfigService/ConfigService";
+import { Config } from "../ConfigService/Config";
 
 import $ from "jquery";
-function rangeSlider(
+export function rangeSlider(
   this: JQuery<HTMLElement>,
   opts?: IOptions
 ): JQuery<HTMLElement> {
   this.each(function () {
     const container = this;
-    const c = container as Element;
-    const options = ConfigService.setInstance(opts, c).getOptions();
+    // const c = container as Element;
+    // const options = ConfigService.setInstance(opts, c).getOptions();
+    const options = Config.set(container, opts).getOptions();
     const view = new RangeSliderView(container);
     const model = new RangeSlider();
     const trackView = view.getTrackView();
     const trackModel = new TrackModel();
     const trackPresenter = new TrackPresenter(trackModel, trackView);
-    if (options.doublePoint == true) {
-    }
     const thumbView = view.getThumbView();
     const thumbModel = new ThumbModel();
     const thumbPresenter = new ThumbPresenter(thumbModel, thumbView);

@@ -4,9 +4,9 @@ body {
   padding: 10px;
 }
 
-.range-slider-container {
+.range-slider-container{
   width: 300px;
-
+}
   .range-slider {
     cursor: pointer;
 
@@ -32,4 +32,12 @@ body {
       border-radius: 5px;
     }
   }
+
+
+.mock-container{
+  width: 400px;
+height: min-content;
+}
+.test{
+  width: 500px;
 }

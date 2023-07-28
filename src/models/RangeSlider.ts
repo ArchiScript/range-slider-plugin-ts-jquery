@@ -2,11 +2,12 @@ import { IRangeSlider } from "../types/IModels/IRangeSlider";
 import { IObserver } from "../types/IObserver";
 import { IOptions } from "../types/IConfigurationService/IOptions";
 import { ConfigService } from "../ConfigService/ConfigService";
+import { Config } from "../ConfigService/Config";
 export class RangeSlider implements IRangeSlider {
   private value: number;
 
   private observers: IObserver[] = [];
-  private options: IOptions = ConfigService.getInstance().getOptions();
+  private options: IOptions = Config.getInstance().getOptions();
 
   constructor() {
     this.value = this.options.value as number;

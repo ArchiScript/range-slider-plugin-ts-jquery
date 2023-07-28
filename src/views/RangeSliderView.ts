@@ -4,6 +4,7 @@ import { ThumbView } from "./ThumbView";
 import { FillView } from "./FillView";
 import { IOptions } from "../types/IConfigurationService/IOptions";
 import { ConfigService } from "../ConfigService/ConfigService";
+import { Config } from "../ConfigService/Config";
 export class RangeSliderView implements IRangeSliderView {
   private $container: HTMLElement;
   private $element: HTMLElement;
@@ -15,7 +16,7 @@ export class RangeSliderView implements IRangeSliderView {
   private $trackElement: HTMLElement;
   private $fillView: FillView;
   private $fillElement: HTMLElement;
-  private options: IOptions = ConfigService.getInstance().getOptions();
+  private options: IOptions = Config.getInstance().getOptions();
 
   constructor(container: HTMLElement) {
     this.$container = container;

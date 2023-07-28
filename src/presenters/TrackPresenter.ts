@@ -4,11 +4,12 @@ import { ITrackPresenter } from "../types/IPresenters/ITrackPresenter";
 import { IObserver } from "../types/IObserver";
 import { Mediator } from "./Mediator";
 import { ConfigService } from "../ConfigService/ConfigService";
+import { Config } from "../ConfigService/Config";
 import { IOptions } from "../types/IConfigurationService/IOptions";
 
 export class TrackPresenter implements ITrackPresenter, IObserver {
   private mediator?: Mediator;
-  private options: IOptions = ConfigService.getInstance().getOptions();
+  private options: IOptions = Config.getInstance().getOptions();
   private startPoint: number;
   constructor(private trackModel: ITrackModel, private trackView: ITrackView) {
     this.trackModel = trackModel;

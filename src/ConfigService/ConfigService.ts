@@ -46,6 +46,7 @@ export class ConfigService implements IConfig {
         ConfigService.container.getBoundingClientRect().left;
       options.containerWidth = this.containerWidth;
       options.containerViewportLeft = this.containerViewportLeft;
+
       return options;
     }
     return options;

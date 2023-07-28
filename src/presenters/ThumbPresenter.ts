@@ -4,6 +4,7 @@ import { IThumbView } from "../types/IViews/IThumbView";
 import { IObserver } from "../types/IObserver";
 import { ThumbView } from "../views/ThumbView";
 import { ConfigService } from "../ConfigService/ConfigService";
+import { Config } from "../ConfigService/Config";
 import { IOptions } from "../types/IConfigurationService/IOptions";
 import { Mediator } from "./Mediator";
 
@@ -17,7 +18,7 @@ export class ThumbPresenter implements IThumbPresenter, IObserver {
   private dragBound!: EventListenerOrEventListenerObject;
   private stopDragBound!: EventListenerOrEventListenerObject;
   private observers: IObserver[] = [];
-  private options: IOptions = ConfigService.getInstance().getOptions();
+  private options: IOptions = Config.getInstance().getOptions();
   private step: number;
   public isDoubleThumb: boolean;
 
@@ -152,11 +153,13 @@ export class ThumbPresenter implements IThumbPresenter, IObserver {
     console.log(
       `:::::: movementX = clientX: ${currentPosition} - thumbSize/2:   ${
         this.model.getThumbSize() / 2
-      } - startPoint ${startPoint} = movementX ${movementX} `
+      } - startPoint ${startPoint} = movementX ${movementX} step: ${this.model.getStep()}`
     );
 
     movementX = this.validateMinMax(movementX);
+
     movementX = this.setStep(movementX);
+
     if (Array.isArray(this.view)) {
       let newPositionArr: number[] = this.setDoubleThumbPosition(
         movementX,
@@ -177,8 +180,11 @@ export class ThumbPresenter implements IThumbPresenter, IObserver {
     this.notifyObservers();
   }
   private setStep(position: number): number {
-    let step: number = this.model.getStep();
-    return Math.round(position / step) * step;
+    if (this.model.getStep()) {
+      let step: number = this.model.getStep();
+      return Math.round(position / step) * step;
+    }
+    return position;
   }
   private setDoubleThumbPosition(
     movement: number,
@@ -251,6 +257,6 @@ export class ThumbPresenter implements IThumbPresenter, IObserver {
   }
 
   private test(): void {
-    // this.mediator?.setFill(44);
+    console.log(`---------options.value  ${this.options.value}`);
   }
 }

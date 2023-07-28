@@ -7,6 +7,7 @@ import { ThumbPresenter } from "./ThumbPresenter";
 import { FillPresenter } from "./FillPresenter";
 import { IOptions } from "../types/IConfigurationService/IOptions";
 import { ConfigService } from "../ConfigService/ConfigService";
+import { Config } from "../ConfigService/Config";
 import { Mediator } from "./Mediator";
 
 export class RangeSliderPresenter implements IPresenter, IObserver {
@@ -29,7 +30,8 @@ export class RangeSliderPresenter implements IPresenter, IObserver {
       this.thumbPresenter,
       this.fillPresenter
     );
-    this.options = ConfigService.getInstance().getOptions();
+    // this.options = ConfigService.getInstance().getOptions();
+    this.options = Config.getInstance().getOptions();
     this.init();
   }
   init(): void {
@@ -45,6 +47,8 @@ export class RangeSliderPresenter implements IPresenter, IObserver {
       this.thumbPresenter.getCurrentFillPosition();
 
     this.fillPresenter.updateValue(thumbPos);
+    console.log("-----options:");
+    console.log(this.options);
   }
 
   update(value: number | number[]): void {

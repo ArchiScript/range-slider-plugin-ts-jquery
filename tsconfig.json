@@ -111,5 +111,5 @@
   //   "src/**/*.ts",
   //   "types/range-slider.d.ts"
   // ]
- 
+ "exclude": ["node_modules","**/*.spec.ts"],
 }

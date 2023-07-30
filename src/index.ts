@@ -11,6 +11,11 @@ $(".range-slider-container").rangeSlider({
   doublePoint: false
 });
 
-const el = document.querySelector(".test") as HTMLElement;
-const mock = new Mock(el).getMockRangeSlider();
-console.log(mock.thumbModel.getContainerWidth());
+// const el = document.querySelector(".test") as HTMLElement;
+// const mock = new Mock(el).getMockRangeSlider();
+// console.log(
+//   `-----mock containerwidth:  ${mock.thumbModel.getContainerWidth()}\n --isdoublethumb---${
+//     mock.thumbPresenter.isDoubleThumb
+//   }`
+// );
+// export { mock };

@@ -8,7 +8,7 @@
         "ecmaVersion": "latest",
         "sourceType": "module"
     },
-    "ignorePatterns": ["dist"],
+    "ignorePatterns": ["dist","src/test/Mock.js"],
     "rules": {
         "quotes": ["error", "double"],
         "semi": ["error", "always"],

@@ -47,12 +47,9 @@ export default class Mock {
   private fillModel: FillModel;
   private fillPresenter: FillPresenter;
 
-  constructor(parentElement: HTMLElement) {
+  constructor(parentElement: HTMLElement, opts?: IOptions) {
     this.container = parentElement;
-    this.options = Config.set(this.container, {
-      max: 200,
-      step: 5
-    }).getOptions();
+    this.options = Config.set(this.container, opts).getOptions();
     this.rangeSliderView = new RangeSliderView(this.container);
     this.rangeSliderModel = new RangeSlider();
     this.trackView = this.rangeSliderView.getTrackView();

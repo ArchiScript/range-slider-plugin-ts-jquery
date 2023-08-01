@@ -16,4 +16,5 @@ export interface IThumbModel {
   getProportion(): number;
   getProportionValue(value: number | number[]): number | number[];
   getStep(): number;
+  posToValProportion(value: number | number[]): number | number[];
 }

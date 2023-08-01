@@ -25,7 +25,7 @@ export class ThumbModel implements IThumbModel {
 
     this.value = this.options.value ? this.options.value : (0 as number);
 
-    this.test();
+    // this.test();
   }
 
   // ===========test====
@@ -56,19 +56,25 @@ export class ThumbModel implements IThumbModel {
   }
   setPosition(position: number | number[]): void {
     this.position = position;
-    console.log(`_____!!!!___SetPosition: ${this.position}`);
     this.notifyObservers();
   }
 
   setValue(value: number | number[]): void {
-    if (Array.isArray(value)) {
-      this.value = value.map((v) => Math.round(v / this.getProportion()));
-    } else if (typeof value === "number") {
-      this.value = Math.round(value / this.getProportion());
-    }
-
+    this.value = value;
     this.notifyObservers();
   }
+
+  posToValProportion(value: number | number[]): number | number[] {
+    if (Array.isArray(value)) {
+      return value.map((v) => Math.round(v / this.getProportion()));
+    } else {
+      if (value == 0) {
+        return value;
+      }
+      return Math.round(value / this.getProportion());
+    }
+  }
+
   getValue(): number | number[] {
     if (Array.isArray(this.value)) {
       return this.value as number[];
@@ -86,6 +92,9 @@ export class ThumbModel implements IThumbModel {
   }
   addObserver(observer: IObserver): void {
     this.observers.push(observer);
+  }
+  getObservers(): IObserver[] {
+    return this.observers;
   }
 
   removeObserver(observer: IObserver): void {
@@ -120,9 +129,9 @@ export class ThumbModel implements IThumbModel {
     const max = this.getMax();
     const min = this.getMin();
     const proportion = this.containerWidth / (max - min);
-    console.log(
-      `proportion: containerWidth: ${this.containerWidth} / max ${max} - min ${min} = ${proportion}`
-    );
+    // console.log(
+    //   `proportion: containerWidth: ${this.containerWidth} / max ${max} - min ${min} = ${proportion}`
+    // );
     return proportion;
   }
 }

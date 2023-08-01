@@ -24,7 +24,7 @@ export class ConfigService implements IConfig {
     container?: Element
   ): ConfigService {
     if (!ConfigService.instance) {
-      ConfigService.instance = new ConfigService(options);
+      ConfigService.instance = new ConfigService(options, container);
     }
     if (container) {
       ConfigService.container = container;

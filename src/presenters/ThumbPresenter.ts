@@ -167,26 +167,26 @@ export class ThumbPresenter implements IThumbPresenter, IObserver {
       );
 
       this.updatePosition(newPositionArr);
-      this.model.setValue(newPositionArr);
+      this.model.setValue(this.model.posToValProportion(newPositionArr));
       let fillThumbWidth = newPositionArr[1];
       newPositionArr = [newPositionArr[0], fillThumbWidth];
       this.mediator?.setFill(newPositionArr);
     } else {
       this.updatePosition(movementX);
-      this.model.setValue(movementX);
+      this.model.setValue(this.model.posToValProportion(movementX));
       this.mediator?.setFill(movementX);
     }
 
     this.notifyObservers();
   }
-  private setStep(position: number): number {
+  setStep(position: number): number {
     if (this.model.getStep()) {
       let step: number = this.model.getStep();
       return Math.round(position / step) * step;
     }
     return position;
   }
-  private setDoubleThumbPosition(
+   setDoubleThumbPosition(
     movement: number,
     viewArr: ThumbView[]
   ): number[] {
@@ -217,7 +217,7 @@ export class ThumbPresenter implements IThumbPresenter, IObserver {
     document.removeEventListener("touchend", this.stopDragBound);
   }
 
-  private validateMinMax(pos: number): number {
+  validateMinMax(pos: number): number {
     let max = this.model.getContainerWidth() - this.model.getThumbSize();
     if (pos < 0) {
       pos = 0;
@@ -251,7 +251,7 @@ export class ThumbPresenter implements IThumbPresenter, IObserver {
     }
 
     this.updatePosition(pos);
-    this.model.setValue(pos);
+    this.model.setValue(this.model.posToValProportion(pos));
     this.mediator?.setFill(pos);
     this.notifyObservers();
   }

@@ -4,11 +4,11 @@ import "./plugin-wrapper/plugin-wrapper";
 import Mock from "./test/Mock";
 
 $(".range-slider-container").rangeSlider({
-  // value: [100, 250],
-  value: 0,
+  value: [100, 250],
+  // value: 0,
   max: 800,
   step: 20,
-  doublePoint: false
+  doublePoint: true
 });
 
 // const el = document.querySelector(".test") as HTMLElement;

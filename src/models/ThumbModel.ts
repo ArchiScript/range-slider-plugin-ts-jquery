@@ -20,7 +20,10 @@ export class ThumbModel implements IThumbModel {
     this.max = this.options.max as number;
     this.step = this.options.step as number;
     this.thumbSize = this.options.thumbSize as number;
-    this.position = this.options.value as number | number[];
+    // this.position = this.options.value as number | number[];
+    this.position = this.getProportionValue(
+      this.options.value as number | number[]
+    );
     this.containerWidth = this.getContainerWidth() - this.thumbSize;
 
     this.value = this.options.value ? this.options.value : (0 as number);
@@ -57,29 +60,27 @@ export class ThumbModel implements IThumbModel {
   setPosition(position: number | number[]): void {
     this.position = position;
     this.notifyObservers();
+    this.value = this.posToValProportion(position);
   }
 
   setValue(value: number | number[]): void {
     this.value = value;
     this.notifyObservers();
+    this.setPosition(this.getProportionValue(value));
   }
 
   posToValProportion(value: number | number[]): number | number[] {
     if (Array.isArray(value)) {
       return value.map((v) => Math.round(v / this.getProportion()));
+    } else if (value == 0) {
+      return value;
     } else {
-      if (value == 0) {
-        return value;
-      }
       return Math.round(value / this.getProportion());
     }
   }
 
   getValue(): number | number[] {
-    if (Array.isArray(this.value)) {
-      return this.value as number[];
-    }
-    return this.value as number;
+    return this.value as number | number[];
   }
   enableDrag(): void {
     this.dragging = true;
@@ -104,7 +105,7 @@ export class ThumbModel implements IThumbModel {
     for (const observer of this.observers) {
       if (Array.isArray(this.value)) {
         this.value.forEach((val) => observer.update(val));
-      } else if (this.value && typeof this.value == "number") {
+      } else if (typeof this.value == "number") {
         observer.update(this.value);
       }
     }
@@ -121,9 +122,13 @@ export class ThumbModel implements IThumbModel {
       return value.map(
         (val) => ((val - min) / (max - min)) * this.containerWidth
       );
+    } else if (value === 0) {
+      return value;
+    } else {
+      const proportionValue =
+        ((value - min) / (max - min)) * this.containerWidth;
+      return proportionValue;
     }
-    const proportionValue = ((value - min) / (max - min)) * this.containerWidth;
-    return proportionValue;
   }
   getProportion(): number {
     const max = this.getMax();

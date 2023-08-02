@@ -42,6 +42,7 @@ export class TrackPresenter implements ITrackPresenter, IObserver {
 
       this.onThumbPositionChange(position);
       this.mediator?.notifyTrackClick(position);
+      console.log(`----trackClickHandler: ${position}`);
     }
   }
   setMediator(mediator?: Mediator): void {

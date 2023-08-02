@@ -5,6 +5,7 @@ export class ThumbView implements IThumbView {
   private $parent: HTMLElement;
   public static id: number = 0;
   private id: number;
+  public isActive: boolean = false;
 
   constructor(parentElement: HTMLElement) {
     ThumbView.id++;

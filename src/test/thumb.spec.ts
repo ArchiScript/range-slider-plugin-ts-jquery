@@ -19,18 +19,18 @@ global.HTMLElement = window.HTMLElement;
 global.Element = window.Element;
 global.Node = window.Node;
 global.getComputedStyle = window.getComputedStyle;
-// global
 
+const el = jsdom.window.document.querySelector(".test") as HTMLElement;
+
+el.style.width = "300px";
+
+const mockOpts: IOptions = {
+  max: 200,
+  step: 5
+};
+const mock = new Mock(el, mockOpts).getMockRangeSlider();
+export { mock };
 describe("Test RangeSlider Thumb-single", () => {
-  const mockOpts: IOptions = {
-    max: 200,
-    step: 5
-  };
-
-  const el = jsdom.window.document.querySelector(".test") as HTMLElement;
-  el.style.width = "300px";
-
-  const mock = new Mock(el, mockOpts).getMockRangeSlider();
   before(() => {});
 
   describe("Test userOptions merged with defaults", () => {
@@ -137,6 +137,7 @@ describe("Test RangeSlider Thumb-single", () => {
     });
 
     it("should have current thumb current position(marginLeft) = 42", () => {
+      mock.thumbModel.setPosition(42);
       expect(thView.getThumbCurrentPosition()).to.equal(42);
     });
     it("should have type of returned thumb = HTMLElement", () => {
@@ -171,7 +172,10 @@ describe("Test Range-slider Double-point", () => {
       let setArr: number[] = [54, 78];
       mock.thumbModel.setValue(setArr);
       let getArr: number[] = mock.thumbModel.getValue() as number[];
-      expect(setArr).to.equal(getArr);
+      let arraysEqual: boolean =
+        getArr[0] === setArr[0] && getArr[1] === setArr[1];
+
+      expect(arraysEqual).to.be.true;
     });
     it("should have position of set position Array = 56,99", () => {
       let posArr: number[] = [56, 99];
@@ -180,10 +184,30 @@ describe("Test Range-slider Double-point", () => {
     });
   });
   describe("Test thumbView Double-point", () => {
+    let viewsArr: components.ThumbView[] =
+      mock.rangeSliderView.getThumbViews() as components.ThumbView[];
     it("should have array of views", () => {
-      let viewsArr: components.ThumbView[] =
-        mock.rangeSliderView.getThumbViews() as components.ThumbView[];
       expect(Array.isArray(viewsArr)).to.be.true;
+    });
+    it("should return correct double-point position array", () => {
+      let posArr = [23, 65];
+      mock.thumbModel.setPosition(posArr);
+      let viewsArr =
+        mock.rangeSliderView.getThumbViews() as components.ThumbView[];
+      let movement: number = 77;
+      mock.thumbPresenter.setThumbDataValue(viewsArr);
+      mock.thumbPresenter.setTestActiveThumb(
+        viewsArr[1].getThumbElement(),
+        viewsArr
+      );
+
+      viewsArr.forEach((view, index) => view.render(posArr[index]));
+      let newPos: number[] = mock.thumbPresenter.setDoubleThumbPosition(
+        movement,
+        viewsArr
+      );
+      let arraysEqual = posArr[0] === newPos[0] && movement === newPos[1];
+      expect(arraysEqual).to.be.true;
     });
   });
 });

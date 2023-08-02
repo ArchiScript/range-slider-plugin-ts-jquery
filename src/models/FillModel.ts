@@ -18,7 +18,7 @@ export class FillModel implements IFillModel {
 
     this.fillWidth = this.calculateFillWidth(this.fillPosition);
   }
-  private calculateFillWidth(fillPos: number | number[]): number {
+  calculateFillWidth(fillPos: number | number[]): number {
     if (Array.isArray(fillPos)) {
       return fillPos[1] - fillPos[0] + this.thumbSize;
     } else {

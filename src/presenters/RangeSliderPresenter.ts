@@ -50,7 +50,9 @@ export class RangeSliderPresenter implements IPresenter, IObserver {
     console.log("-----options:");
     console.log(this.options);
   }
-
+  getMediator() {
+    return this.mediator;
+  }
   update(value: number | number[]): void {
     this.view.render(value);
   }

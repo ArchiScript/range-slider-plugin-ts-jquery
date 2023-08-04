@@ -8,7 +8,8 @@ $(".range-slider-container").rangeSlider({
   // value: 0,
   max: 800,
   step: 20,
-  doublePoint: true
+  doublePoint: true,
+  tooltip: true
 });
 
 // const el = document.querySelector(".test") as HTMLElement;

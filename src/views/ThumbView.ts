@@ -1,29 +1,55 @@
 import { IThumbView } from "../types/IViews/IThumbView";
-
+import { IOptions } from "../components/components";
+import { Config } from "../components/components";
 export class ThumbView implements IThumbView {
   private $thumb: HTMLElement;
   private $parent: HTMLElement;
+  private $tooltip: HTMLElement;
   public static id: number = 0;
   private id: number;
+  // private localId: number;
+
   public isActive: boolean = false;
+  private options: IOptions = Config.getInstance().getOptions();
 
   constructor(parentElement: HTMLElement) {
     ThumbView.id++;
+    if (ThumbView.id > 2) {
+      ThumbView.id = 1;
+    }
     this.id = ThumbView.id;
+    console.log(this.id);
     this.$thumb = document.createElement("div");
     this.$thumb.setAttribute("class", `range-slider__thumb thumb-${this.id}`);
     this.$thumb.setAttribute("data-id", `${this.id}`);
     this.$parent = parentElement;
     this.$parent.appendChild(this.$thumb);
     this.$thumb.setAttribute("data-value", `0`);
+    this.$tooltip = this.getTooltip();
+    if (this.options.tooltip) {
+      this.$thumb.appendChild(this.$tooltip);
+    }
   }
 
-  render(position: number | number[]): void {
-    if (Array.isArray(position)) {
+  getTooltip(): HTMLElement {
+    const tooltip = document.createElement("div");
+    tooltip.setAttribute("class", `range-slider__tooltip tooltip-${this.id}`);
+    return tooltip;
+  }
+
+  render(position: number | number[], value: number | number[]): void {
+    if (Array.isArray(position) && Array.isArray(value)) {
       const thisId: number = this.id - 1;
       this.$thumb.style.left = `${position[thisId]}px`;
+      if (this.options.tooltip) {
+        this.$tooltip.innerHTML = `${value[thisId]}`;
+      }
+    } else {
+      this.$thumb.style.left = `${position}px`;
+      if (this.options.tooltip) {
+        this.$tooltip.innerHTML = `${value}`;
+      }
     }
-    this.$thumb.style.left = `${position}px`;
   }
   getThumbViewId(): number {
     return this.id;

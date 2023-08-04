@@ -100,10 +100,10 @@ export class ThumbPresenter implements IThumbPresenter, IObserver {
 
   updateView(): void {
     if (this.view instanceof ThumbView) {
-      this.view.render(this.model.getPosition());
+      this.view.render(this.model.getPosition(), this.model.getValue());
     } else if (Array.isArray(this.view)) {
       this.view.forEach((thumbView) =>
-        thumbView.render(this.model.getPosition())
+        thumbView.render(this.model.getPosition(), this.model.getValue())
       );
     }
 

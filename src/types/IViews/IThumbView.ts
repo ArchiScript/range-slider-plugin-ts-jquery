@@ -3,4 +3,6 @@ export interface IThumbView {
   addValueChangeListener(listener: Function): void;
   addStartDragListener(listener: Function): void;
   getThumbViewId(): number;
+  getThumbElement(): HTMLElement;
+  getTooltipElement(): HTMLElement;
 }

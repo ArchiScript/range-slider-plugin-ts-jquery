@@ -71,4 +71,7 @@ export class ThumbView implements IThumbView {
   getThumbElement(): HTMLElement {
     return this.$thumb;
   }
+  getTooltipElement(): HTMLElement {
+    return this.$tooltip;
+  }
 }

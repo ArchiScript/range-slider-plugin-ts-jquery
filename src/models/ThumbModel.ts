@@ -59,14 +59,14 @@ export class ThumbModel implements IThumbModel {
   }
   setPosition(position: number | number[]): void {
     this.position = position;
-    this.notifyObservers();
     this.value = this.posToValProportion(position);
+    this.notifyObservers();
   }
 
   setValue(value: number | number[]): void {
     this.value = value;
-    this.notifyObservers();
     this.setPosition(this.getProportionValue(value));
+    this.notifyObservers();
   }
 
   posToValProportion(value: number | number[]): number | number[] {

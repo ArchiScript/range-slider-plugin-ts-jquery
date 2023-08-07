@@ -201,13 +201,25 @@ describe("Test Range-slider Double-point", () => {
         viewsArr
       );
 
-      viewsArr.forEach((view, index) => view.render(posArr[index]));
+      viewsArr.forEach((view, index) =>
+        view.render(posArr[index], mock.thumbModel.getValue())
+      );
       let newPos: number[] = mock.thumbPresenter.setDoubleThumbPosition(
         movement,
         viewsArr
       );
       let arraysEqual = posArr[0] === newPos[0] && movement === newPos[1];
       expect(arraysEqual).to.be.true;
+    });
+
+    it("should have a tooltip HTMLElement", () => {
+      if (Array.isArray(mock.thumbView)) {
+        mock.thumbView.forEach((view) => {
+          expect(view.getTooltipElement() instanceof HTMLElement).to.be.true;
+        });
+      } else {
+        expect(mock.thumbView.getTooltipElement());
+      }
     });
   });
 });

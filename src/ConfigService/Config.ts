@@ -16,7 +16,8 @@ export class Config implements IConfig {
     trackHeight: 10,
     tooltip: true,
     thumbSize: 15,
-    doublePoint: false
+    doublePoint: false,
+    ticks: true
   };
   private constructor(options?: IOptions, container?: HTMLElement) {
     Config.instanceId++;

@@ -6,7 +6,8 @@ export interface IOptions {
   min?: number;
   thumbSize?: number;
   value?: number | number[];
-  ticks?: number;
+  ticks?: boolean;
+  tickStep?: number;
   step?: number;
   tooltip?: boolean;
   label?: string;

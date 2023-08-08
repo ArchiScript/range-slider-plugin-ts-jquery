@@ -22,7 +22,7 @@ export class TrackPresenter implements ITrackPresenter, IObserver {
     this.trackModel.addObserver(this);
     this.trackView.addPositionChangeListener(this.trackClickHandler.bind(this));
     this.updateView();
-    this.getCalculatedTickStep(30);
+    console.log(`------tick-- ${this.getCalculatedTickStep(800)}`);
   }
 
   update(clickPosition: number): void {
@@ -51,55 +51,75 @@ export class TrackPresenter implements ITrackPresenter, IObserver {
     if (mediator) this.mediator = mediator;
   }
 
-  getCalculatedTickStep(num: number): void {
-    let tickStep: number;
-    // let max = this.options.max as number;
-    let max = num as number;
+  getCalculatedTickStep(num: number): number {
+    let tickStep: number = 1;
+    let max = num;
 
-    let significant: { num: number; grade: number } =
-      this.removeTrailingZeros(max);
-    let half =
-      significant.grade > 1
-        ? 5 * 10 ** (significant.grade - 1)
-        : 5 * 10 ** significant.grade;
-    let significantIsPlain = significant.num / 10 < 1;
+    const significant = this.removeTrailingZeros(max);
 
-    const magnitude = Math.floor(Math.log10(max));
-    const firstDigit = Math.floor(max / 10 ** magnitude);
-    tickStep = 10 ** magnitude;
-    tickStep = this.getValidPartitions(tickStep, max, significant.grade);
-
-    console.log(`------half: ${half}`);
-    console.log(
-      `----- tick: ${tickStep} ---${significant.num}--${significant.grade}`
-    );
-    if (significantIsPlain) {
-      tickStep = max / significant.num;
-      tickStep = this.getValidPartitions(tickStep, max, significant.grade);
-      console.log(
-        `----this number is plain: ${significant.num} tick: ${tickStep}`
+    if (this.isValidPartition(max / significant.num, max)) {
+      return (tickStep = max / significant.num);
+    } else {
+      const validTicksSteps: number[] = this.getValidTickStepsArr(
+        tickStep,
+        max
       );
-    } else if (significantIsPlain && max % half == 0) {
-      tickStep = max / (max / half);
-      tickStep = this.getValidPartitions(tickStep, max, significant.grade);
-      console.log(
-        `----- tick: ${tickStep} ---${significant.num}--${significant.grade}`
-      );
+      tickStep = this.getFavorableTickStep(validTicksSteps, max);
+      return tickStep;
     }
   }
+  isFirstDigitPlain(num: number): boolean {
+    return this.removeTrailingZeros(num).num / 10 < 1;
+  }
+
+  getValidMultipliers(max: number): number[] {
+    const multipliers: number[] = [];
+    const sqrtMax = Math.sqrt(max);
+    for (let i = 1; i <= sqrtMax; i++) {
+      if (max % i === 0) {
+        multipliers.push(i);
+        if (i !== max / i && i !== 1) {
+          multipliers.push(max / i);
+        }
+      }
+    }
+    return multipliers.sort((a, b) => a - b);
+  }
+
   isValidPartition(tickStep: number, max: number): boolean {
     const partitions = max / tickStep;
-    return partitions < 20 && partitions > 4;
+    const result = partitions <= 20 && partitions >= 6 && max % tickStep == 0;
+    return result;
   }
-  getValidPartitions(tickStep: number, max: number, grade: number): number {
-    const partitions = max / tickStep;
-    const minPartitions = 4;
-    const maxPartitions = 20;
-    if (partitions < minPartitions) {
-      return (tickStep /= 10);
-    } else if (partitions > maxPartitions) {
-      return (tickStep *= 10);
-    } else return tickStep;
+
+  getFavorableTickStep(validTicksSteps: number[], max: number): number {
+    let result: number = 0;
+    for (let tick of validTicksSteps) {
+      if (this.isFirstDigitPlain(tick)) {
+        console.log(`====favorable====${tick}`);
+        result = tick;
+      }
+    }
+    result = result
+      ? result
+      : validTicksSteps.filter((num) => max / num == 10)[0] ??
+        validTicksSteps[0];
+    return result;
+  }
+
+  getValidTickStepsArr(tickStep: number, max: number): number[] {
+    const validTicksSteps: number[] = [];
+    const magnitudes = this.getValidMultipliers(max);
+
+    for (const magnitude of magnitudes) {
+      const newTickStep = tickStep * magnitude;
+
+      if (this.isValidPartition(newTickStep, max)) {
+        validTicksSteps.push(newTickStep);
+      }
+    }
+
+    return validTicksSteps;
   }
 
   removeTrailingZeros(num: number): { num: number; grade: number } {

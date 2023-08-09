@@ -173,9 +173,8 @@ export class ThumbPresenter implements IThumbPresenter, IObserver {
       } - startPoint ${startPoint} = movementX ${movementX} step: ${this.model.getStep()}`
     );
 
-    movementX = this.validateMinMax(movementX);
-
     movementX = this.setStep(movementX);
+    movementX = this.validateMinMax(movementX);
 
     if (Array.isArray(this.view)) {
       let newPositionArr: number[] = this.setDoubleThumbPosition(
@@ -197,6 +196,7 @@ export class ThumbPresenter implements IThumbPresenter, IObserver {
   setStep(position: number): number {
     if (this.model.getStep()) {
       let step: number = this.model.getStep();
+      step = this.validateIfStepMismatch(position);
       return Math.round(position / step) * step;
     }
     return position;
@@ -237,16 +237,24 @@ export class ThumbPresenter implements IThumbPresenter, IObserver {
     return pos;
   }
 
+  validateIfStepMismatch(pos: number): number {
+    const max = this.model.getContainerWidth() - this.model.getThumbSize();
+    console.log(max % this.step);
+    return pos >= max && max % this.step !== 0 ? max % this.step : this.step;
+  }
+
   public onTrackClick(clickPosition: number): void {
     let pos: number | number[];
     clickPosition -= this.model.getThumbSize();
     clickPosition = this.validateMinMax(clickPosition);
-    console.log(`____clickpos__${clickPosition}`);
     let intersection: number = 0;
+    const maxPos = this.model.getProportionValue(
+      this.options.max as number
+    ) as number;
+    console.log(maxPos);
 
     if (!Array.isArray(this.model.getPosition())) {
       pos = clickPosition;
-      pos = this.setStep(pos);
     } else {
       let posArr: number[] = this.model.getPosition() as number[];
       intersection = posArr[1] - posArr[0];

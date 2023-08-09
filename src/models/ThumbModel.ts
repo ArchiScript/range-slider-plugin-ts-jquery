@@ -3,6 +3,7 @@ import { IThumbModel } from "../types/IModels/IThumbModel";
 import { IOptions } from "../types/IConfigurationService/IOptions";
 import { ConfigService } from "../ConfigService/ConfigService";
 import { Config } from "../ConfigService/Config";
+import { Ruler } from "./Ruler";
 export class ThumbModel implements IThumbModel {
   private position: number | number[];
   private observers: IObserver[] = [];
@@ -32,15 +33,8 @@ export class ThumbModel implements IThumbModel {
   }
 
   // ===========test====
-  test(): void {
-    console.log(
-      `containerWidth: ${
-        this.containerWidth
-      }====Position:${this.getPosition()}====Proportion=== ${this.getProportionValue(
-        this.position
-      )}=====Value:${this.getValue()}`
-    );
-  }
+  test(): void {}
+
   getStep(): number {
     return this.step * this.getProportion();
   }

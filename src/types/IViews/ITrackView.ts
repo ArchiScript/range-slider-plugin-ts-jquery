@@ -1,5 +1,5 @@
 export interface ITrackView {
-  render(width: number, height: number): void;
+  render(width: number, height: number, tickStep: number): void;
   addPositionChangeListener(listener: Function): void;
-  getRuler(): HTMLElement;
+  getRuler(tickStep: number): HTMLElement;
 }

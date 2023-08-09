@@ -15,15 +15,15 @@ export class TrackView implements ITrackView {
     return this.$track;
   }
 
-  render(width: number, height: number): void {
+  render(width: number, height: number, tickStep: number): void {
     this.$element.appendChild(this.$track);
     this.$track.style.width = `${width}%`;
     this.$track.style.height = `${height}px`;
     if (this.options.ticks) {
-      this.$track.appendChild(this.getRuler());
+      this.$track.appendChild(this.getRuler(tickStep));
     }
   }
-  getRuler(): HTMLElement {
+  getRuler(tickStep: number): HTMLElement {
     let $ruler = document.createElement("div");
     $ruler.setAttribute("class", "range-slider__ruler");
     $ruler.style.width = `100%`;
@@ -31,7 +31,6 @@ export class TrackView implements ITrackView {
     $ruler.style.paddingLeft = `${rulerPadding}px`;
     $ruler.style.paddingRight = `${rulerPadding}px`;
     let i: number = 0,
-      rulerStep: number = 100,
       max: number = this.options.max as number;
 
     while (i <= max) {
@@ -45,7 +44,7 @@ export class TrackView implements ITrackView {
       tick.appendChild(tickNumber);
       $ruler.appendChild(tick);
       tickNumber.innerHTML = i.toString();
-      i += rulerStep;
+      i += tickStep;
     }
     return $ruler;
   }

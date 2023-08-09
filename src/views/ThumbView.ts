@@ -18,7 +18,6 @@ export class ThumbView implements IThumbView {
       ThumbView.id = 1;
     }
     this.id = ThumbView.id;
-    console.log(this.id);
     this.$thumb = document.createElement("div");
     this.$thumb.setAttribute("class", `range-slider__thumb thumb-${this.id}`);
     this.$thumb.setAttribute("data-id", `${this.id}`);

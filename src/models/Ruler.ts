@@ -15,10 +15,7 @@ export class Ruler implements IRuler {
     if (this.isValidPartition(max / significantNum, max)) {
       return (tickStep = max / significantNum);
     } else {
-      const validTicksSteps: number[] = this.getValidTickStepsArr(
-        tickStep,
-        max
-      );
+      const validTicksSteps: number[] = this.getValidTickStepsArr(max);
       tickStep = this.getFavorableTickStep(validTicksSteps, max);
       return tickStep;
     }
@@ -61,7 +58,8 @@ export class Ruler implements IRuler {
     return result;
   }
 
-  getValidTickStepsArr(tickStep: number, max: number): number[] {
+  getValidTickStepsArr(max: number): number[] {
+    const tickStep: number = 1;
     const validTicksSteps: number[] = [];
     const magnitudes = this.getValidMultipliers(max);
 

@@ -8,5 +8,6 @@ $(".range-slider-container").rangeSlider({
   max: 800,
   step: 20,
   doublePoint: true,
-  tooltip: true
+  tooltip: true,
+  stringValues: ["small", "medium", "large", "giant"]
 });

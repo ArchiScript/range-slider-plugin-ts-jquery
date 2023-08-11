@@ -64,12 +64,13 @@ body {
   &__tooltip {
     position: absolute;
     height: 30px;
-    width: 30px;
+    min-width: 30px;
+    padding: 5px;
     top: -37px;
     background-color: rgb(212, 69, 69);
     color: white;
     font-family: arial;
-    font-size: 14px;
+    font-size: 12px;
     display: flex;
     align-items: center;
     justify-content: center;

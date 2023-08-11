@@ -15,4 +15,5 @@ export interface IOptions {
   containerWidth?: number;
   containerViewportLeft?: number;
   instanceId?: number;
+  stringValues?: string[];
 }

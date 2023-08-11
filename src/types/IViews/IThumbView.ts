@@ -1,5 +1,9 @@
 export interface IThumbView {
-  render(position: number | number[], value: number | number[]): void;
+  render(
+    position: number | number[],
+    value: number | number[],
+    stringValue?: string
+  ): void;
   addValueChangeListener(listener: Function): void;
   addStartDragListener(listener: Function): void;
   getThumbViewId(): number;

@@ -29,11 +29,14 @@ export class ThumbModel implements IThumbModel {
 
     this.value = this.options.value ? this.options.value : (0 as number);
 
-    // this.test();
+    this.test();
   }
 
   // ===========test====
-  test(): void {}
+  test(): void {
+    // console.log(this.splitNum(800, 3));
+    console.log(this.getValueString([100, 700]));
+  }
 
   getStep(): number {
     return this.step * this.getProportion();
@@ -128,9 +131,47 @@ export class ThumbModel implements IThumbModel {
     const max = this.getMax();
     const min = this.getMin();
     const proportion = this.containerWidth / (max - min);
-    // console.log(
-    //   `proportion: containerWidth: ${this.containerWidth} / max ${max} - min ${min} = ${proportion}`
-    // );
     return proportion;
+  }
+
+  getValueString(value: number | number[]): string | string[] | undefined {
+    let stringValue = "";
+    if (this.options.stringValues) {
+      const userStrings = this.options.stringValues as string[];
+      let parts: number = userStrings.length;
+      const splitArr = this.splitNum(this.max as number, parts);
+      if (Array.isArray(value)) {
+        const stringValueArr: string[] = [];
+
+        value.forEach((val) => {
+          let start: number = 0;
+          for (let i = 0; i <= userStrings.length - 1; i++) {
+            if (val >= start && val <= splitArr[i]) {
+              stringValueArr.push(userStrings[i]);
+              start = splitArr[i];
+            }
+          }
+        });
+        return stringValueArr;
+      } else {
+        let start: number = 0;
+        for (let i = 0; i <= userStrings.length - 1; i++) {
+          if (value >= start && value <= splitArr[i]) {
+            stringValue = userStrings[i];
+            start = splitArr[i];
+          }
+          return stringValue;
+        }
+      }
+    }
+  }
+
+  splitNum(num: number, parts: number): number[] {
+    let splitArr: number[] = [];
+    let part = num / parts;
+    for (let i = 0; i <= parts - 1; i++) {
+      splitArr.push(part * (i + 1));
+    }
+    return splitArr;
   }
 }

@@ -36,20 +36,33 @@ export class ThumbView implements IThumbView {
     return tooltip;
   }
 
-  render(position: number | number[], value: number | number[]): void {
+  render(
+    position: number | number[],
+    value: number | number[],
+    stringValue?: string | string[]
+  ): void {
     if (Array.isArray(position) && Array.isArray(value)) {
       const thisId: number = this.id - 1;
       this.$thumb.style.left = `${position[thisId]}px`;
       if (this.options.tooltip) {
-        this.$tooltip.innerHTML = `${value[thisId]}`;
+        if (stringValue) {
+          this.$tooltip.innerHTML = `${stringValue[thisId]}`;
+        } else {
+          this.$tooltip.innerHTML = `${value[thisId]}`;
+        }
       }
     } else {
       this.$thumb.style.left = `${position}px`;
       if (this.options.tooltip) {
-        this.$tooltip.innerHTML = `${value}`;
+        if (this.options.stringValues) {
+          this.$tooltip.innerHTML = `${stringValue as string}`;
+        } else {
+          this.$tooltip.innerHTML = `${value}`;
+        }
       }
     }
   }
+
   getThumbViewId(): number {
     return this.id;
   }

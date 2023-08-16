@@ -12,16 +12,17 @@ import { FillView } from "../views/FillView";
 import { IOptions } from "../types/IConfigurationService/IOptions";
 import { ConfigService } from "../ConfigService/ConfigService";
 import { Config } from "../ConfigService/Config";
+// import "../types/range-slider.d";
 
 import $ from "jquery";
-export function rangeSlider(
+function rangeSlider(
   this: JQuery<HTMLElement>,
   opts?: IOptions
 ): JQuery<HTMLElement> {
+  const pluginInstance: JQuery<HTMLElement> = this;
   this.each(function () {
     const container = this;
-    // const c = container as Element;
-    // const options = ConfigService.setInstance(opts, c).getOptions();
+
     const options = Config.set(container, opts).getOptions();
     const view = new RangeSliderView(container);
     const model = new RangeSlider();
@@ -41,11 +42,19 @@ export function rangeSlider(
       thumbPresenter,
       fillPresenter
     );
+    pluginInstance.setValue = function (
+      value: number | number
+    ): JQuery<HTMLElement> {
+      thumbPresenter.externalSetValue(value);
+      return pluginInstance;
+    };
   });
-  return this;
+
+  return pluginInstance;
 }
 
 $.fn.rangeSlider = rangeSlider;
+
 // $.fn.rangeSlider = function (opts?: IOptions) {
 //   return rangeSlider.call(this, opts);
 // };

@@ -19,14 +19,12 @@ export class ThumbModel implements IThumbModel {
   constructor() {
     this.min = this.options.min as number;
     this.max = this.options.max as number;
-    this.step = this.options.step as number;
+    this.step = this.validateStep(this.options.step as number);
     this.thumbSize = this.options.thumbSize as number;
-    // this.position = this.options.value as number | number[];
     this.position = this.getProportionValue(
       this.options.value as number | number[]
     );
     this.containerWidth = this.getContainerWidth() - this.thumbSize;
-
     this.value = this.options.value ? this.options.value : (0 as number);
 
     this.test();
@@ -35,7 +33,7 @@ export class ThumbModel implements IThumbModel {
   // ===========test====
   test(): void {
     // console.log(this.splitNum(800, 3));
-    console.log(this.getValueString([100, 700]));
+    console.log(this.getValueString([400, 800]));
   }
 
   getStep(): number {
@@ -144,24 +142,24 @@ export class ThumbModel implements IThumbModel {
         const stringValueArr: string[] = [];
 
         value.forEach((val) => {
-          let start: number = 0;
-          for (let i = 0; i <= userStrings.length - 1; i++) {
-            if (val >= start && val <= splitArr[i]) {
+          let ranges = [0, ...splitArr];
+          for (let i = 0; i <= userStrings.length; i++) {
+            if (val >= ranges[i] && val <= ranges[i + 1]) {
               stringValueArr.push(userStrings[i]);
-              start = splitArr[i];
+              break;
             }
           }
         });
         return stringValueArr;
       } else {
-        let start: number = 0;
-        for (let i = 0; i <= userStrings.length - 1; i++) {
-          if (value >= start && value <= splitArr[i]) {
+        let ranges = [0, ...splitArr];
+        for (let i = 0; i <= userStrings.length; i++) {
+          if (value >= ranges[i] && value <= ranges[i + 1]) {
             stringValue = userStrings[i];
-            start = splitArr[i];
+            break;
           }
-          return stringValue;
         }
+        return stringValue;
       }
     }
   }
@@ -173,5 +171,14 @@ export class ThumbModel implements IThumbModel {
       splitArr.push(part * (i + 1));
     }
     return splitArr;
+  }
+
+  validateStep(step: number): number {
+    if (step > this.max) {
+      step = this.max;
+    } else if (step <= this.min) {
+      step = this.min;
+    }
+    return step;
   }
 }

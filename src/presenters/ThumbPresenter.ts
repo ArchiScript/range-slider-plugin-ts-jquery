@@ -212,6 +212,12 @@ export class ThumbPresenter implements IThumbPresenter, IObserver {
 
     this.notifyObservers();
   }
+
+  externalSetValue(value: number | number[]): void {
+    this.model.setValue(value);
+    this.mediator?.setFill(this.model.getPosition());
+  }
+
   setStep(position: number): number {
     if (this.model.getStep()) {
       let step: number = this.model.getStep();
@@ -258,7 +264,6 @@ export class ThumbPresenter implements IThumbPresenter, IObserver {
 
   validateIfStepMismatch(pos: number): number {
     const max = this.model.getContainerWidth() - this.model.getThumbSize();
-    console.log(max % this.step);
     return pos >= max && max % this.step !== 0 ? max % this.step : this.step;
   }
 
@@ -273,7 +278,7 @@ export class ThumbPresenter implements IThumbPresenter, IObserver {
     console.log(maxPos);
 
     if (!Array.isArray(this.model.getPosition())) {
-      pos = clickPosition;
+      pos = this.setStep(clickPosition);
     } else {
       let posArr: number[] = this.model.getPosition() as number[];
       intersection = posArr[1] - posArr[0];

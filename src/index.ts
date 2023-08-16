@@ -2,7 +2,7 @@ import "./assets/styles/style.scss";
 import $ from "jquery";
 import "./plugin-wrapper/plugin-wrapper";
 
-$(".range-slider-container").rangeSlider({
+const plugin = $(".range-slider-container").rangeSlider({
   value: [100, 250],
   // value: 0,
   max: 800,
@@ -11,3 +11,5 @@ $(".range-slider-container").rangeSlider({
   tooltip: true,
   stringValues: ["small", "medium", "large", "giant"]
 });
+
+plugin.setValue([50, 420]);

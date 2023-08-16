@@ -54,7 +54,7 @@ export class ThumbView implements IThumbView {
     } else {
       this.$thumb.style.left = `${position}px`;
       if (this.options.tooltip) {
-        if (this.options.stringValues) {
+        if (stringValue) {
           this.$tooltip.innerHTML = `${stringValue as string}`;
         } else {
           this.$tooltip.innerHTML = `${value}`;

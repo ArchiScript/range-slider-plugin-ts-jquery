@@ -5,14 +5,20 @@ import { ConfigService } from "../ConfigService/ConfigService";
 import { Config } from "../ConfigService/Config";
 
 export class TrackModel implements ITrackModel {
-  private width: number = 100;
+  private width: number;
   private height: number;
 
   private observers: IObserver[] = [];
   private options: IOptions = Config.getInstance().getOptions();
 
   constructor() {
-    this.height = Number(this.options.trackHeight);
+    if (this.options.orientation === "horizontal") {
+      this.height = this.options.trackHeight as number;
+      this.width = 100;
+    } else {
+      this.height = 100;
+      this.width = this.options.trackHeight as number;
+    }
   }
 
   getWidth(): number {

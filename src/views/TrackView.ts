@@ -9,7 +9,9 @@ export class TrackView implements ITrackView {
   constructor(parentElement: HTMLElement) {
     this.$element = parentElement;
     this.$track = document.createElement("div");
-    this.$track.setAttribute("class", "range-slider__track");
+    let orientClass: string = `range-slider__track--${this.options.orientation}`;
+
+    this.$track.setAttribute("class", `range-slider__track ${orientClass}`);
   }
   getTrackElement(): HTMLElement {
     return this.$track;
@@ -17,16 +19,32 @@ export class TrackView implements ITrackView {
 
   render(width: number, height: number, tickStep: number): void {
     this.$element.appendChild(this.$track);
-    this.$track.style.width = `${width}%`;
-    this.$track.style.height = `${height}px`;
+    if (this.options.orientation === "horizontal") {
+      this.$track.style.width = `${width}%`;
+      this.$track.style.height = `${height}px`;
+    } else {
+      this.$track.style.width = `${width}px`;
+      this.$track.style.height = `${height}%`;
+    }
+    console.log(this.$track.style.width);
+    console.log(this.$track.style.height);
+
     if (this.options.ticks) {
       this.$track.appendChild(this.getRuler(tickStep));
     }
   }
   getRuler(tickStep: number): HTMLElement {
     let $ruler = document.createElement("div");
-    $ruler.setAttribute("class", "range-slider__ruler");
-    $ruler.style.width = `100%`;
+    $ruler.setAttribute(
+      "class",
+      `range-slider__ruler range-slider__ruler--${this.options.orientation} `
+    );
+    if (this.options.orientation === "horizontal") {
+      $ruler.style.width = `100%`;
+    } else {
+      $ruler.style.height = `100%`;
+    }
+
     let rulerPadding = this.options.thumbSize! / 2;
     $ruler.style.paddingLeft = `${rulerPadding}px`;
     $ruler.style.paddingRight = `${rulerPadding}px`;
@@ -35,11 +53,20 @@ export class TrackView implements ITrackView {
 
     while (i <= max) {
       let tick = document.createElement("div");
-      tick.setAttribute("class", "range-slider__tick");
+      tick.setAttribute(
+        "class",
+        `range-slider__tick range-slider__tick--${this.options.orientation}`
+      );
       let tickBar = document.createElement("div");
-      tickBar.setAttribute("class", "range-slider__tick-bar");
+      tickBar.setAttribute(
+        "class",
+        `range-slider__tick-bar range-slider__tick-bar--${this.options.orientation}`
+      );
       let tickNumber = document.createElement("div");
-      tickNumber.setAttribute("class", "range-slider__tick-number");
+      tickNumber.setAttribute(
+        "class",
+        `range-slider__tick-number range-slider__tick-number--${this.options.orientation}`
+      );
       tick.appendChild(tickBar);
       tick.appendChild(tickNumber);
       $ruler.appendChild(tick);

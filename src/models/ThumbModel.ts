@@ -13,8 +13,10 @@ export class ThumbModel implements IThumbModel {
   private max: number;
   private value?: number | number[];
   private containerWidth: number;
+  private containerHeight: number;
   private step: number;
   private options: IOptions = Config.getInstance().getOptions();
+  private containerOrientationValue: number;
 
   constructor() {
     this.min = this.options.min as number;
@@ -25,8 +27,12 @@ export class ThumbModel implements IThumbModel {
       this.options.value as number | number[]
     );
     this.containerWidth = this.getContainerWidth() - this.thumbSize;
+    this.containerHeight = this.getContainerHeight() - this.thumbSize;
     this.value = this.options.value ? this.options.value : (0 as number);
-
+    this.containerOrientationValue =
+      this.options.orientation === "horizontal"
+        ? this.containerWidth
+        : this.containerHeight;
     this.test();
   }
 
@@ -110,25 +116,29 @@ export class ThumbModel implements IThumbModel {
     return this.options.containerWidth as number;
   }
 
+  getContainerHeight(): number {
+    return this.options.containerHeight as number;
+  }
+
   getProportionValue(value: number | number[]): number | number[] {
     const max = this.getMax();
     const min = this.getMin();
     if (Array.isArray(value)) {
       return value.map(
-        (val) => ((val - min) / (max - min)) * this.containerWidth
+        (val) => ((val - min) / (max - min)) * this.containerOrientationValue
       );
     } else if (value === 0) {
       return value;
     } else {
       const proportionValue =
-        ((value - min) / (max - min)) * this.containerWidth;
+        ((value - min) / (max - min)) * this.containerOrientationValue;
       return proportionValue;
     }
   }
   getProportion(): number {
     const max = this.getMax();
     const min = this.getMin();
-    const proportion = this.containerWidth / (max - min);
+    const proportion = this.containerOrientationValue / (max - min);
     return proportion;
   }
 

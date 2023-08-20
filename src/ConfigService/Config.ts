@@ -4,7 +4,9 @@ export class Config implements IConfig {
   private userOptions?: IOptions;
   private container?: Element;
   private containerWidth?: number;
+  private containerHeight?: number;
   private containerViewportLeft?: number;
+  private containerViewportTop?: number;
   private static instance: Config;
   private static instanceId: number = 0;
   private instanceId: number;
@@ -40,9 +42,14 @@ export class Config implements IConfig {
   private decorateUserOptions(options: IOptions): IOptions {
     if (this.container) {
       this.containerWidth = parseInt(getComputedStyle(this.container).width);
+      this.containerHeight = parseInt(getComputedStyle(this.container).height);
       this.containerViewportLeft = this.container.getBoundingClientRect().left;
+      this.containerViewportTop = this.container.getBoundingClientRect().top;
       options.containerWidth = this.containerWidth;
+      options.containerHeight = this.containerHeight;
       options.containerViewportLeft = this.containerViewportLeft;
+      options.containerViewportTop = this.containerViewportTop;
+
       options.instanceId = this.instanceId;
       return options;
     }

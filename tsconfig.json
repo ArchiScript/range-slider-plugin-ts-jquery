@@ -28,10 +28,13 @@
     "module": "ES2022",                                /* Specify what module code is generated. */
     // "rootDir": "./",                                  /* Specify the root folder within your source files. */
     "moduleResolution": "node",                     /* Specify how TypeScript looks up a file from a given module specifier. */
-    // "baseUrl": "./",                                  /* Specify the base directory to resolve non-relative module names. */
-    // "paths": {},                                      /* Specify a set of entries that re-map imports to additional lookup locations. */
+    "baseUrl": "./src",                                  /* Specify the base directory to resolve non-relative module names. */
+    // "paths": {
+    //   "IOptions" :["src/types/IConfigurationService/IOptions.d.ts"]
+    // },                                      /* Specify a set of entries that re-map imports to additional lookup locations. */
     // "rootDirs": [],                                   /* Allow multiple folders to be treated as one when resolving modules. */
-    "typeRoots": ["src/types/range-slider.d.ts","node_modules/@types"],                                  /* Specify multiple folders that act like './node_modules/@types'. */
+    "typeRoots": ["src/types/range-slider.d.ts","node_modules/@types"],                                 
+     /* Specify multiple folders that act like './node_modules/@types'. */
     // "types": ["node", "jquery"],                                      /* Specify type package names to be included without being referenced in a source file. */
     // "allowUmdGlobalAccess": true,                     /* Allow accessing UMD globals from modules. */
     // "moduleSuffixes": [],                             /* List of file name suffixes to search when resolving a module. */

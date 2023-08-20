@@ -181,23 +181,33 @@ export class ThumbPresenter implements IThumbPresenter, IObserver {
   }
   private drag(event: MouseEvent | TouchEvent): void {
     event.preventDefault();
-    const startPoint: number = this.options.containerViewportLeft as number;
+    const startPoint: number =
+      this.options.orientation === "horizontal"
+        ? (this.options.containerViewportLeft as number)
+        : (this.options.containerViewportTop as number);
 
-    let currentPosition =
-      event instanceof MouseEvent ? event.clientX : event.touches[0].clientX;
+    let currentPosition: number;
 
-    let movementX =
+    if (this.options.orientation === "horizontal") {
+      currentPosition =
+        event instanceof MouseEvent ? event.clientX : event.touches[0].clientX;
+    } else {
+      currentPosition =
+        event instanceof MouseEvent ? event.clientY : event.touches[0].clientY;
+    }
+
+    let movement =
       currentPosition -
       this.model.getMin() -
       this.model.getThumbSize() / 2 -
       startPoint;
 
-    movementX = this.setStep(movementX);
-    movementX = this.validateMinMax(movementX);
+    movement = this.setStep(movement);
+    movement = this.validateMinMax(movement);
 
     if (Array.isArray(this.view)) {
       let newPositionArr: number[] = this.setDoubleThumbPosition(
-        movementX,
+        movement,
         this.view
       );
 
@@ -206,8 +216,8 @@ export class ThumbPresenter implements IThumbPresenter, IObserver {
       newPositionArr = [newPositionArr[0], fillThumbWidth];
       this.mediator?.setFill(newPositionArr);
     } else {
-      this.updatePosition(movementX);
-      this.mediator?.setFill(movementX);
+      this.updatePosition(movement);
+      this.mediator?.setFill(movement);
     }
 
     this.notifyObservers();
@@ -216,6 +226,7 @@ export class ThumbPresenter implements IThumbPresenter, IObserver {
   externalSetValue(value: number | number[]): void {
     this.model.setValue(value);
     this.mediator?.setFill(this.model.getPosition());
+    this.notifyObservers();
   }
 
   setStep(position: number): number {
@@ -253,7 +264,10 @@ export class ThumbPresenter implements IThumbPresenter, IObserver {
   }
 
   validateMinMax(pos: number): number {
-    let max = this.model.getContainerWidth() - this.model.getThumbSize();
+    let max =
+      this.options.orientation === "horizontal"
+        ? this.model.getContainerWidth() - this.model.getThumbSize()
+        : this.model.getContainerHeight() - this.model.getThumbSize();
     if (pos < 0) {
       pos = 0;
     } else if (pos > max) {

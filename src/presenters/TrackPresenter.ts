@@ -17,7 +17,10 @@ export class TrackPresenter implements ITrackPresenter, IObserver {
   constructor(private trackModel: ITrackModel, private trackView: ITrackView) {
     this.trackModel = trackModel;
     this.trackView = trackView;
-    this.startPoint = this.options.containerViewportLeft as number;
+    this.startPoint =
+      this.options.orientation === "horizontal"
+        ? (this.options.containerViewportLeft as number)
+        : (this.options.containerViewportTop as number);
     this.ruler = new Ruler();
     this.tickStep = this.options.tickStep
       ? this.options.tickStep
@@ -45,7 +48,11 @@ export class TrackPresenter implements ITrackPresenter, IObserver {
   trackClickHandler(e: MouseEvent | TouchEvent): void {
     if (e instanceof MouseEvent) {
       let position: number =
-        e.clientX - this.startPoint + (this.options.thumbSize as number) / 2;
+        this.options.orientation === "horizontal"
+          ? e.clientX - this.startPoint + (this.options.thumbSize as number) / 2
+          : e.clientY -
+            this.startPoint +
+            (this.options.thumbSize as number) / 2;
 
       this.onThumbPositionChange(position);
       this.mediator?.notifyTrackClick(position);

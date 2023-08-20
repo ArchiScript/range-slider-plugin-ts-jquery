@@ -5,7 +5,7 @@ import { Config } from "../ConfigService/Config";
 import { IObserver } from "../types/IObserver";
 export class FillModel implements IFillModel {
   private fillPosition: number | number[];
-  private fillWidth: number;
+  private fillLength: number;
   private options: IOptions;
   private observers: IObserver[] = [];
   private thumbSize: number;
@@ -16,9 +16,9 @@ export class FillModel implements IFillModel {
       this.options.value as number | number[]
     );
 
-    this.fillWidth = this.calculateFillWidth(this.fillPosition);
+    this.fillLength = this.calculateFillLength(this.fillPosition);
   }
-  calculateFillWidth(fillPos: number | number[]): number {
+  calculateFillLength(fillPos: number | number[]): number {
     if (Array.isArray(fillPos)) {
       return fillPos[1] - fillPos[0] + this.thumbSize;
     } else {
@@ -26,7 +26,7 @@ export class FillModel implements IFillModel {
     }
   }
   getFillWidth(): number {
-    return this.calculateFillWidth(this.fillPosition);
+    return this.calculateFillLength(this.fillPosition);
   }
 
   getFillPosition(): number | number[] {
@@ -51,13 +51,18 @@ export class FillModel implements IFillModel {
   getProportionValue(value: number | number[]): number | number[] {
     const max: number = this.options.max as number;
     const min: number = this.options.min as number;
-    const containerWidth: number = this.options.containerWidth as number;
+    const containerOrientationValue: number =
+      this.options.orientation === "horizontal"
+        ? (this.options.containerWidth as number)
+        : (this.options.containerHeight as number);
     if (Array.isArray(value)) {
       return value.map(
-        (val) => ((val - min) / (max - min)) * (containerWidth as number)
+        (val) =>
+          ((val - min) / (max - min)) * (containerOrientationValue as number)
       );
     }
-    const proportionValue = ((value - min) / (max - min)) * containerWidth;
+    const proportionValue =
+      ((value - min) / (max - min)) * containerOrientationValue;
     return proportionValue;
   }
 }

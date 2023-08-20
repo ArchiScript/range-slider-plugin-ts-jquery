@@ -9,7 +9,8 @@ const plugin = $(".range-slider-container").rangeSlider({
   step: 20,
   doublePoint: true,
   tooltip: true,
-  stringValues: ["small", "medium", "large", "giant"]
+  stringValues: ["small", "medium", "large", "giant"],
+  orientation: "vertical"
 });
 
 plugin.setValue([50, 420]);

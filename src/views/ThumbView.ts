@@ -19,7 +19,10 @@ export class ThumbView implements IThumbView {
     }
     this.id = ThumbView.id;
     this.$thumb = document.createElement("div");
-    this.$thumb.setAttribute("class", `range-slider__thumb thumb-${this.id}`);
+    this.$thumb.setAttribute(
+      "class",
+      `range-slider__thumb range-slider__thumb--${this.options.orientation} thumb-${this.id}`
+    );
     this.$thumb.setAttribute("data-id", `${this.id}`);
     this.$parent = parentElement;
     this.$parent.appendChild(this.$thumb);
@@ -32,7 +35,10 @@ export class ThumbView implements IThumbView {
 
   getTooltip(): HTMLElement {
     const tooltip = document.createElement("div");
-    tooltip.setAttribute("class", `range-slider__tooltip tooltip-${this.id}`);
+    tooltip.setAttribute(
+      "class",
+      `range-slider__tooltip range-slider__tooltip--${this.options.orientation} tooltip-${this.id}`
+    );
     return tooltip;
   }
 
@@ -43,7 +49,7 @@ export class ThumbView implements IThumbView {
   ): void {
     if (Array.isArray(position) && Array.isArray(value)) {
       const thisId: number = this.id - 1;
-      this.$thumb.style.left = `${position[thisId]}px`;
+      this.setOrientationPos(position);
       if (this.options.tooltip) {
         if (stringValue) {
           this.$tooltip.innerHTML = `${stringValue[thisId]}`;
@@ -52,13 +58,30 @@ export class ThumbView implements IThumbView {
         }
       }
     } else {
-      this.$thumb.style.left = `${position}px`;
+      this.setOrientationPos(position);
       if (this.options.tooltip) {
         if (stringValue) {
           this.$tooltip.innerHTML = `${stringValue as string}`;
         } else {
           this.$tooltip.innerHTML = `${value}`;
         }
+      }
+    }
+  }
+
+  setOrientationPos(position: number | number[]): void {
+    const thisId: number = this.id - 1;
+    if (this.options.orientation === "horizontal") {
+      if (Array.isArray(position)) {
+        this.$thumb.style.left = `${position[thisId]}px`;
+      } else {
+        this.$thumb.style.left = `${position}px`;
+      }
+    } else {
+      if (Array.isArray(position)) {
+        this.$thumb.style.top = `${position[thisId]}px`;
+      } else {
+        this.$thumb.style.top = `${position}px`;
       }
     }
   }

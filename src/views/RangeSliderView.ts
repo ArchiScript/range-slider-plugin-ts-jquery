@@ -7,10 +7,10 @@ import { ConfigService } from "../ConfigService/ConfigService";
 import { Config } from "../ConfigService/Config";
 export class RangeSliderView implements IRangeSliderView {
   private $container: HTMLElement;
-  private $element: HTMLElement;
+  private $pluginElement: HTMLElement;
   private $title: HTMLElement;
   private $trackView: TrackView;
-
+  private $label: HTMLElement;
   // private $thumbViews: ThumbView | ThumbView[];
   private $thumbView: ThumbView | ThumbView[];
   private $trackElement: HTMLElement;
@@ -21,43 +21,47 @@ export class RangeSliderView implements IRangeSliderView {
   constructor(container: HTMLElement) {
     this.$container = container;
     console.log(`containerWidth: ${getComputedStyle(this.$container).width}`);
-    this.$element = document.createElement("div");
-    this.$element.setAttribute("class", "range-slider");
-    this.$trackView = new TrackView(this.$element);
+    this.$pluginElement = document.createElement("div");
+    let classStr: string = `range-slider--${this.options.orientation}`;
+    this.$pluginElement.setAttribute("class", `range-slider ${classStr}`);
+    this.$label = document.createElement("div");
+    this.$label.setAttribute("class", "range-slider__label");
+
+    this.$trackView = new TrackView(this.$pluginElement);
     this.$trackElement = this.$trackView.getTrackElement();
     this.$thumbView = this.getThumbViews();
     // this.$thumbViews = this.getThumbViews();
     this.$fillView = new FillView(this.$trackElement);
     this.$fillElement = this.$fillView.getFillElement();
     this.$title = document.createElement("h1");
-    this.test();
   }
 
   getThumbViews(): ThumbView | ThumbView[] {
     if (!this.options.doublePoint) {
-      return new ThumbView(this.$element) as ThumbView;
+      return new ThumbView(this.$pluginElement) as ThumbView;
     } else {
       let thumbs = [];
       for (let i = 1; i <= 2; i++) {
-        thumbs.push(new ThumbView(this.$element));
+        thumbs.push(new ThumbView(this.$pluginElement));
       }
       return thumbs as ThumbView[];
     }
   }
-  test(): void {
-    console.log(this.getThumbViews());
-  }
+
   render(value: number | number[]): void {
     let valueStr: string = value.toString();
 
     const inner = `
     RangeSlider--${valueStr}
     `;
-    this.$container.appendChild(this.$element);
+    this.$container.appendChild(this.$pluginElement);
+
     this.$title.textContent = "Range Slider";
     this.$container.prepend(this.$title);
-    this.$element.textContent = inner;
-    this.$element.appendChild(this.$trackElement);
+    this.$label.textContent = inner;
+    this.$pluginElement.appendChild(this.$label);
+
+    this.$pluginElement.appendChild(this.$trackElement);
     if (this.$thumbView instanceof ThumbView) {
       this.$trackElement.appendChild(this.$thumbView.getThumbElement());
     } else {
@@ -80,7 +84,7 @@ export class RangeSliderView implements IRangeSliderView {
     return this.$fillView;
   }
   addValueChangeListener(listener: Function): void {
-    this.$element.addEventListener("click", () => {
+    this.$pluginElement.addEventListener("click", () => {
       listener();
     });
   }

@@ -1,10 +1,6 @@
-// import { IOptions } from "./IConfigurationService/IOptions";
+declare type Opts = import("./IConfigurationService/IOptions").IOptions;
 
 interface JQuery<TElement = HTMLElement> {
-  rangeSlider(opts?: Object): JQuery<TElement>;
+  rangeSlider(opts?: Opts): JQuery<TElement>;
   setValue(value: number | number[]): JQuery<TElement>;
 }
-
-// interface RangeSliderPlugin extends JQuery<HTMLElement> {
-//   setValue(value: number | number[]): RangeSliderPlugin;
-// }

@@ -1,64 +1,134 @@
+html {
+  height: 100%;
+}
+
 body {
+  height: 100%;
   background-color: rgb(255, 170, 170);
   box-sizing: border-box;
   padding: 10px;
   font-family: arial;
 }
-*{box-sizing:border-box}
+
+* {
+  box-sizing: border-box
+}
+
 .range-slider-container {
   width: 300px;
+  height: 300px;
 }
 
 .range-slider {
   cursor: pointer;
   user-select: none;
-  
+
+  &--vertical {
+    height: 100%;
+  }
+
+  &--horizontal {
+    width: 100%;
+  }
+
   &__track {
     position: relative;
     background: rgb(167, 167, 167);
     border-radius: 5px;
-    margin: 60px 0;
+
+    &--horizontal {
+      margin: 60px 0;
+      width: 100%;
+    }
+
+    &--vertical {
+      margin: 0 60px;
+      height: 100%;
+    }
   }
 
   &__ruler {
     display: flex;
-    justify-content: space-between;
-    align-items: center;
     position: absolute;
-    height: 12px;
-    bottom: -12px;
-    font-size: 12px;
-    padding-top: 3px;
-    
+    font-size: 11px;
+    justify-content: space-between;
+
+    &--horizontal {
+      padding-top: 3px;
+      align-items: center;
+      flex-direction: row;
+      height: 12px;
+      bottom: -12px;
+    }
+
+    &--vertical {
+      flex-direction: column;
+      height: 100%;
+      width: 20px;
+      left: -20px;
+    }
   }
 
   &__tick {
 
     display: flex;
-    flex-direction: column;
-    align-items: center;
-    height: 100%;
+    position: relative;
+
+    &--horizontal {
+      flex-direction: column;
+      align-items: center;
+      height: 100%;
+    }
+
+    &--vertical {
+      flex-direction: row;
+      align-items: center;
+      height: 12px;
+    }
   }
 
   &__tick-bar {
-    height: 100%;
-    width: 1px;
-    background-color:rgb(241, 241, 241);
+
+    background-color: rgb(241, 241, 241);
+
+    &--horizontal {
+      height: 100%;
+      width: 1px;
+    }
+
+    &--vertical {
+      height: 1px;
+      width: 100%;
+    }
   }
 
-  &__tick-number{
+  &__tick-number {
     position: absolute;
-    bottom: -1rem;
     color: rgb(241, 241, 241);
+
+    &--horizontal {
+      bottom: -1rem;
+    }
+
+    &--vertical {
+      right: 1rem;
+    }
   }
 
   &__thumb {
     position: absolute;
     width: 15px;
     height: 15px;
-    top: -2px;
     border-radius: 50%;
     background-color: red;
+
+    &--horizontal {
+      top: -2px;
+    }
+
+    &--vertical {
+      left: -2px;
+    }
   }
 
   &__tooltip {
@@ -66,7 +136,6 @@ body {
     height: 30px;
     min-width: 30px;
     padding: 5px;
-    top: -37px;
     background-color: rgb(212, 69, 69);
     color: white;
     font-family: arial;
@@ -76,25 +145,51 @@ body {
     justify-content: center;
     border-radius: 4px;
 
+    &--horizontal {
+      top: -37px;
+
+      &::after {
+        bottom: -5px;
+        left: 3px;
+      }
+    }
+
+    &--vertical {
+      top: -15px;
+      left: 23px;
+
+      &::after {
+        transform: rotate(90deg);
+        left: -8px;
+        bottom: 7px;
+      }
+    }
+
     &::after {
       content: "";
       position: absolute;
-      bottom: -5px;
-      left: 3px;
       border-left: 6px solid transparent;
       border-right: 6px solid transparent;
       border-top: 6px solid rgb(212, 69, 69);
-
-
     }
   }
 
   &__fill {
-    height: 10px;
-
     background-color: rgb(255, 73, 73);
     border-radius: 5px;
+
+    &--horizontal {
+      height: 10px;
+    }
+
+    &--vertical {
+      position: absolute;
+      width: 10px;
+    }
   }
+&__label{
+  margin-bottom: 30px;
+}
 }
 
 

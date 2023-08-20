@@ -30,7 +30,6 @@ export class RangeSliderPresenter implements IPresenter, IObserver {
       this.thumbPresenter,
       this.fillPresenter
     );
-    // this.options = ConfigService.getInstance().getOptions();
     this.options = Config.getInstance().getOptions();
     this.init();
   }
@@ -47,8 +46,7 @@ export class RangeSliderPresenter implements IPresenter, IObserver {
       this.thumbPresenter.getCurrentFillPosition();
 
     this.fillPresenter.updateValue(thumbPos);
-    console.log("-----options:");
-    console.log(this.options);
+    
   }
   getMediator() {
     return this.mediator;

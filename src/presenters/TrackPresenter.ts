@@ -54,8 +54,8 @@ export class TrackPresenter implements ITrackPresenter, IObserver {
     if (e instanceof MouseEvent) {
       const startPoint =
         this.options.orientation === "horizontal"
-          ? this.$trackElement.offsetLeft
-          : this.$trackElement.offsetTop;
+          ? this.$trackElement.getBoundingClientRect().left
+          : this.$trackElement.getBoundingClientRect().top;
       let position: number =
         this.options.orientation === "horizontal"
           ? e.clientX - startPoint + (this.options.thumbSize as number) / 2
@@ -74,8 +74,8 @@ export class TrackPresenter implements ITrackPresenter, IObserver {
   }
   getTrackStartPoint(): { left: number; top: number } {
     return {
-      left: this.$trackElement.offsetLeft,
-      top: this.$trackElement.offsetTop
+      left: this.$trackElement.getBoundingClientRect().left,
+      top: this.$trackElement.getBoundingClientRect().top
     };
   }
 }

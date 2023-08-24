@@ -23,9 +23,10 @@ export class ThumbModel implements IThumbModel {
     this.max = this.options.max as number;
     this.step = this.validateStep(this.options.step as number);
     this.thumbSize = this.options.thumbSize as number;
-    this.position = this.getProportionValue(
-      this.options.value as number | number[]
-    );
+    // this.position = this.getProportionValue(
+    //   this.options.value as number | number[]
+    // );
+
     this.containerWidth = this.getContainerWidth() - this.thumbSize;
     this.containerHeight = this.getContainerHeight() - this.thumbSize;
     this.value = this.options.value ? this.options.value : (0 as number);
@@ -33,13 +34,26 @@ export class ThumbModel implements IThumbModel {
       this.options.orientation === "horizontal"
         ? this.containerWidth
         : this.containerHeight;
+    if (!this.options.reverseOrder) {
+      this.position = this.getProportionValue(
+        this.options.value as number | number[]
+      );
+    } else {
+      let a = this.getProportionValue(this.max) as number;
+      let b = this.getProportionValue(this.value as number | number[]);
+      let c = Array.isArray(b) ? b.map((i) => a - i) : a - b;
+      this.position = c;
+      console.log(b);
+      console.log(c);
+    }
     this.test();
   }
 
   // ===========test====
   test(): void {
+    console.log(this.position);
     // console.log(this.splitNum(800, 3));
-    console.log(this.getValueString([400, 800]));
+    // console.log(this.getValueString([400, 800]));
   }
 
   getStep(): number {
@@ -72,11 +86,21 @@ export class ThumbModel implements IThumbModel {
 
   posToValProportion(value: number | number[]): number | number[] {
     if (Array.isArray(value)) {
-      return value.map((v) => Math.round(v / this.getProportion()));
+      if (!this.options.reverseOrder) {
+        return value.map((v) => Math.round(v / this.getProportion()));
+      } else {
+        return value.map(
+          (v) => this.getMax() - Math.round(v / this.getProportion())
+        );
+      }
     } else if (value == 0) {
       return value;
     } else {
-      return Math.round(value / this.getProportion());
+      if (!this.options.reverseOrder) {
+        return Math.round(value / this.getProportion());
+      } else {
+        return this.getMax() - Math.round(value / this.getProportion());
+      }
     }
   }
 

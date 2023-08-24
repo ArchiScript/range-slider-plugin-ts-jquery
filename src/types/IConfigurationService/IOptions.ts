@@ -18,4 +18,5 @@ export interface IOptions {
   containerViewportTop?: number;
   instanceId?: number;
   stringValues?: string[];
+  reverseOrder?: boolean;
 }

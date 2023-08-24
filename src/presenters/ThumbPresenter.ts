@@ -26,9 +26,11 @@ export class ThumbPresenter implements IThumbPresenter, IObserver {
     this.model = model;
     this.view = view;
     this.step = this.model.getStep();
-    this.position = this.model.getProportionValue(
-      this.options.value as number | number[]
-    );
+    // this.position = this.model.getProportionValue(
+    //   this.options.value as number | number[]
+    // );
+    this.position = this.model.getPosition();
+    console.log(this.position);
     this.value = this.model.getValue();
     this.isDoubleThumb = this.isDouble;
     this.init();

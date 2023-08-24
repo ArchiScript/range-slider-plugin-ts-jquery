@@ -26,13 +26,12 @@ export class TrackView implements ITrackView {
       this.$track.style.height = `${height}px`;
     } else {
       this.$track.style.width = `${width}px`;
-      this.$track.style.height = `${height}%`;
+      this.$track.style.height = `${this.options.containerHeight}px`;
     }
 
     if (this.options.ticks) {
       this.$track.appendChild(this.getRuler(tickStep));
     }
-  
   }
   getRuler(tickStep: number): HTMLElement {
     let $ruler = document.createElement("div");
@@ -49,41 +48,53 @@ export class TrackView implements ITrackView {
     let rulerPadding = this.options.thumbSize! / 2;
     $ruler.style.paddingLeft = `${rulerPadding}px`;
     $ruler.style.paddingRight = `${rulerPadding}px`;
-    let i: number = 0,
-      max: number = this.options.max as number;
+    let i: number, max: number;
+    if (!this.options.reverseOrder) {
+      i = 0;
+      max = this.options.max as number;
 
-    while (i <= max) {
-      let tick = document.createElement("div");
-      tick.setAttribute(
-        "class",
-        `range-slider__tick range-slider__tick--${this.options.orientation}`
-      );
-      let tickBar = document.createElement("div");
-      tickBar.setAttribute(
-        "class",
-        `range-slider__tick-bar range-slider__tick-bar--${this.options.orientation}`
-      );
-      let tickNumber = document.createElement("div");
-      tickNumber.setAttribute(
-        "class",
-        `range-slider__tick-number range-slider__tick-number--${this.options.orientation}`
-      );
-      tick.appendChild(tickBar);
-      tick.appendChild(tickNumber);
-      $ruler.appendChild(tick);
-      tickNumber.innerHTML = i.toString();
-      i += tickStep;
+      while (i <= max) {
+        let tick = this.renderEachTick(i);
+        $ruler.appendChild(tick);
+        i += tickStep;
+      }
+    } else {
+      i = this.options.max as number;
+      let min = this.options.min as number;
+      while (i >= min) {
+        let tick = this.renderEachTick(i);
+        $ruler.appendChild(tick);
+        i -= tickStep;
+      }
     }
+
     return $ruler;
+  }
+
+  renderEachTick(i: number): HTMLElement {
+    let tick = document.createElement("div");
+    tick.setAttribute(
+      "class",
+      `range-slider__tick range-slider__tick--${this.options.orientation}`
+    );
+    let tickBar = document.createElement("div");
+    tickBar.setAttribute(
+      "class",
+      `range-slider__tick-bar range-slider__tick-bar--${this.options.orientation}`
+    );
+    let tickNumber = document.createElement("div");
+    tickNumber.setAttribute(
+      "class",
+      `range-slider__tick-number range-slider__tick-number--${this.options.orientation}`
+    );
+    tick.appendChild(tickBar);
+    tick.appendChild(tickNumber);
+    tickNumber.innerHTML = i.toString();
+    return tick;
   }
   addPositionChangeListener(listener: Function): void {
     this.$element.addEventListener("click", (e) => {
       listener(e);
-    });
-  }
-  addTrackElementCreatedListener(listener: Function): void {
-    this.$element.addEventListener("TrackElementCreated", () => {
-      listener();
     });
   }
 }

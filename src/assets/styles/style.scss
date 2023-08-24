@@ -1,5 +1,5 @@
 html {
-  height: 100%;
+  min-height: 100%;
 }
 
 body {
@@ -15,16 +15,18 @@ body {
 }
 
 .range-slider-container {
-  width: 300px;
-  height: 300px;
-}
+padding:20px 0;
+width: 300px;
+min-height: 300px;
 
+}
 .range-slider {
   cursor: pointer;
   user-select: none;
 
   &--vertical {
     height: 100%;
+    width: 100%;
   }
 
   &--horizontal {
@@ -121,7 +123,7 @@ body {
     height: 15px;
     border-radius: 50%;
     background-color: red;
-
+    z-index:2;
     &--horizontal {
       top: -2px;
     }
@@ -188,7 +190,7 @@ body {
     }
   }
 &__label{
-  margin-bottom: 30px;
+  margin: 30px 0 ;
 }
 }
 

@@ -54,13 +54,10 @@ export class RangeSliderView implements IRangeSliderView {
     const inner = `
     RangeSlider--${valueStr}
     `;
-    this.$container.appendChild(this.$pluginElement);
 
-    this.$title.textContent = "Range Slider";
-    this.$container.prepend(this.$title);
     this.$label.textContent = inner;
-    this.$pluginElement.appendChild(this.$label);
-
+    this.$container.appendChild(this.$label);
+    this.$container.appendChild(this.$pluginElement);
     this.$pluginElement.appendChild(this.$trackElement);
     if (this.$thumbView instanceof ThumbView) {
       this.$trackElement.appendChild(this.$thumbView.getThumbElement());

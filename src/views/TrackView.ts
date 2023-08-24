@@ -1,6 +1,7 @@
 import { ITrackView } from "../types/IViews/ITrackView";
 import { Config } from "../ConfigService/Config";
 import { IOptions } from "../components/components";
+
 export class TrackView implements ITrackView {
   private $element: HTMLElement;
   private $track: HTMLElement;
@@ -19,6 +20,7 @@ export class TrackView implements ITrackView {
 
   render(width: number, height: number, tickStep: number): void {
     this.$element.appendChild(this.$track);
+
     if (this.options.orientation === "horizontal") {
       this.$track.style.width = `${width}%`;
       this.$track.style.height = `${height}px`;
@@ -26,12 +28,11 @@ export class TrackView implements ITrackView {
       this.$track.style.width = `${width}px`;
       this.$track.style.height = `${height}%`;
     }
-    console.log(this.$track.style.width);
-    console.log(this.$track.style.height);
 
     if (this.options.ticks) {
       this.$track.appendChild(this.getRuler(tickStep));
     }
+  
   }
   getRuler(tickStep: number): HTMLElement {
     let $ruler = document.createElement("div");
@@ -78,6 +79,11 @@ export class TrackView implements ITrackView {
   addPositionChangeListener(listener: Function): void {
     this.$element.addEventListener("click", (e) => {
       listener(e);
+    });
+  }
+  addTrackElementCreatedListener(listener: Function): void {
+    this.$element.addEventListener("TrackElementCreated", () => {
+      listener();
     });
   }
 }

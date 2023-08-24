@@ -20,8 +20,8 @@ export class ThumbPresenter implements IThumbPresenter, IObserver {
   private observers: IObserver[] = [];
   private options: IOptions = Config.getInstance().getOptions();
   private step: number;
-  public isDoubleThumb: boolean;
-
+  private isDoubleThumb: boolean;
+  public startPoint?: number;
   constructor(model: IThumbModel, view: ThumbView | ThumbView[]) {
     this.model = model;
     this.view = view;
@@ -179,13 +179,18 @@ export class ThumbPresenter implements IThumbPresenter, IObserver {
       });
     }
   }
+
+  public passTrackStartPoint(obj: { left: number; top: number }): void {
+    this.startPoint =
+      this.options.orientation === "horizontal" ? obj.left : obj.top;
+    this.options.containerViewportLeft = obj.left;
+    this.options.containerViewportTop = obj.top;
+    console.log(this.options);
+  }
+
   private drag(event: MouseEvent | TouchEvent): void {
     event.preventDefault();
-    const startPoint: number =
-      this.options.orientation === "horizontal"
-        ? (this.options.containerViewportLeft as number)
-        : (this.options.containerViewportTop as number);
-
+    console.log(this.startPoint);
     let currentPosition: number;
 
     if (this.options.orientation === "horizontal") {
@@ -200,8 +205,8 @@ export class ThumbPresenter implements IThumbPresenter, IObserver {
       currentPosition -
       this.model.getMin() -
       this.model.getThumbSize() / 2 -
-      startPoint;
-
+      this.startPoint!;
+    console.log(movement);
     movement = this.setStep(movement);
     movement = this.validateMinMax(movement);
 
@@ -262,12 +267,15 @@ export class ThumbPresenter implements IThumbPresenter, IObserver {
     document.removeEventListener("mouseup", this.stopDragBound);
     document.removeEventListener("touchend", this.stopDragBound);
   }
-
-  validateMinMax(pos: number): number {
-    let max =
+  private countContainerMax(): number {
+    let max: number =
       this.options.orientation === "horizontal"
         ? this.model.getContainerWidth() - this.model.getThumbSize()
         : this.model.getContainerHeight() - this.model.getThumbSize();
+    return max;
+  }
+  validateMinMax(pos: number): number {
+    const max = this.countContainerMax();
     if (pos < 0) {
       pos = 0;
     } else if (pos > max) {
@@ -277,7 +285,7 @@ export class ThumbPresenter implements IThumbPresenter, IObserver {
   }
 
   validateIfStepMismatch(pos: number): number {
-    const max = this.model.getContainerWidth() - this.model.getThumbSize();
+    const max = this.countContainerMax();
     return pos >= max && max % this.step !== 0 ? max % this.step : this.step;
   }
 

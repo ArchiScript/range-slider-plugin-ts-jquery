@@ -7,20 +7,20 @@ import { ConfigService } from "../ConfigService/ConfigService";
 import { Config } from "../ConfigService/Config";
 import { IOptions } from "../types/IConfigurationService/IOptions";
 import { Ruler } from "../models/Ruler";
-
+import { config } from "chai";
+export const TrackElementCreated = new CustomEvent("TrackCreated", {});
 export class TrackPresenter implements ITrackPresenter, IObserver {
   private mediator?: Mediator;
   private options: IOptions = Config.getInstance().getOptions();
-  private startPoint: number;
   private ruler: Ruler;
   private tickStep: number;
+  private $trackElement: HTMLElement;
   constructor(private trackModel: ITrackModel, private trackView: ITrackView) {
     this.trackModel = trackModel;
     this.trackView = trackView;
-    this.startPoint =
-      this.options.orientation === "horizontal"
-        ? (this.options.containerViewportLeft as number)
-        : (this.options.containerViewportTop as number);
+    this.$trackElement = trackView.getTrackElement();
+    console.log(this.$trackElement);
+
     this.ruler = new Ruler();
     this.tickStep = this.options.tickStep
       ? this.options.tickStep
@@ -32,6 +32,8 @@ export class TrackPresenter implements ITrackPresenter, IObserver {
     this.trackModel.addObserver(this);
     this.trackView.addPositionChangeListener(this.trackClickHandler.bind(this));
     this.updateView();
+
+    console.log(this.options);
   }
 
   update(clickPosition: number): void {
@@ -44,21 +46,36 @@ export class TrackPresenter implements ITrackPresenter, IObserver {
       this.tickStep
     );
   }
+  private test(): void {
+    console.log("testing");
+  }
   onThumbPositionChange(position: number): void {}
   trackClickHandler(e: MouseEvent | TouchEvent): void {
     if (e instanceof MouseEvent) {
+      const startPoint =
+        this.options.orientation === "horizontal"
+          ? this.$trackElement.offsetLeft
+          : this.$trackElement.offsetTop;
       let position: number =
         this.options.orientation === "horizontal"
-          ? e.clientX - this.startPoint + (this.options.thumbSize as number) / 2
-          : e.clientY -
-            this.startPoint +
-            (this.options.thumbSize as number) / 2;
-
+          ? e.clientX - startPoint + (this.options.thumbSize as number) / 2
+          : e.clientY - startPoint + (this.options.thumbSize as number) / 2;
+      console.log(`startPoint ----${startPoint}`);
+      console.log(
+        `---containerViewportLeft: ${this.$trackElement.offsetLeft}\n ---containerViewportTop: ${this.$trackElement.offsetTop}`
+      );
+      console.log(position);
       this.onThumbPositionChange(position);
       this.mediator?.notifyTrackClick(position);
     }
   }
   setMediator(mediator?: Mediator): void {
     if (mediator) this.mediator = mediator;
+  }
+  getTrackStartPoint(): { left: number; top: number } {
+    return {
+      left: this.$trackElement.offsetLeft,
+      top: this.$trackElement.offsetTop
+    };
   }
 }

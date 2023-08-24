@@ -100,7 +100,11 @@ export class ThumbView implements IThumbView {
     });
   }
   getThumbCurrentPosition(): number {
-    return parseFloat(this.$thumb.style.left);
+    const pos: number =
+      this.options.orientation === "horizontal"
+        ? parseFloat(this.$thumb.style.left)
+        : parseFloat(this.$thumb.style.top);
+    return pos;
   }
 
   getThumbElement(): HTMLElement {

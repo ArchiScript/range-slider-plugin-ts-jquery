@@ -40,21 +40,29 @@ export class Config implements IConfig {
     return Config.instance;
   }
   private decorateUserOptions(options: IOptions): IOptions {
+    const $container__track: HTMLElement = this.container?.querySelector(
+      ".range-slider__track"
+    ) as HTMLElement;
     if (this.container) {
       this.containerWidth = parseInt(getComputedStyle(this.container).width);
       this.containerHeight = parseInt(getComputedStyle(this.container).height);
-      this.containerViewportLeft = this.container.getBoundingClientRect().left;
-      this.containerViewportTop = this.container.getBoundingClientRect().top;
+      // this.containerViewportLeft = this.container.getBoundingClientRect().left;
+      // this.containerViewportTop = this.container.getBoundingClientRect().top;
+
       options.containerWidth = this.containerWidth;
       options.containerHeight = this.containerHeight;
-      options.containerViewportLeft = this.containerViewportLeft;
-      options.containerViewportTop = this.containerViewportTop;
+      // options.containerViewportLeft = this.containerViewportLeft;
+      // options.containerViewportTop = this.containerViewportTop;
 
       options.instanceId = this.instanceId;
       return options;
     }
     return options;
   }
+  setOptions(opt: IOptions): void {
+    this.userOptions = Object.assign({}, this.userOptions, opt);
+  }
+
   getOptions(): IOptions {
     return this.userOptions
       ? Object.assign(

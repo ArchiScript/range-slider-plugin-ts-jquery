@@ -9,7 +9,7 @@ import { mock } from "./thumb.spec";
 describe("Test RangeSlider Fill", () => {
   describe("Test fillModel", () => {
     it("should have the correct fill width= pos 55 + thumb 15 = 70 ", () => {
-      expect(mock.fillModel.calculateFillWidth(55)).to.equal(70);
+      expect(mock.fillModel.calculateFillLength(55)).to.equal(70);
     });
 
     it("should have the fill position of set fill position = 67", () => {
@@ -34,7 +34,6 @@ describe("Test RangeSlider Fill", () => {
       let fill = mock.fillView.getFillElement();
       expect(fill instanceof HTMLElement).to.be.true;
       expect(fill.classList.contains("range-slider__fill")).to.be.true;
-      
     });
   });
 });

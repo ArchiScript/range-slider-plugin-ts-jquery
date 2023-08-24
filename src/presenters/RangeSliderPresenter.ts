@@ -39,14 +39,15 @@ export class RangeSliderPresenter implements IPresenter, IObserver {
     this.thumbPresenter.setMediator(this.mediator);
     this.trackPresenter.setMediator(this.mediator);
     this.fillPresenter.setMediator(this.mediator);
-    this.updateView();
-    this.thumbPresenter.updateView();
 
+    this.updateView();
+    const startPoint = this.trackPresenter.getTrackStartPoint();
+    this.thumbPresenter.passTrackStartPoint(startPoint);
+    this.thumbPresenter.updateView();
     const thumbPos: number | number[] =
       this.thumbPresenter.getCurrentFillPosition();
 
     this.fillPresenter.updateValue(thumbPos);
-    
   }
   getMediator() {
     return this.mediator;

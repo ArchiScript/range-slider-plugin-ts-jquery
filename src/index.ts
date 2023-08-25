@@ -9,7 +9,7 @@ const plugin1 = $(".container-1").rangeSlider({
   step: 20,
   doublePoint: true,
   tooltip: true,
-  // stringValues: ["small", "medium", "large", "giant"],
+  stringValues: ["small", "medium", "large", "giant"],
   orientation: "vertical",
   reverseOrder: true
 });

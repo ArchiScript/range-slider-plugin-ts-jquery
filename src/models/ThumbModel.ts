@@ -34,17 +34,22 @@ export class ThumbModel implements IThumbModel {
       this.options.orientation === "horizontal"
         ? this.containerWidth
         : this.containerHeight;
+
     if (!this.options.reverseOrder) {
       this.position = this.getProportionValue(
         this.options.value as number | number[]
       );
     } else {
-      let a = this.getProportionValue(this.max) as number;
-      let b = this.getProportionValue(this.value as number | number[]);
-      let c = Array.isArray(b) ? b.map((i) => a - i) : a - b;
-      this.position = c;
-      console.log(b);
-      console.log(c);
+      const proportionMax = this.getProportionValue(this.max) as number;
+      const proportionVal = this.getProportionValue(
+        this.value as number | number[]
+      );
+      const reverseVal = Array.isArray(proportionVal)
+        ? proportionVal.map((i) => proportionMax - i).reverse()
+        : proportionMax - proportionVal;
+      this.position = reverseVal;
+      console.log(proportionVal);
+      console.log(reverseVal);
     }
     this.test();
   }

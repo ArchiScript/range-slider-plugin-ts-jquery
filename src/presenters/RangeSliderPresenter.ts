@@ -46,7 +46,6 @@ export class RangeSliderPresenter implements IPresenter, IObserver {
     this.thumbPresenter.updateView();
     const thumbPos: number | number[] =
       this.thumbPresenter.getCurrentFillPosition();
-
     this.fillPresenter.updateValue(thumbPos);
   }
   getMediator() {

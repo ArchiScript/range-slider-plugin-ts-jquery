@@ -8,7 +8,7 @@ import { Config } from "../ConfigService/Config";
 import { IOptions } from "../types/IConfigurationService/IOptions";
 import { Ruler } from "../models/Ruler";
 import { config } from "chai";
-export const TrackElementCreated = new CustomEvent("TrackCreated", {});
+
 export class TrackPresenter implements ITrackPresenter, IObserver {
   private mediator?: Mediator;
   private options: IOptions = Config.getInstance().getOptions();

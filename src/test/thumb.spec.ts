@@ -96,7 +96,7 @@ describe("Test RangeSlider Thumb-single", () => {
 
   describe("Test thumbPresenter", () => {
     it("should have correct value for isDoubleThumb = false", () => {
-      const isDoubleThumb = mock.thumbPresenter.isDoubleThumb;
+      const isDoubleThumb = mock.thumbPresenter.isDouble;
       expect(isDoubleThumb).to.be.false;
     });
 

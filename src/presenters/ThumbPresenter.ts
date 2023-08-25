@@ -58,7 +58,7 @@ export class ThumbPresenter implements IThumbPresenter, IObserver {
     return this.value;
   }
 
-  private get isDouble(): boolean {
+  get isDouble(): boolean {
     return Array.isArray(this.view);
   }
   setMediator(mediator: Mediator): void {

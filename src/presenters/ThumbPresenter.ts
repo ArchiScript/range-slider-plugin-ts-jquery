@@ -25,10 +25,8 @@ export class ThumbPresenter implements IThumbPresenter, IObserver {
   constructor(model: IThumbModel, view: ThumbView | ThumbView[]) {
     this.model = model;
     this.view = view;
+
     this.step = this.model.getStep();
-    // this.position = this.model.getProportionValue(
-    //   this.options.value as number | number[]
-    // );
     this.position = this.model.getPosition();
     console.log(this.position);
     this.value = this.model.getValue();
@@ -118,14 +116,12 @@ export class ThumbPresenter implements IThumbPresenter, IObserver {
       ? this.model.getValueString(this.model.getValue())
       : "";
     if (this.view instanceof ThumbView) {
-      console.log(`____updateView -- ${this.model.getValue()}`);
       this.view.render(
         this.model.getPosition(),
         this.model.getValue(),
         this.model.getValueString(this.model.getValue())
       );
     } else if (Array.isArray(this.view)) {
-      console.log(`____updateView Arr -- ${this.model.getValue()}`);
       this.view.forEach((thumbView) =>
         thumbView.render(
           this.model.getPosition(),
@@ -232,6 +228,7 @@ export class ThumbPresenter implements IThumbPresenter, IObserver {
 
   externalSetValue(value: number | number[]): void {
     this.model.setValue(value);
+
     this.mediator?.setFill(this.model.getPosition());
     this.notifyObservers();
   }
@@ -296,7 +293,7 @@ export class ThumbPresenter implements IThumbPresenter, IObserver {
     clickPosition -= this.model.getThumbSize();
     clickPosition = this.validateMinMax(clickPosition);
     let intersection: number = 0;
-    const maxPos = this.model.getProportionValue(
+    const maxPos = this.model.convertToPosition(
       this.options.max as number
     ) as number;
     console.log(maxPos);

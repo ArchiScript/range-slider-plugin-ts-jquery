@@ -55,6 +55,7 @@ export class FillModel implements IFillModel {
       this.options.orientation === "horizontal"
         ? (this.options.containerWidth as number)
         : (this.options.containerHeight as number);
+
     if (Array.isArray(value)) {
       return value.map(
         (val) =>

@@ -14,7 +14,7 @@ const plugin1 = $(".container-1").rangeSlider({
   reverseOrder: true
 });
 
-// plugin1.setValue([50, 420]);
+plugin1.setValue([420, 50]);
 
 const plugin2 = $(".container-2").rangeSlider({
   max: 500,

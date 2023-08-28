@@ -15,8 +15,9 @@ export interface IThumbModel {
   getValue(): number | number[];
   setValue(value: number | number[]): void;
   getProportion(): number;
-  getProportionValue(value: number | number[]): number | number[];
+  convertToPosition(value: number | number[]): number | number[];
   getStep(): number;
-  posToValProportion(value: number | number[]): number | number[];
+  convertToValue(value: number | number[]): number | number[];
   getValueString(value: number | number[]): string | string[] | undefined;
+  convertToPositionReversed(value: number | number[]): number | number[];
 }

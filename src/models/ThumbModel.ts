@@ -23,9 +23,6 @@ export class ThumbModel implements IThumbModel {
     this.max = this.options.max as number;
     this.step = this.validateStep(this.options.step as number);
     this.thumbSize = this.options.thumbSize as number;
-    // this.position = this.getProportionValue(
-    //   this.options.value as number | number[]
-    // );
 
     this.containerWidth = this.getContainerWidth() - this.thumbSize;
     this.containerHeight = this.getContainerHeight() - this.thumbSize;
@@ -36,25 +33,17 @@ export class ThumbModel implements IThumbModel {
         : this.containerHeight;
 
     if (!this.options.reverseOrder) {
-      this.position = this.getProportionValue(
+      this.position = this.convertToPosition(
         this.options.value as number | number[]
       );
     } else {
-      const proportionMax = this.getProportionValue(this.max) as number;
-      const proportionVal = this.getProportionValue(
-        this.value as number | number[]
+      this.position = this.convertToPositionReversed(
+        this.options.value as number | number[]
       );
-      const reverseVal = Array.isArray(proportionVal)
-        ? proportionVal.map((i) => proportionMax - i).reverse()
-        : proportionMax - proportionVal;
-      this.position = reverseVal;
-      console.log(proportionVal);
-      console.log(reverseVal);
     }
     this.test();
   }
 
-  // ===========test====
   test(): void {
     console.log(this.position);
     // console.log(this.splitNum(800, 3));
@@ -78,37 +67,76 @@ export class ThumbModel implements IThumbModel {
     return this.position;
   }
   setPosition(position: number | number[]): void {
-    this.position = position;
-    this.value = this.posToValProportion(position);
+    if (this.options.reverseOrder) {
+      this.position = position;
+      this.value = this.convertToValueReversed(position);
+      console.log(this.value);
+    } else {
+      this.position = position;
+      this.value = this.convertToValue(position);
+    }
+
     this.notifyObservers();
   }
 
   setValue(value: number | number[]): void {
-    this.value = value;
-    this.setPosition(this.getProportionValue(value));
+    if (this.options.reverseOrder) {
+      this.value = Array.isArray(value) ? value.reverse() : value;
+      this.setPosition(this.convertToPositionReversed(value));
+    } else {
+      this.value = value;
+      this.setPosition(this.convertToPosition(value));
+    }
+
     this.notifyObservers();
   }
 
-  posToValProportion(value: number | number[]): number | number[] {
-    if (Array.isArray(value)) {
-      if (!this.options.reverseOrder) {
-        return value.map((v) => Math.round(v / this.getProportion()));
-      } else {
-        return value.map(
-          (v) => this.getMax() - Math.round(v / this.getProportion())
-        );
-      }
-    } else if (value == 0) {
-      return value;
+  convertToValueReversed(position: number | number[]): number | number[] {
+    const convertedVal = this.convertToValue(position);
+    if (Array.isArray(convertedVal)) {
+      return convertedVal.map((v) => this.getMax() - v);
     } else {
-      if (!this.options.reverseOrder) {
-        return Math.round(value / this.getProportion());
-      } else {
-        return this.getMax() - Math.round(value / this.getProportion());
-      }
+      return this.getMax() - convertedVal;
+    }
+  }
+  convertToValue(position: number | number[]): number | number[] {
+    if (Array.isArray(position)) {
+      return position.map((v) => Math.round(v / this.getProportion()));
+    } else if (position == 0) {
+      return position;
+    } else {
+      return Math.round(position / this.getProportion());
     }
   }
 
+  convertToPosition(value: number | number[]): number | number[] {
+    const max = this.getMax();
+    const min = this.getMin();
+    if (Array.isArray(value)) {
+      return value.map(
+        (val) => ((val - min) / (max - min)) * this.containerOrientationValue
+      );
+    } else if (value === 0) {
+      return value;
+    } else {
+      const proportionValue =
+        ((value - min) / (max - min)) * this.containerOrientationValue;
+      return proportionValue;
+    }
+  }
+  convertToPositionReversed(value: number | number[]): number | number[] {
+    let proportionMax: number,
+      proportionVal: number | number[],
+      reverseVal: number | number[];
+
+    proportionMax = this.convertToPosition(this.max) as number;
+    proportionVal = this.convertToPosition(value);
+    reverseVal = Array.isArray(proportionVal)
+      ? proportionVal.map((val) => proportionMax - val).reverse()
+      : proportionMax - proportionVal;
+
+    return reverseVal;
+  }
   getValue(): number | number[] {
     return this.value as number | number[];
   }
@@ -149,21 +177,6 @@ export class ThumbModel implements IThumbModel {
     return this.options.containerHeight as number;
   }
 
-  getProportionValue(value: number | number[]): number | number[] {
-    const max = this.getMax();
-    const min = this.getMin();
-    if (Array.isArray(value)) {
-      return value.map(
-        (val) => ((val - min) / (max - min)) * this.containerOrientationValue
-      );
-    } else if (value === 0) {
-      return value;
-    } else {
-      const proportionValue =
-        ((value - min) / (max - min)) * this.containerOrientationValue;
-      return proportionValue;
-    }
-  }
   getProportion(): number {
     const max = this.getMax();
     const min = this.getMin();

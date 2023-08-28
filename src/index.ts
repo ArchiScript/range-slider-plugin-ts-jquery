@@ -11,14 +11,16 @@ const plugin1 = $(".container-1").rangeSlider({
   tooltip: true,
   stringValues: ["small", "medium", "large", "giant"],
   orientation: "vertical",
-  reverseOrder: true
+  reversedOrder: true
 });
 
-plugin1.setValue([420, 50]);
+plugin1.setValue([50, 420]);
 
 const plugin2 = $(".container-2").rangeSlider({
   max: 500,
   value: 450,
   tickStep: 100,
-  reverseOrder: true
+  reversedOrder: true,
+  thumbSize: 15,
+  trackHeight: 8
 });

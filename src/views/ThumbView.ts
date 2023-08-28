@@ -31,6 +31,7 @@ export class ThumbView implements IThumbView {
     if (this.options.tooltip) {
       this.$thumb.appendChild(this.$tooltip);
     }
+    this.applyTooltipStyle();
   }
 
   getTooltip(): HTMLElement {
@@ -42,11 +43,19 @@ export class ThumbView implements IThumbView {
     return tooltip;
   }
 
+  applyTooltipStyle(): void {
+    this.$tooltip.style.setProperty(
+      "--tooltip-color",
+      `${this.options.tooltipColor}`
+    );
+  }
+
   render(
     position: number | number[],
     value: number | number[],
     stringValue?: string | string[]
   ): void {
+    this.applyThumbStyles(this.$thumb);
     if (Array.isArray(position) && Array.isArray(value)) {
       const thisId: number = this.id - 1;
       this.setOrientationPos(position);
@@ -69,6 +78,18 @@ export class ThumbView implements IThumbView {
     }
   }
 
+  private applyThumbStyles(thumb: HTMLElement): void {
+    thumb.style.width = `${this.options.thumbSize}px`;
+    thumb.style.height = `${this.options.thumbSize}px`;
+    const thumbSize = this.options.thumbSize as number;
+    const trackHeight = this.options.trackHeight as number;
+    if (this.options.orientation === "horizontal") {
+      thumb.style.top = `-${thumbSize / 2 - trackHeight / 2}px`;
+    } else {
+      thumb.style.left = `-${thumbSize / 2 - trackHeight / 2}px`;
+    }
+    thumb.style.setProperty("--thumb-color", `${this.options.thumbColor}`);
+  }
   setOrientationPos(position: number | number[]): void {
     const thisId: number = this.id - 1;
     if (this.options.orientation === "horizontal") {

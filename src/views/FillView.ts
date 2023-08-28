@@ -31,6 +31,7 @@ export class FillView implements IFillView {
         this.$fill.style.height = `${width}px`;
       }
     }
+    this.$fill.style.setProperty("--fill-color", `${this.options.fillColor}`);
   }
 
   getFillElement(): HTMLElement {

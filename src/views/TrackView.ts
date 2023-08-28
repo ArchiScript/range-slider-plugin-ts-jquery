@@ -29,6 +29,11 @@ export class TrackView implements ITrackView {
       this.$track.style.height = `${this.options.containerHeight}px`;
     }
 
+    this.$track.style.setProperty(
+      "--track-color",
+      `${this.options.trackColor}`
+    );
+
     if (this.options.ticks) {
       this.$track.appendChild(this.getRuler(tickStep));
     }
@@ -49,7 +54,7 @@ export class TrackView implements ITrackView {
     $ruler.style.paddingLeft = `${rulerPadding}px`;
     $ruler.style.paddingRight = `${rulerPadding}px`;
     let i: number, max: number;
-    if (!this.options.reverseOrder) {
+    if (!this.options.reversedOrder) {
       i = 0;
       max = this.options.max as number;
 
@@ -90,6 +95,8 @@ export class TrackView implements ITrackView {
     tick.appendChild(tickBar);
     tick.appendChild(tickNumber);
     tickNumber.innerHTML = i.toString();
+    tick.style.setProperty("--tick-color", `${this.options.rulerColor}`);
+
     return tick;
   }
   addPositionChangeListener(listener: Function): void {

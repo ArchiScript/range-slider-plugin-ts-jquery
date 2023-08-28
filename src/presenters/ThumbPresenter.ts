@@ -227,6 +227,9 @@ export class ThumbPresenter implements IThumbPresenter, IObserver {
   }
 
   externalSetValue(value: number | number[]): void {
+    if (Array.isArray(value) && this.options.reversedOrder) {
+      value = value.reverse();
+    }
     this.model.setValue(value);
 
     this.mediator?.setFill(this.model.getPosition());

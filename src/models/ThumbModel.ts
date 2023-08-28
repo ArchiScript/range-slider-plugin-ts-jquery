@@ -32,7 +32,7 @@ export class ThumbModel implements IThumbModel {
         ? this.containerWidth
         : this.containerHeight;
 
-    if (!this.options.reverseOrder) {
+    if (!this.options.reversedOrder) {
       this.position = this.convertToPosition(
         this.options.value as number | number[]
       );
@@ -67,7 +67,7 @@ export class ThumbModel implements IThumbModel {
     return this.position;
   }
   setPosition(position: number | number[]): void {
-    if (this.options.reverseOrder) {
+    if (this.options.reversedOrder) {
       this.position = position;
       this.value = this.convertToValueReversed(position);
       console.log(this.value);
@@ -80,7 +80,7 @@ export class ThumbModel implements IThumbModel {
   }
 
   setValue(value: number | number[]): void {
-    if (this.options.reverseOrder) {
+    if (this.options.reversedOrder) {
       this.value = Array.isArray(value) ? value.reverse() : value;
       this.setPosition(this.convertToPositionReversed(value));
     } else {

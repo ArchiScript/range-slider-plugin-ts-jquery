@@ -19,7 +19,12 @@ export class Config implements IConfig {
     tooltip: true,
     thumbSize: 15,
     doublePoint: false,
-    ticks: true
+    ticks: true,
+    thumbColor: "red",
+    trackColor: "#a7a7a7",
+    fillColor: "red",
+    tooltipColor: "red",
+    rulerColor: "white"
   };
   private constructor(options?: IOptions, container?: HTMLElement) {
     Config.instanceId++;

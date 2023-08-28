@@ -52,7 +52,7 @@ export class RangeSliderPresenter implements IPresenter, IObserver {
     return this.mediator;
   }
   update(value: number | number[]): void {
-    if (this.options.reverseOrder && Array.isArray(value)) {
+    if (this.options.reversedOrder && Array.isArray(value)) {
       value = value.reverse();
       this.view.render(value);
     } else {

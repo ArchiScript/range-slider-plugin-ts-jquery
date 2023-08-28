@@ -18,5 +18,11 @@ export interface IOptions {
   containerViewportTop?: number;
   instanceId?: number;
   stringValues?: string[];
-  reverseOrder?: boolean;
+  reversedOrder?: boolean;
+  thumbColor?: string;
+  trackColor?: string;
+  fillColor?: string;
+  tooltipColor?: string;
+  rulerColor?: string;
+  tickFontSize?: number;
 }

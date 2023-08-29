@@ -22,7 +22,19 @@ export class FillModel implements IFillModel {
     if (Array.isArray(fillPos)) {
       return fillPos[1] - fillPos[0] + this.thumbSize;
     } else {
-      return fillPos + this.thumbSize;
+      if (this.options.orientation === "horizontal") {
+        if (!this.options.reversedOrder) {
+          return fillPos + this.thumbSize;
+        } else {
+          return (this.options.containerWidth as number) - fillPos;
+        }
+      } else {
+        if (!this.options.reversedOrder) {
+          return fillPos + this.thumbSize;
+        } else {
+          return (this.options.containerHeight as number) - fillPos;
+        }
+      }
     }
   }
   getFillWidth(): number {

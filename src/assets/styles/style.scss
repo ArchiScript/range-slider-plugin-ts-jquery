@@ -6,17 +6,25 @@ html {
 
 body {
   height: 100%;
-  background-color: rgb(255, 170, 170);
+  background-color: #ffbebe;
   box-sizing: border-box;
   padding: 10px;
   font-family: arial;
 }
 
+.main{
+  display: grid;
+  grid-template-columns:repeat(auto-fit, minmax(300px, 1fr));
+  gap: 50px;
+  
+}
 * {
   box-sizing: border-box
 }
 
 .range-slider-container {
+
+  background-color:#ffbebe;
 padding:20px 0;
 width: 300px;
 min-height: 300px;
@@ -137,7 +145,7 @@ min-height: 300px;
     position: absolute;
     height: 30px;
     min-width: 30px;
-    padding: 5px;
+    padding: 7px;
     background-color: var(--tooltip-color);
     color: white;
     font-family: arial;
@@ -146,8 +154,30 @@ min-height: 300px;
     align-items: center;
     justify-content: center;
     border-radius: 4px;
+    
+    &::after {
+      content: "";
+      position: absolute;
+      border-left: 6px solid transparent;
+      border-right: 6px solid transparent;
+      border-top: 6px solid var(--tooltip-color);
+    }
 
     &--horizontal {
+      &.tooltip-round{
+        border-radius: 50%;
+        height: 36px;
+        width: 36px;
+        left:-8px;
+        top: -45px;
+        &::after {
+          left:6px;
+          bottom: -7px;
+          border-left: 12px solid transparent;
+          border-right: 12px solid transparent;
+          border-top: 12px solid var(--tooltip-color);
+        }
+      }
       top: -37px;
 
       &::after {
@@ -157,6 +187,20 @@ min-height: 300px;
     }
 
     &--vertical {
+      &.tooltip-round{
+        border-radius: 30px;
+        height: 36px;
+        min-width: 36px;
+        left:25px;
+        top: -10px;
+        &::after {
+          left:-14px;
+          bottom: 12px;
+          border-left: 12px solid transparent;
+          border-right: 12px solid transparent;
+          border-top: 12px solid var(--tooltip-color);
+        }
+      }
       top: -15px;
       left: 23px;
 
@@ -167,13 +211,7 @@ min-height: 300px;
       }
     }
 
-    &::after {
-      content: "";
-      position: absolute;
-      border-left: 6px solid transparent;
-      border-right: 6px solid transparent;
-      border-top: 6px solid var(--tooltip-color);
-    }
+    
   }
 
   &__fill {

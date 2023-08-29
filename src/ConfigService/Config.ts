@@ -16,6 +16,7 @@ export class Config implements IConfig {
     max: 100,
     value: 0,
     trackHeight: 10,
+    fill: true,
     tooltip: true,
     thumbSize: 15,
     doublePoint: false,

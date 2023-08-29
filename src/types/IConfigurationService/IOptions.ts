@@ -25,4 +25,7 @@ export interface IOptions {
   tooltipColor?: string;
   rulerColor?: string;
   tickFontSize?: number;
+  tooltipForm?: "square" | "round";
+  fill?: boolean;
+  
 }

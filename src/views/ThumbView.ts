@@ -36,9 +36,10 @@ export class ThumbView implements IThumbView {
 
   getTooltip(): HTMLElement {
     const tooltip = document.createElement("div");
+    let tooltipFormClass: string = `tooltip-${this.options.tooltipForm}` ?? "";
     tooltip.setAttribute(
       "class",
-      `range-slider__tooltip range-slider__tooltip--${this.options.orientation} tooltip-${this.id}`
+      `range-slider__tooltip range-slider__tooltip--${this.options.orientation} tooltip-${this.id} ${tooltipFormClass}`
     );
     return tooltip;
   }

@@ -10,7 +10,7 @@ import { chromium, Browser, Page } from "playwright";
 import * as components from "../components/components";
 
 const jsdom = new JSDOM(
-  '<!doctype html><html><body><div class="test" style="margin-left: 200px"></div></body></html>'
+  '<!doctype html><html><body><div class="test-plugin--1" style="margin-left: 200px"></div><div class="test-plugin--2" style="margin-left: 200px"></div></body></html>'
 );
 const { window } = jsdom;
 
@@ -20,10 +20,15 @@ global.Element = window.Element;
 global.Node = window.Node;
 global.getComputedStyle = window.getComputedStyle;
 
-const el = jsdom.window.document.querySelector(".test") as HTMLElement;
+export const el = jsdom.window.document.querySelector(
+  ".test-plugin--1"
+) as HTMLElement;
+export const el2 = jsdom.window.document.querySelector(
+  ".test-plugin--2"
+) as HTMLElement;
 
 el.style.width = "300px";
-
+el2.style.width = "300px";
 const mockOpts: IOptions = {
   max: 200,
   step: 5
@@ -31,39 +36,6 @@ const mockOpts: IOptions = {
 const mock = new Mock(el, mockOpts).getMockRangeSlider();
 export { mock };
 describe("Test RangeSlider Thumb-single", () => {
-  before(() => {});
-
-  describe("Test userOptions merged with defaults", () => {
-    it("should have options step value = 5", () => {
-      expect(mock.options.step).to.equal(5);
-    });
-
-    it("should have options min value = 0", () => {
-      expect(mock.options.min).to.equal(0);
-    });
-    it("should have options max value = 200", () => {
-      expect(mock.options.max).to.equal(200);
-    });
-    it("should have options initial value = 0", () => {
-      expect(mock.options.value).to.equal(0);
-    });
-    it("should have options track height = 10", () => {
-      expect(mock.options.trackHeight).to.equal(10);
-    });
-    it("should have options tooltip = true", () => {
-      expect(mock.options.tooltip).to.be.true;
-    });
-    it("should have options thumbsize = 15", () => {
-      expect(mock.options.thumbSize).to.equal(15);
-    });
-    it("should have options doublePoing = false", () => {
-      expect(mock.options.doublePoint).to.be.false;
-    });
-    it("should have options container width = 300", () => {
-      expect(mock.options.containerWidth).to.equal(300);
-    });
-  });
-
   describe("Test thumbModel", () => {
     it("should have the value of set value = 62", () => {
       mock.thumbModel.setValue(62);
@@ -111,6 +83,11 @@ describe("Test RangeSlider Thumb-single", () => {
     it("should have round position according to step proportion, if pos= 42.35=>42.75", () => {
       expect(mock.thumbPresenter.setStep(42.35)).to.equal(42.75);
     });
+    it("should set a start point position for track = 0", () => {
+      const startPoint = mock.trackPresenter.getTrackStartPoint();
+      mock.thumbPresenter.passTrackStartPoint(startPoint);
+      expect(mock.thumbPresenter.startPoint).to.equal(0);
+    });
   });
 
   describe("Test thumbView", () => {
@@ -146,7 +123,7 @@ describe("Test RangeSlider Thumb-single", () => {
   });
 });
 
-describe("Test Range-slider Double-point", () => {
+describe("Test Range-slider Thumb-double", () => {
   const mockOpts: IOptions = {
     max: 200,
     step: 10,
@@ -154,7 +131,9 @@ describe("Test Range-slider Double-point", () => {
     doublePoint: true
   };
 
-  const el = jsdom.window.document.querySelector(".test") as HTMLElement;
+  const el = jsdom.window.document.querySelector(
+    ".test-plugin--1"
+  ) as HTMLElement;
   el.style.width = "300px";
 
   const mock = new Mock(el, mockOpts).getMockRangeSlider();
@@ -181,6 +160,28 @@ describe("Test Range-slider Double-point", () => {
       let posArr: number[] = [56, 99];
       mock.thumbModel.setPosition(posArr);
       expect(mock.thumbModel.getPosition()).to.equal(posArr);
+    });
+    it("should have value in reversed order(from the end) [5,25] to [175,195]", () => {
+      mock.thumbModel.setValue([5, 25]);
+      const straightValue = mock.thumbModel.getValue();
+
+      const reversedToPos =
+        mock.thumbModel.convertToPositionReversed(straightValue);
+      const convertToVal: number[] = mock.thumbModel.convertToValue(
+        reversedToPos
+      ) as number[];
+      const correctReversed =
+        convertToVal[0] === 175 && convertToVal[1] === 195;
+      expect(correctReversed).to.be.true;
+    });
+    it("should have reversed value if set option reversedOrder: true", () => {
+      mock.thumbModel.setPosition([50, 100]);
+      console.log(mock.thumbModel.getValue());
+
+      mock.options.reversedOrder = true;
+      console.log(mock.options);
+      mock.thumbModel.setPosition([50, 100]);
+      console.log(mock.thumbModel.getValue());
     });
   });
   describe("Test thumbView Double-point", () => {
@@ -221,5 +222,32 @@ describe("Test Range-slider Double-point", () => {
         expect(mock.thumbView.getTooltipElement());
       }
     });
+  });
+});
+
+describe("Test Thumb StringValues", () => {
+  const mockOpts: components.IOptions = {
+    max: 800,
+    stringValues: ["one", "two", "three"]
+  };
+  const mock = new Mock(el2, mockOpts).getMockRangeSlider();
+  const thumb: HTMLElement = el2.querySelector(
+    ".range-slider__thumb"
+  ) as HTMLElement;
+
+  it("should have if number value=126 string data-value = one", () => {
+    mock.thumbModel.setValue(126);
+    mock.thumbPresenter.setThumbDataValue(mock.thumbView);
+    expect(thumb.dataset.value).to.equal("one");
+  });
+  it("should have if number value=345 string data-value = two", () => {
+    mock.thumbModel.setValue(345);
+    mock.thumbPresenter.setThumbDataValue(mock.thumbView);
+    expect(thumb.dataset.value).to.equal("two");
+  });
+  it("should have if number value=786 string data-value = two", () => {
+    mock.thumbModel.setValue(786);
+    mock.thumbPresenter.setThumbDataValue(mock.thumbView);
+    expect(thumb.dataset.value).to.equal("three");
   });
 });

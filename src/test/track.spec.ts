@@ -4,7 +4,7 @@ import { expect } from "chai";
 
 import * as components from "../components/components";
 
-import { mock } from "./thumb.spec";
+import { mock, el } from "./thumb.spec";
 
 describe("Test RangeSlider Track", () => {
   describe("Test trackModel", () => {
@@ -35,6 +35,15 @@ describe("Test RangeSlider Track", () => {
           .getTrackElement()
           .classList.contains("range-slider__track")
       ).to.be.true;
+    });
+  });
+  describe("Test trackPresenter", () => {
+    it("should get trackElement's start point as an object {left:number,top: number}", () => {
+      const returnObj: { left: number; top: number } =
+        mock.trackPresenter.getTrackStartPoint();
+      expect(typeof mock.trackPresenter.getTrackStartPoint() == "object").to.be
+        .true;
+      expect("left" in returnObj && "top" in returnObj).to.be.true;
     });
   });
 });

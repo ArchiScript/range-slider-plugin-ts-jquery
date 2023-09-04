@@ -27,5 +27,6 @@ export interface IOptions {
   tickFontSize?: number;
   tooltipForm?: "square" | "round";
   fill?: boolean;
+  tickBar?: boolean;
   
 }

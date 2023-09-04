@@ -1,47 +1,60 @@
 import { IObserver } from "../types/IObserver";
 import { IThumbModel } from "../types/IModels/IThumbModel";
 import { IOptions } from "../types/IConfigurationService/IOptions";
-import { ConfigService } from "../ConfigService/ConfigService";
 import { Config } from "../ConfigService/Config";
-import { Ruler } from "./Ruler";
+
 export class ThumbModel implements IThumbModel {
-  private position: number | number[];
+  private position!: number | number[];
   private observers: IObserver[] = [];
   private dragging: boolean = false;
-  private thumbSize: number;
-  private min: number;
-  private max: number;
+  private thumbSize!: number;
+  private min!: number;
+  private max!: number;
   private value?: number | number[];
-  private containerWidth: number;
-  private containerHeight: number;
-  private step: number;
-  private options: IOptions = Config.getInstance().getOptions();
-  private containerOrientationValue: number;
+  private containerWidth!: number;
+  private containerHeight!: number;
+  private step!: number;
+  private options: IOptions;
+  private containerOrientationValue!: number;
 
   constructor() {
+    this.options = Config.getInstance().getOptions();
+    this.init();
+  }
+
+  init(): void {
     this.min = this.options.min as number;
     this.max = this.options.max as number;
     this.step = this.validateStep(this.options.step as number);
     this.thumbSize = this.options.thumbSize as number;
-
     this.containerWidth = this.getContainerWidth() - this.thumbSize;
     this.containerHeight = this.getContainerHeight() - this.thumbSize;
     this.value = this.options.value ? this.options.value : (0 as number);
-    this.containerOrientationValue =
-      this.options.orientation === "horizontal"
-        ? this.containerWidth
-        : this.containerHeight;
+    this.containerOrientationValue = this.setContainerOrientationValue();
+    this.position = this.setInitialPosition();
+  }
 
+  updateOptions(): void {
+    this.options = Config.getInstance().getOptions();
+    console.log("updateOptions");
+    console.log(this.options);
+    this.init();
+  }
+
+  setContainerOrientationValue(): number {
+    return this.options.orientation === "horizontal"
+      ? this.containerWidth
+      : this.containerHeight;
+  }
+
+  setInitialPosition(): number | number[] {
     if (!this.options.reversedOrder) {
-      this.position = this.convertToPosition(
-        this.options.value as number | number[]
-      );
+      return this.convertToPosition(this.options.value as number | number[]);
     } else {
-      this.position = this.convertToPositionReversed(
+      return this.convertToPositionReversed(
         this.options.value as number | number[]
       );
     }
-    this.test();
   }
 
   test(): void {

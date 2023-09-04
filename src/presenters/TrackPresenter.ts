@@ -3,7 +3,6 @@ import { ITrackModel } from "../types/IModels/ITrackModel";
 import { ITrackPresenter } from "../types/IPresenters/ITrackPresenter";
 import { IObserver } from "../types/IObserver";
 import { Mediator } from "./Mediator";
-import { ConfigService } from "../ConfigService/ConfigService";
 import { Config } from "../ConfigService/Config";
 import { IOptions } from "../types/IConfigurationService/IOptions";
 import { Ruler } from "../models/Ruler";
@@ -11,29 +10,31 @@ import { config } from "chai";
 
 export class TrackPresenter implements ITrackPresenter, IObserver {
   private mediator?: Mediator;
-  private options: IOptions = Config.getInstance().getOptions();
-  private ruler: Ruler;
-  private tickStep: number;
-  private $trackElement: HTMLElement;
+  private options: IOptions;
+  private ruler!: Ruler;
+  private tickStep!: number;
+  private $trackElement!: HTMLElement;
   constructor(private trackModel: ITrackModel, private trackView: ITrackView) {
+    this.options = Config.getInstance().getOptions();
     this.trackModel = trackModel;
     this.trackView = trackView;
-    this.$trackElement = trackView.getTrackElement();
-    console.log(this.$trackElement);
-
-    this.ruler = new Ruler();
-    this.tickStep = this.options.tickStep
-      ? this.options.tickStep
-      : this.ruler.getCalculatedTickStep(this.options.max as number);
     this.init();
   }
-
+  updateOptions(): void {
+    this.options = Config.getInstance().getOptions();
+    this.init();
+  }
   init(): void {
+    this.$trackElement = this.trackView.getTrackElement();
+
+    this.tickStep = this.options.tickStep
+      ? this.options.tickStep
+      : this.trackView
+          .getRuler()
+          .getCalculatedTickStep(this.options.max as number);
     this.trackModel.addObserver(this);
     this.trackView.addPositionChangeListener(this.trackClickHandler.bind(this));
     this.updateView();
-
-    console.log(this.options);
   }
 
   update(clickPosition: number): void {
@@ -46,10 +47,7 @@ export class TrackPresenter implements ITrackPresenter, IObserver {
       this.tickStep
     );
   }
-  private test(): void {
-    console.log("testing");
-  }
-  onThumbPositionChange(position: number): void {}
+
   trackClickHandler(e: MouseEvent | TouchEvent): void {
     if (e instanceof MouseEvent) {
       const startPoint =
@@ -65,7 +63,7 @@ export class TrackPresenter implements ITrackPresenter, IObserver {
         `---containerViewportLeft: ${this.$trackElement.offsetLeft}\n ---containerViewportTop: ${this.$trackElement.offsetTop}`
       );
       console.log(position);
-      this.onThumbPositionChange(position);
+
       this.mediator?.notifyTrackClick(position);
     }
   }

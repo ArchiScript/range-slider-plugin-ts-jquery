@@ -2,9 +2,15 @@ import { Config } from "../ConfigService/Config";
 import { IOptions } from "../components/components";
 import { IRuler } from "../types/IModels/IRuler";
 export class Ruler implements IRuler {
-  private options: IOptions = Config.getInstance().getOptions();
+  private options: IOptions;
   private max: number;
   constructor() {
+    this.options = Config.getInstance().getOptions();
+    this.max = this.options.max as number;
+  }
+
+  updateOptions(): void {
+    this.options = Config.getInstance().getOptions();
     this.max = this.options.max as number;
   }
   getCalculatedTickStep(max: number): number {
@@ -84,5 +90,70 @@ export class Ruler implements IRuler {
       num: num,
       grade: grade
     };
+  }
+  renderRuler(tickStep: number): HTMLElement {
+    let $ruler = document.createElement("div");
+    $ruler.setAttribute(
+      "class",
+      `range-slider__ruler range-slider__ruler--${this.options.orientation} `
+    );
+    if (this.options.orientation === "horizontal") {
+      $ruler.style.width = `100%`;
+    } else {
+      $ruler.style.height = `100%`;
+    }
+
+    let rulerPadding = this.options.thumbSize! / 2;
+    $ruler.style.paddingLeft = `${rulerPadding}px`;
+    $ruler.style.paddingRight = `${rulerPadding}px`;
+    let i: number, max: number;
+    if (!this.options.reversedOrder) {
+      i = 0;
+      max = this.options.max as number;
+
+      while (i <= max) {
+        let tick = this.renderEachTick(i);
+        $ruler.appendChild(tick);
+        i += tickStep;
+      }
+    } else {
+      i = this.options.max as number;
+      let min = this.options.min as number;
+      while (i >= min) {
+        let tick = this.renderEachTick(i);
+        $ruler.appendChild(tick);
+        i -= tickStep;
+      }
+    }
+
+    return $ruler;
+  }
+
+  renderEachTick(i: number): HTMLElement {
+    let tick = document.createElement("div");
+    tick.setAttribute(
+      "class",
+      `range-slider__tick range-slider__tick--${this.options.orientation}`
+    );
+
+    let tickBar = document.createElement("div");
+    tickBar.setAttribute(
+      "class",
+      `range-slider__tick-bar range-slider__tick-bar--${this.options.orientation}`
+    );
+    let tickNumber = document.createElement("div");
+    tickNumber.setAttribute(
+      "class",
+      `range-slider__tick-number range-slider__tick-number--${this.options.orientation}`
+    );
+    if (this.options.tickBar) {
+      tick.appendChild(tickBar);
+    }
+
+    tick.appendChild(tickNumber);
+    tickNumber.innerHTML = i.toString();
+    tick.style.setProperty("--tick-color", `${this.options.rulerColor}`);
+
+    return tick;
   }
 }

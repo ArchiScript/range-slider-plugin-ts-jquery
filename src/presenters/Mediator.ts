@@ -24,7 +24,7 @@ export class Mediator implements IMediator {
   }
 
   public notifyThumbPositionChange(position: number): void {
-    this.trackPresenter.onThumbPositionChange(position);
+
     this.fillPresenter.onThumbPositionChange(position);
   }
   public setFill(position: number | number[]): void {

@@ -4,36 +4,48 @@ import { Config } from "../components/components";
 export class ThumbView implements IThumbView {
   private $thumb: HTMLElement;
   private $parent: HTMLElement;
-  private $tooltip: HTMLElement;
+  private $tooltip!: HTMLElement;
   public static id: number = 0;
   private id: number;
-  // private localId: number;
 
   public isActive: boolean = false;
-  private options: IOptions = Config.getInstance().getOptions();
+  private options: IOptions;
 
   constructor(parentElement: HTMLElement) {
+    this.options = Config.getInstance().getOptions();
     ThumbView.id++;
     if (ThumbView.id > 2) {
       ThumbView.id = 1;
     }
     this.id = ThumbView.id;
+    this.$parent = parentElement;
     this.$thumb = document.createElement("div");
+    this.init();
+  }
+  init(): void {
     this.$thumb.setAttribute(
       "class",
       `range-slider__thumb range-slider__thumb--${this.options.orientation} thumb-${this.id}`
     );
     this.$thumb.setAttribute("data-id", `${this.id}`);
-    this.$parent = parentElement;
+    this.$parent.innerHTML = "";
     this.$parent.appendChild(this.$thumb);
     this.$thumb.setAttribute("data-value", `0`);
-    this.$tooltip = this.getTooltip();
-    if (this.options.tooltip) {
-      this.$thumb.appendChild(this.$tooltip);
-    }
-    this.applyTooltipStyle();
-  }
+    this.$thumb.innerHTML = "";
+    console.log(`*******thumViewINIT - tooltip:${this.options.tooltip}`);
 
+    if (this.options.tooltip) {
+      this.$tooltip = this.getTooltip();
+      this.$thumb.appendChild(this.$tooltip);
+      this.applyTooltipStyle();
+    } else {
+      this.$thumb.innerHTML = "";
+    }
+  }
+  updateOptions(): void {
+    this.options = Config.getInstance().getOptions();
+    this.init();
+  }
   getTooltip(): HTMLElement {
     const tooltip = document.createElement("div");
     let tooltipFormClass: string = `tooltip-${this.options.tooltipForm}` ?? "";

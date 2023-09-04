@@ -1,17 +1,20 @@
 import { ITrackModel } from "../types/IModels/ITrackModel";
 import { IObserver } from "../types/IObserver";
 import { IOptions } from "../types/IConfigurationService/IOptions";
-import { ConfigService } from "../ConfigService/ConfigService";
 import { Config } from "../ConfigService/Config";
 
 export class TrackModel implements ITrackModel {
-  private width: number;
-  private height: number;
-
+  private width!: number;
+  private height!: number;
   private observers: IObserver[] = [];
-  private options: IOptions = Config.getInstance().getOptions();
+  private options: IOptions;
 
   constructor() {
+    this.options = Config.getInstance().getOptions();
+    this.init();
+  }
+
+  init(): void {
     if (this.options.orientation === "horizontal") {
       this.height = this.options.trackHeight as number;
       this.width = 100;
@@ -19,6 +22,10 @@ export class TrackModel implements ITrackModel {
       this.height = 100;
       this.width = this.options.trackHeight as number;
     }
+  }
+  updateOptions(): void {
+    this.options = Config.getInstance().getOptions();
+    this.init();
   }
 
   getWidth(): number {

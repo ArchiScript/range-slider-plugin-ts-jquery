@@ -6,7 +6,6 @@ import { TrackPresenter } from "./TrackPresenter";
 import { ThumbPresenter } from "./ThumbPresenter";
 import { FillPresenter } from "./FillPresenter";
 import { IOptions } from "../types/IConfigurationService/IOptions";
-import { ConfigService } from "../ConfigService/ConfigService";
 import { Config } from "../ConfigService/Config";
 import { Mediator } from "./Mediator";
 
@@ -33,6 +32,10 @@ export class RangeSliderPresenter implements IPresenter, IObserver {
     this.options = Config.getInstance().getOptions();
     this.init();
   }
+  updateOptions(): void {
+    this.options = Config.getInstance().getOptions();
+    this.init();
+  }
   init(): void {
     this.model.addObserver(this);
     this.thumbPresenter.addObserver(this);
@@ -43,10 +46,10 @@ export class RangeSliderPresenter implements IPresenter, IObserver {
     this.updateView();
     const startPoint = this.trackPresenter.getTrackStartPoint();
     this.thumbPresenter.passTrackStartPoint(startPoint);
-    this.thumbPresenter.updateView();
     const thumbPos: number | number[] =
       this.thumbPresenter.getCurrentFillPosition();
     this.fillPresenter.updateValue(thumbPos);
+    this.thumbPresenter.updateView();
   }
   getMediator() {
     return this.mediator;

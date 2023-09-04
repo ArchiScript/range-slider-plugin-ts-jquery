@@ -3,39 +3,48 @@ import { TrackView } from "./TrackView";
 import { ThumbView } from "./ThumbView";
 import { FillView } from "./FillView";
 import { IOptions } from "../types/IConfigurationService/IOptions";
-import { ConfigService } from "../ConfigService/ConfigService";
 import { Config } from "../ConfigService/Config";
 export class RangeSliderView implements IRangeSliderView {
   private $container: HTMLElement;
   private $pluginElement: HTMLElement;
   private $title: HTMLElement;
-  private $trackView: TrackView;
+  private $trackView!: TrackView;
   private $label: HTMLElement;
-  // private $thumbViews: ThumbView | ThumbView[];
-  private $thumbView: ThumbView | ThumbView[];
-  private $trackElement: HTMLElement;
-  private $fillView: FillView;
-  private $fillElement: HTMLElement;
-  private options: IOptions = Config.getInstance().getOptions();
+  private $thumbView!: ThumbView | ThumbView[];
+  private $trackElement!: HTMLElement;
+  private $fillView!: FillView;
+  private $fillElement!: HTMLElement;
+  private options: IOptions;
 
   constructor(container: HTMLElement) {
+    this.options = Config.getInstance().getOptions();
     this.$container = container;
-    console.log(`containerWidth: ${getComputedStyle(this.$container).width}`);
     this.$pluginElement = document.createElement("div");
+    this.$label = document.createElement("div");
+    this.$title = document.createElement("h1");
+    this.init();
+  }
+  init(): void {
     let classStr: string = `range-slider--${this.options.orientation}`;
     this.$pluginElement.setAttribute("class", `range-slider ${classStr}`);
-    this.$label = document.createElement("div");
     this.$label.setAttribute("class", "range-slider__label");
+    if (!this.$thumbView) {
+      this.$trackView = new TrackView(this.$pluginElement);
+      this.$trackElement = this.$trackView.getTrackElement();
+    }
 
-    this.$trackView = new TrackView(this.$pluginElement);
-    this.$trackElement = this.$trackView.getTrackElement();
-    this.$thumbView = this.getThumbViews();
-    // this.$thumbViews = this.getThumbViews();
-    this.$fillView = new FillView(this.$trackElement);
-    this.$fillElement = this.$fillView.getFillElement();
-    this.$title = document.createElement("h1");
+    if (!this.$thumbView) {
+      this.$thumbView = this.getThumbViews();
+    }
+    if (!this.$fillView) {
+      this.$fillView = new FillView(this.$trackElement);
+      this.$fillElement = this.$fillView.getFillElement();
+    }
   }
-
+  updateOptions(): void {
+    this.options = Config.getInstance().getOptions();
+    this.init();
+  }
   getThumbViews(): ThumbView | ThumbView[] {
     if (!this.options.doublePoint) {
       return new ThumbView(this.$pluginElement) as ThumbView;

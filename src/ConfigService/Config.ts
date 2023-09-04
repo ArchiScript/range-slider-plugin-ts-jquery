@@ -15,17 +15,20 @@ export class Config implements IConfig {
     min: 0,
     max: 100,
     value: 0,
-    trackHeight: 10,
+    step: 1,
+    trackHeight: 6,
     fill: true,
     tooltip: true,
+    tooltipForm: "square",
     thumbSize: 15,
     doublePoint: false,
     ticks: true,
-    thumbColor: "red",
-    trackColor: "#a7a7a7",
-    fillColor: "red",
-    tooltipColor: "red",
-    rulerColor: "white"
+    tickBar: true,
+    thumbColor: "#E65837FF",
+    trackColor: "#E5E5E5FF",
+    fillColor: "#E65837FF",
+    tooltipColor: "#E65837FF",
+    rulerColor: "#C4C4C4FF"
   };
   private constructor(options?: IOptions, container?: HTMLElement) {
     Config.instanceId++;
@@ -65,8 +68,9 @@ export class Config implements IConfig {
     }
     return options;
   }
-  setOptions(opt: IOptions): void {
+  public updateOptions(opt: IOptions): void {
     this.userOptions = Object.assign({}, this.userOptions, opt);
+    console.log(this.userOptions);
   }
 
   getOptions(): IOptions {

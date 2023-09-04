@@ -1,19 +1,25 @@
 import { IRangeSlider } from "../types/IModels/IRangeSlider";
 import { IObserver } from "../types/IObserver";
 import { IOptions } from "../types/IConfigurationService/IOptions";
-import { ConfigService } from "../ConfigService/ConfigService";
 import { Config } from "../ConfigService/Config";
 export class RangeSlider implements IRangeSlider {
-  private value: number;
-
+  private value!: number;
   private observers: IObserver[] = [];
-  private options: IOptions = Config.getInstance().getOptions();
+  private options!: IOptions;
 
   constructor() {
+    this.options = Config.getInstance().getOptions();
+    this.init();
+  }
+
+  init(): void {
     this.value = this.options.value as number;
     this.setValue(this.value);
   }
-
+  updateOptions(): void {
+    this.options = Config.getInstance().getOptions();
+    this.init();
+  }
   setValue(value: number): void {
     this.value = value;
     this.notifyObservers();

@@ -1,22 +1,29 @@
 import { IFillModel } from "../types/IModels/IFillModel";
 import { IOptions } from "../types/IConfigurationService/IOptions";
-import { ConfigService } from "../ConfigService/ConfigService";
 import { Config } from "../ConfigService/Config";
 import { IObserver } from "../types/IObserver";
 export class FillModel implements IFillModel {
-  private fillPosition: number | number[];
-  private fillLength: number;
+  private fillPosition!: number | number[];
+  private fillLength!: number;
   private options: IOptions;
   private observers: IObserver[] = [];
-  private thumbSize: number;
+  private thumbSize!: number;
   constructor() {
     this.options = Config.getInstance().getOptions();
+    this.init();
+  }
+  init(): void {
     this.thumbSize = this.options.thumbSize as number;
+    console.log(`=======fillmodel initOpts ==`);
+    console.log(this.options);
     this.fillPosition = this.getProportionValue(
       this.options.value as number | number[]
     );
-
     this.fillLength = this.calculateFillLength(this.fillPosition);
+  }
+  updateOptions(): void {
+    this.options = Config.getInstance().getOptions();
+    this.init();
   }
   calculateFillLength(fillPos: number | number[]): number {
     if (Array.isArray(fillPos)) {

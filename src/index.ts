@@ -16,6 +16,11 @@ const plugin1 = $(".container-1").rangeSlider({
 });
 
 // plugin1.setValue([50, 420]);
+plugin1.updateOptions({
+  orientation: "horizontal",
+  tooltipColor: "orange",
+  max: 1000
+});
 
 const plugin2 = $(".container-2").rangeSlider({
   max: 500,
@@ -24,8 +29,9 @@ const plugin2 = $(".container-2").rangeSlider({
   // reversedOrder: true,
   // doublePoint: true,
   thumbSize: 15,
-  trackHeight: 8,
-  tooltipForm: "round"
+  trackHeight: 6,
+  tooltipForm: "round",
+  orientation: "vertical"
   // trackColor: "linear-gradient(to right, green, red)"
 });
 
@@ -36,8 +42,11 @@ $(".container-3").rangeSlider({
   // reversedOrder: true,
   doublePoint: true,
   thumbSize: 15,
-  trackHeight: 8,
-  tooltipColor: "green"
+  trackHeight: 6,
+  tooltipColor: "#51B7A9FF",
+  fillColor: "#51B7A9FF",
+  thumbColor: "#51B7A9FF",
+  tickBar: false
   // trackColor: "linear-gradient(to right, green, red)"
 });
 
@@ -49,7 +58,7 @@ $(".container-4").rangeSlider({
   // reversedOrder: true,
   doublePoint: true,
   thumbSize: 15,
-  trackHeight: 8,
+  trackHeight: 6,
   tooltipColor: "green",
   trackColor: "linear-gradient(to right, blue, green)"
 });
@@ -60,7 +69,7 @@ $(".container-5").rangeSlider({
   // reversedOrder: true,
   doublePoint: true,
   thumbSize: 15,
-  trackHeight: 8,
+  trackHeight: 6,
   tooltipColor: "green"
   // trackColor: "linear-gradient(to right, green, red)"
 });
@@ -71,7 +80,7 @@ $(".container-6").rangeSlider({
   // reversedOrder: true,
   doublePoint: true,
   thumbSize: 15,
-  trackHeight: 8,
+  trackHeight: 6,
   tooltipColor: "green"
   // trackColor: "linear-gradient(to right, green, red)"
 });
@@ -82,7 +91,7 @@ $(".container-7").rangeSlider({
   // reversedOrder: true,
   doublePoint: true,
   thumbSize: 15,
-  trackHeight: 8,
+  trackHeight: 6,
   tooltipColor: "green"
   // trackColor: "linear-gradient(to right, green, red)"
 });
@@ -93,7 +102,7 @@ $(".container-8").rangeSlider({
   // reversedOrder: true,
   doublePoint: true,
   thumbSize: 15,
-  trackHeight: 8,
+  trackHeight: 6,
   tooltipColor: "green"
   // trackColor: "linear-gradient(to right, green, red)"
 });

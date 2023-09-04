@@ -3,7 +3,6 @@ import { IThumbModel } from "../types/IModels/IThumbModel";
 import { IThumbView } from "../types/IViews/IThumbView";
 import { IObserver } from "../types/IObserver";
 import { ThumbView } from "../views/ThumbView";
-import { ConfigService } from "../ConfigService/ConfigService";
 import { Config } from "../ConfigService/Config";
 import { IOptions } from "../types/IConfigurationService/IOptions";
 import { Mediator } from "./Mediator";
@@ -12,34 +11,37 @@ export class ThumbPresenter implements IThumbPresenter, IObserver {
   private model: IThumbModel;
   private view: ThumbView | ThumbView[];
   private mediator?: Mediator;
-  private position: number | number[];
+  private position!: number | number[];
   private activeThumb?: HTMLElement;
-  private value: number | number[];
+  private value!: number | number[];
   private dragBound!: EventListenerOrEventListenerObject;
   private stopDragBound!: EventListenerOrEventListenerObject;
   private observers: IObserver[] = [];
-  private options: IOptions = Config.getInstance().getOptions();
-  private step: number;
-  private isDoubleThumb: boolean;
+  private options: IOptions;
+  private step!: number;
+  private isDoubleThumb!: boolean;
   public startPoint?: number;
   constructor(model: IThumbModel, view: ThumbView | ThumbView[]) {
+    this.options = Config.getInstance().getOptions();
     this.model = model;
     this.view = view;
-
-    this.step = this.model.getStep();
-    this.position = this.model.getPosition();
-    console.log(this.position);
-    this.value = this.model.getValue();
-    this.isDoubleThumb = this.isDouble;
+    this.model.addObserver(this);
+    this.addDragListeners(this);
     this.init();
   }
-
+  updateOptions(): void {
+    this.options = Config.getInstance().getOptions();
+    console.log(this.options);
+    this.init();
+  }
   init(): void {
-    this.model.addObserver(this);
+    this.step = this.model.getStep();
+    this.position = this.model.getPosition();
+    this.value = this.model.getValue();
+    this.isDoubleThumb = this.isDouble;
+    // this.model.addObserver(this);
     this.model.setPosition(this.position);
-    this.addDragListeners(this);
-
-    this.test();
+    // this.addDragListeners(this);
     this.updateView();
   }
 
@@ -150,7 +152,14 @@ export class ThumbPresenter implements IThumbPresenter, IObserver {
 
   private startDrag(e: MouseEvent | TouchEvent): void {
     e.preventDefault();
-    this.activeThumb = e.target as HTMLElement;
+    let eventTarget = e.target as HTMLElement;
+    let thumb: HTMLElement;
+    if (eventTarget.classList.contains("range-slider__tooltip")) {
+      thumb = eventTarget.closest(".range-slider__thumb") as HTMLElement;
+    } else {
+      thumb = eventTarget;
+    }
+    this.activeThumb = thumb;
     this.setActiveThumb(this.activeThumb);
     this.model.enableDrag();
     this.dragBound = this.drag.bind(this) as EventListener;
@@ -251,9 +260,10 @@ export class ThumbPresenter implements IThumbPresenter, IObserver {
     currentPositionArr = viewArr.map((v) => v.getThumbCurrentPosition());
 
     if (viewArr[0].isActive && movement > currentPositionArr[1]) {
-      movement = currentPositionArr[1] - this.step;
+      movement = currentPositionArr[1] - this.model.getStep();
+      console.log(`----=---${this.model.getStep()}`);
     } else if (viewArr[1].isActive && movement < currentPositionArr[0]) {
-      movement = currentPositionArr[0] + this.step;
+      movement = currentPositionArr[0] + this.model.getStep();
     }
     newPositionArr = viewArr[0].isActive
       ? [movement, currentPositionArr[1]]

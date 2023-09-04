@@ -11,7 +11,6 @@ import { FillModel } from "../models/FillModel";
 import { FillPresenter } from "../presenters/FillPresenter";
 import { FillView } from "../views/FillView";
 import { IOptions } from "../types/IConfigurationService/IOptions";
-import { ConfigService } from "../ConfigService/ConfigService";
 import { Config } from "../ConfigService/Config";
 
 interface MockRangeSliderObject {

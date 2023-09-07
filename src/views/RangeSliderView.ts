@@ -41,8 +41,9 @@ export class RangeSliderView implements IRangeSliderView {
       this.$fillElement = this.$fillView.getFillElement();
     }
   }
-  updateOptions(): void {
-    this.options = Config.getInstance().getOptions();
+
+  updateOptions(id: number): void {
+    this.options = Config.getInstanceById(id).getOptions();
     this.init();
   }
   getThumbViews(): ThumbView | ThumbView[] {

@@ -9,8 +9,8 @@ export class Ruler implements IRuler {
     this.max = this.options.max as number;
   }
 
-  updateOptions(): void {
-    this.options = Config.getInstance().getOptions();
+  updateOptions(id: number): void {
+    this.options = Config.getInstanceById(id).getOptions();
     this.max = this.options.max as number;
   }
   getCalculatedTickStep(max: number): number {

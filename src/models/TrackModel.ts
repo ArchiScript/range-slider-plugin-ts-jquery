@@ -23,11 +23,10 @@ export class TrackModel implements ITrackModel {
       this.width = this.options.trackHeight as number;
     }
   }
-  updateOptions(): void {
-    this.options = Config.getInstance().getOptions();
+  updateOptions(id: number): void {
+    this.options = Config.getInstanceById(id).getOptions();
     this.init();
   }
-
   getWidth(): number {
     return this.width;
   }

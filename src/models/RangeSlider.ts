@@ -16,8 +16,8 @@ export class RangeSlider implements IRangeSlider {
     this.value = this.options.value as number;
     this.setValue(this.value);
   }
-  updateOptions(): void {
-    this.options = Config.getInstance().getOptions();
+  updateOptions(id: number): void {
+    this.options = Config.getInstanceById(id).getOptions();
     this.init();
   }
   setValue(value: number): void {

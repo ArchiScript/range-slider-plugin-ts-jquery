@@ -20,8 +20,8 @@ export class TrackPresenter implements ITrackPresenter, IObserver {
     this.trackView = trackView;
     this.init();
   }
-  updateOptions(): void {
-    this.options = Config.getInstance().getOptions();
+  updateOptions(id: number): void {
+    this.options = Config.getInstanceById(id).getOptions();
     this.init();
   }
   init(): void {

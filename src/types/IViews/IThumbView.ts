@@ -9,4 +9,6 @@ export interface IThumbView {
   getThumbViewId(): number;
   getThumbElement(): HTMLElement;
   getTooltipElement(): HTMLElement;
+  // updateOptions(): void;
+  updateOptions(id: number): void;
 }

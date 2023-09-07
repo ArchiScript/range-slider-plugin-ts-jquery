@@ -15,7 +15,7 @@ const mock = new Mock(el, mockOpts).getMockRangeSlider();
 
 describe("Test Config", () => {
   it("should set an option stringValues", () => {
-    components.Config.getInstance().setOptions({
+    components.Config.getInstance().updateOptions({
       stringValues: ["one", "two", "three"]
     });
     expect("stringValues" in components.Config.getInstance().getOptions()).to.be

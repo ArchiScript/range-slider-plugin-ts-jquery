@@ -6,7 +6,7 @@ export class ThumbView implements IThumbView {
   private $parent: HTMLElement;
   private $tooltip!: HTMLElement;
   public static id: number = 0;
-  private id: number;
+  private id!: number;
 
   public isActive: boolean = false;
   private options: IOptions;
@@ -42,8 +42,9 @@ export class ThumbView implements IThumbView {
       this.$thumb.innerHTML = "";
     }
   }
-  updateOptions(): void {
-    this.options = Config.getInstance().getOptions();
+
+  updateOptions(id: number): void {
+    this.options = Config.getInstanceById(id).getOptions();
     this.init();
   }
   getTooltip(): HTMLElement {

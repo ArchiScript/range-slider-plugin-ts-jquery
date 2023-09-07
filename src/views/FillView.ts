@@ -17,8 +17,8 @@ export class FillView implements IFillView {
       `range-slider__fill range-slider__fill--${this.options.orientation}`
     );
   }
-  updateOptions(): void {
-    this.options = Config.getInstance().getOptions();
+  updateOptions(id: number): void {
+    this.options = Config.getInstanceById(id).getOptions();
     console.log(this.options);
     this.init();
   }

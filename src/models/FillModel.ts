@@ -14,15 +14,13 @@ export class FillModel implements IFillModel {
   }
   init(): void {
     this.thumbSize = this.options.thumbSize as number;
-    console.log(`=======fillmodel initOpts ==`);
-    console.log(this.options);
     this.fillPosition = this.getProportionValue(
       this.options.value as number | number[]
     );
     this.fillLength = this.calculateFillLength(this.fillPosition);
   }
-  updateOptions(): void {
-    this.options = Config.getInstance().getOptions();
+  updateOptions(id: number): void {
+    this.options = Config.getInstanceById(id).getOptions();
     this.init();
   }
   calculateFillLength(fillPos: number | number[]): number {

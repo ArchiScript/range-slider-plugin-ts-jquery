@@ -34,13 +34,12 @@ export class ThumbModel implements IThumbModel {
     this.position = this.setInitialPosition();
   }
 
-  updateOptions(): void {
-    this.options = Config.getInstance().getOptions();
+  updateOptions(id: number): void {
+    this.options = Config.getInstanceById(id).getOptions();
     console.log("updateOptions");
     console.log(this.options);
     this.init();
   }
-
   setContainerOrientationValue(): number {
     return this.options.orientation === "horizontal"
       ? this.containerWidth

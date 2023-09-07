@@ -18,13 +18,15 @@ export class TrackView implements ITrackView {
     if (!this.ruler) {
       this.ruler = new Ruler();
     } else {
-      this.ruler.updateOptions();
+      // this.ruler.updateOptions();
+      this.ruler.updateOptions(this.options.instanceId as number);
     }
     let orientClass: string = `range-slider__track--${this.options.orientation}`;
     this.$track.setAttribute("class", `range-slider__track ${orientClass}`);
   }
-  updateOptions(): void {
-    this.options = Config.getInstance().getOptions();
+
+  updateOptions(id: number): void {
+    this.options = Config.getInstanceById(id).getOptions();
     this.init();
   }
   getTrackElement(): HTMLElement {

@@ -1,5 +1,7 @@
 import { IConfig } from "../types/IConfigurationService/IConfig";
 import { IOptions } from "../types/IConfigurationService/IOptions";
+import cloneDeep from "lodash/cloneDeep";
+
 export class Config implements IConfig {
   private userOptions?: IOptions;
   private container?: Element;
@@ -8,6 +10,7 @@ export class Config implements IConfig {
   private containerViewportLeft?: number;
   private containerViewportTop?: number;
   private static instance: Config;
+  private static instances: Config[] = [];
   private static instanceId: number = 0;
   private instanceId: number;
   private defaultOptions: IOptions = {
@@ -39,14 +42,17 @@ export class Config implements IConfig {
   public static set(container: HTMLElement, options?: IOptions): Config {
     if (!options?.instanceId) {
       Config.instance = new Config(options, container);
+      Config.instances.push(Config.instance);
     } else {
       throw new Error("This instance is already set");
     }
-    console.log(`--------instanceId   ${this.instanceId}`);
     return Config.instance;
   }
   public static getInstance(): Config {
     return Config.instance;
+  }
+  public static getInstanceById(instanceId: number): Config {
+    return Config.instances[instanceId - 1];
   }
   private decorateUserOptions(options: IOptions): IOptions {
     const $container__track: HTMLElement = this.container?.querySelector(
@@ -55,13 +61,8 @@ export class Config implements IConfig {
     if (this.container) {
       this.containerWidth = parseInt(getComputedStyle(this.container).width);
       this.containerHeight = parseInt(getComputedStyle(this.container).height);
-      // this.containerViewportLeft = this.container.getBoundingClientRect().left;
-      // this.containerViewportTop = this.container.getBoundingClientRect().top;
-
       options.containerWidth = this.containerWidth;
       options.containerHeight = this.containerHeight;
-      // options.containerViewportLeft = this.containerViewportLeft;
-      // options.containerViewportTop = this.containerViewportTop;
 
       options.instanceId = this.instanceId;
       return options;
@@ -70,9 +71,25 @@ export class Config implements IConfig {
   }
   public updateOptions(opt: IOptions): void {
     this.userOptions = Object.assign({}, this.userOptions, opt);
-    console.log(this.userOptions);
+    console.log(Config.instances);
   }
+  public updateOptionsExact(config: Config, opt: IOptions): void {
+    config.userOptions = Object.assign({}, config.userOptions, opt);
+    console.log(Config.instances);
+  }
+  // public updateOptions(opt: IOptions): void {
+  //   this.userOptions = cloneDeep(opt);
+  // }
 
+  public static getConfigObjectById(id: number): {
+    pluginId: number;
+    config: Config;
+  } {
+    return {
+      pluginId: id,
+      config: Config.instances[id]
+    };
+  }
   getOptions(): IOptions {
     return this.userOptions
       ? Object.assign(

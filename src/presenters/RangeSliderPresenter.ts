@@ -32,8 +32,8 @@ export class RangeSliderPresenter implements IPresenter, IObserver {
     this.options = Config.getInstance().getOptions();
     this.init();
   }
-  updateOptions(): void {
-    this.options = Config.getInstance().getOptions();
+  updateOptions(id: number): void {
+    this.options = Config.getInstanceById(id).getOptions();
     this.init();
   }
   init(): void {

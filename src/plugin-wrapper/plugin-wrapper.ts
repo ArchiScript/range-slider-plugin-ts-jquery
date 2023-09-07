@@ -22,7 +22,9 @@ function rangeSlider(
   this.each(function () {
     const container = this;
 
-    Config.set(container, opts).getOptions();
+    const options = Config.set(container, opts).getOptions();
+    pluginInstance.config = Config.getInstance();
+    const id = options.instanceId as number;
     const rangeSliderView = new RangeSliderView(container);
     const rangeSliderModel = new RangeSlider();
     const trackView = rangeSliderView.getTrackView();
@@ -65,38 +67,57 @@ function rangeSlider(
     pluginInstance.updateOptions = function (
       options: IOptions
     ): JQuery<HTMLElement> {
-      Config.getInstance().updateOptions(options);
-
-      update(container);
+      // Config.getInstance().updateOptions(options);
+      pluginInstance.config.updateOptionsExact(pluginInstance.config, options);
+      update(container, id);
       return pluginInstance;
+    };
+    pluginInstance.getOptions = function (): IOptions {
+      return Config.getInstance().getOptions();
+    };
+    pluginInstance.getContainer = function (): HTMLElement {
+      return container;
+    };
+    pluginInstance.getPluginConfig = function (): {
+      pluginId: number;
+      config: Config;
+    } {
+      const conf = Config.getConfigObjectById(id);
+      return conf;
+    };
+
+    pluginInstance.getContainerId = function (): number {
+      return options.instanceId as number;
     };
   });
 
   return pluginInstance;
 }
 
-function update(container: HTMLElement): void {
+function update(container: HTMLElement, id: number): void {
   const instances = $(container).data("rangeSliderInstances");
   if (instances) {
-    const options = Config.getInstance().getOptions();
+    instances.trackModel.updateOptions(id);
+    instances.trackView.updateOptions(id);
+    instances.trackPresenter.updateOptions(id);
+    instances.thumbModel.updateOptions(id);
+    if (Array.isArray(instances.thumbView)) {
+      instances.thumbView.forEach(
+        (view: { updateOptions: (id: number) => void }) =>
+          view.updateOptions(id)
+      );
+    } else {
+      instances.thumbView.updateOptions(id);
+    }
 
-    instances.trackModel.updateOptions(options);
-    instances.trackView.updateOptions(options);
-    instances.trackPresenter.updateOptions(options);
-    instances.thumbModel.updateOptions(options);
-    instances.thumbView.updateOptions(options);
-    instances.thumbPresenter.updateOptions(options);
-    instances.fillModel.updateOptions(options);
-    instances.fillView.updateOptions(options);
-    instances.fillPresenter.updateOptions(options);
-    instances.rangeSliderModel.updateOptions(options);
-    instances.rangeSliderView.updateOptions(options);
-    instances.rangeSliderPresenter.updateOptions(options);
+    instances.thumbPresenter.updateOptions(id);
+    instances.fillModel.updateOptions(id);
+    instances.fillView.updateOptions(id);
+    instances.fillPresenter.updateOptions();
+    instances.rangeSliderModel.updateOptions(id);
+    instances.rangeSliderView.updateOptions(id);
+    instances.rangeSliderPresenter.updateOptions(id);
   }
 }
 
 $.fn.rangeSlider = rangeSlider;
-
-// $.fn.rangeSlider = function (opts?: IOptions) {
-//   return rangeSlider.call(this, opts);
-// };

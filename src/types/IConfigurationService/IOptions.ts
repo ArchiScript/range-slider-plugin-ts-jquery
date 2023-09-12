@@ -28,5 +28,4 @@ export interface IOptions {
   tooltipForm?: "square" | "round";
   fill?: boolean;
   tickBar?: boolean;
-  
 }

@@ -32,7 +32,6 @@ export class ThumbView implements IThumbView {
     this.$parent.appendChild(this.$thumb);
     this.$thumb.setAttribute("data-value", `0`);
     this.$thumb.innerHTML = "";
-    console.log(`*******thumViewINIT - tooltip:${this.options.tooltip}`);
 
     if (this.options.tooltip) {
       this.$tooltip = this.getTooltip();

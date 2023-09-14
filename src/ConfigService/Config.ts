@@ -75,7 +75,6 @@ export class Config implements IConfig {
   }
   public updateOptionsExact(config: Config, opt: IOptions): void {
     config.userOptions = Object.assign({}, config.userOptions, opt);
-    console.log(Config.instances);
   }
   // public updateOptions(opt: IOptions): void {
   //   this.userOptions = cloneDeep(opt);

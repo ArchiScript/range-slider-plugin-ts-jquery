@@ -29,10 +29,9 @@ export class ThumbPresenter implements IThumbPresenter, IObserver {
     this.addDragListeners(this);
     this.init();
   }
-  
+
   updateOptions(id: number): void {
     this.options = Config.getInstanceById(id).getOptions();
-    console.log(this.options);
     this.init();
   }
   init(): void {
@@ -77,8 +76,6 @@ export class ThumbPresenter implements IThumbPresenter, IObserver {
       } else if (Array.isArray(this.model.getValue())) {
         observer.update(this.model.getValue() as number[]);
       }
-
-      console.log(`notifyobserver: ${this.model.getValue()}`);
     }
   }
 
@@ -193,12 +190,10 @@ export class ThumbPresenter implements IThumbPresenter, IObserver {
       this.options.orientation === "horizontal" ? obj.left : obj.top;
     this.options.containerViewportLeft = obj.left;
     this.options.containerViewportTop = obj.top;
-    console.log(this.options);
   }
 
   private drag(event: MouseEvent | TouchEvent): void {
     event.preventDefault();
-    console.log(this.startPoint);
     let currentPosition: number;
 
     if (this.options.orientation === "horizontal") {
@@ -214,7 +209,6 @@ export class ThumbPresenter implements IThumbPresenter, IObserver {
       this.model.getMin() -
       this.model.getThumbSize() / 2 -
       this.startPoint!;
-    console.log(movement);
     movement = this.setStep(movement);
     movement = this.validateMinMax(movement);
 

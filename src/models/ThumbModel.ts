@@ -36,8 +36,6 @@ export class ThumbModel implements IThumbModel {
 
   updateOptions(id: number): void {
     this.options = Config.getInstanceById(id).getOptions();
-    console.log("updateOptions");
-    console.log(this.options);
     this.init();
   }
   setContainerOrientationValue(): number {
@@ -82,7 +80,6 @@ export class ThumbModel implements IThumbModel {
     if (this.options.reversedOrder) {
       this.position = position;
       this.value = this.convertToValueReversed(position);
-      console.log(this.value);
     } else {
       this.position = position;
       this.value = this.convertToValue(position);

@@ -19,7 +19,6 @@ export class FillView implements IFillView {
   }
   updateOptions(id: number): void {
     this.options = Config.getInstanceById(id).getOptions();
-    console.log(this.options);
     this.init();
   }
   render(position: number | number[], width: number): void {
@@ -48,8 +47,6 @@ export class FillView implements IFillView {
           if (!this.options.reversedOrder) {
             this.$fill.style.height = `${width}px`;
           } else {
-            console.log(`+++++++filViewRender++++`);
-            console.log(position);
             this.$fill.style.marginTop = `${position}px`;
             this.$fill.style.height = `${width}px`;
           }

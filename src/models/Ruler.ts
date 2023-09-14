@@ -4,14 +4,26 @@ import { IRuler } from "../types/IModels/IRuler";
 export class Ruler implements IRuler {
   private options: IOptions;
   private max: number;
+  private maxTicks: number;
   constructor() {
     this.options = Config.getInstance().getOptions();
     this.max = this.options.max as number;
+    this.maxTicks =
+      this.options.orientation === "horizontal"
+        ? (this.options.maxTicks as number) ?? 10
+        : (this.options.maxTicks as number) ?? 20;
   }
 
+  setMaxTicks(max: number): void {
+    this.maxTicks = max;
+  }
   updateOptions(id: number): void {
     this.options = Config.getInstanceById(id).getOptions();
     this.max = this.options.max as number;
+    this.maxTicks =
+      this.options.orientation === "horizontal"
+        ? (this.options.maxTicks as number) ?? 10
+        : (this.options.maxTicks as number) ?? 20;
   }
   getCalculatedTickStep(max: number): number {
     let tickStep: number = 1;
@@ -46,7 +58,8 @@ export class Ruler implements IRuler {
 
   isValidPartition(tickStep: number, max: number): boolean {
     const partitions = max / tickStep;
-    const result = partitions <= 20 && partitions >= 6 && max % tickStep == 0;
+    const result =
+      partitions <= this.maxTicks && partitions >= 6 && max % tickStep == 0;
     return result;
   }
 

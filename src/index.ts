@@ -23,6 +23,7 @@ window.addEventListener("DOMContentLoaded", () => {
 
   function plugins(): JQuery<HTMLElement>[] {
     const pluginsArr: JQuery<HTMLElement>[] = [];
+
     const plugin1 = $(".container-1").rangeSlider({
       // value: [100, 250],
       value: 47,
@@ -104,8 +105,9 @@ window.addEventListener("DOMContentLoaded", () => {
     const plugin6 = $(".container-6").rangeSlider({
       max: 1200,
       value: [320, 950],
-      tickStep: 200,
+      // tickStep: 200,
       // reversedOrder: true,
+
       doublePoint: true,
       thumbSize: 15,
       trackHeight: 6,

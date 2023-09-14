@@ -8,6 +8,7 @@ export interface ISettableOptions {
   value: number | number[];
   ticks: boolean;
   tickStep: number;
+  maxTicks: number;
   step: number;
   tooltip: boolean;
   label: string;
@@ -23,3 +24,24 @@ export interface ISettableOptions {
   fill: boolean;
   tickBar: boolean;
 }
+
+type StringKeys<T> = {
+  [K in keyof T as string]: T[K];
+};
+export type StringKeysSettableOptions = StringKeys<ISettableOptions>;
+
+export type PropertyTypes<T> = {
+  [K in keyof T]: T[K] extends string
+    ? "string"
+    : T[K] extends string | string
+    ? "string"
+    : T[K] extends number
+    ? "number"
+    : T[K] extends boolean
+    ? "boolean"
+    : T[K] extends (infer U)[]
+    ? U[]
+    : T[K];
+};
+
+export type PropertyTypedOptions = PropertyTypes<ISettableOptions>;

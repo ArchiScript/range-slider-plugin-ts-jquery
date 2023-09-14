@@ -8,6 +8,7 @@ export interface IOptions {
   value?: number | number[];
   ticks?: boolean;
   tickStep?: number;
+  maxTicks?: number;
   step?: number;
   tooltip?: boolean;
   label?: string;

@@ -25,36 +25,39 @@ window.addEventListener("DOMContentLoaded", () => {
     const pluginsArr: JQuery<HTMLElement>[] = [];
 
     const plugin1 = $(".container-1").rangeSlider({
-      // value: [100, 250],
-      value: 47,
       max: 800,
+      value: [100, 250],
+      // value: 47,
+
       step: 20,
-      // doublePoint: true,
-      tooltip: true,
+      doublePoint: true,
+
       stringValues: ["small", "medium", "large", "giant"],
       orientation: "vertical",
       reversedOrder: true
       // tooltipForm: "round"
     });
-    pluginsArr.push(plugin1);
+
     // plugin1.setValue([50, 420]);
-    plugin1.updateOptions({
-      // orientation: "horizontal",
-      tooltipColor: "orange",
-      max: 1000
-    });
-    plugin1.updateOptions({ tooltipColor: "blue" });
+    // plugin1.updateOptions({
+    //   // orientation: "horizontal",
+    //   tooltipColor: "orange",
+    //   max: 1000
+    // });
+    // plugin1.updateOptions({ tooltipColor: "blue" });
+    pluginsArr.push(plugin1);
 
     const plugin2 = $(".container-2").rangeSlider({
       max: 500,
-      value: 288,
+      // value: 288,
+      value: [100, 250],
       // tickStep: 100,
       // reversedOrder: true,
-      // doublePoint: true,
+      doublePoint: true,
       thumbSize: 15,
       trackHeight: 6,
-      tooltipForm: "round",
-      orientation: "vertical"
+      tooltipForm: "round"
+      // orientation: "vertical"
       // trackColor: "linear-gradient(to right, green, red)"
     });
     pluginsArr.push(plugin2);
@@ -100,15 +103,16 @@ window.addEventListener("DOMContentLoaded", () => {
     pluginsArr.push(plugin5);
 
     // console.log(plugin5.getPluginConfig());
-    plugin5.updateOptions({ max: 1400, tooltipColor: "black" });
+    // plugin5.updateOptions({ max: 1400, tooltipColor: "black" });
     // console.log(plugin1.config.getOptions());
     const plugin6 = $(".container-6").rangeSlider({
       max: 1200,
-      value: [320, 950],
+      // value: [320, 950],
+      value: 688,
       // tickStep: 200,
       // reversedOrder: true,
 
-      doublePoint: true,
+      doublePoint: false,
       thumbSize: 15,
       trackHeight: 6,
       tooltipColor: "green"
@@ -123,6 +127,7 @@ window.addEventListener("DOMContentLoaded", () => {
       doublePoint: true,
       thumbSize: 15,
       trackHeight: 6,
+      orientation: "vertical",
       tooltipColor: "green"
       // trackColor: "linear-gradient(to right, green, red)"
     });
@@ -131,18 +136,22 @@ window.addEventListener("DOMContentLoaded", () => {
 
     const plugin8 = $(".container-8").rangeSlider({
       max: 1200,
+      // value: 977,
       value: [125, 950],
       tickStep: 200,
       // reversedOrder: true,
       doublePoint: true,
       thumbSize: 15,
       trackHeight: 6,
-      tooltipColor: "green"
+      tooltipColor: "green",
+      orientation: "vertical"
       // trackColor: "linear-gradient(to right, green, red)"
     });
     pluginsArr.push(plugin8);
     // onSumbitOptions(plugin2);
     // onModifyButtonClick();
+    const plugin9 = $(".container-9").rangeSlider({ orientation: "vertical" });
+
     return pluginsArr;
   }
 

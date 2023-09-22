@@ -19,6 +19,7 @@ export class ThumbModel implements IThumbModel {
 
   constructor() {
     this.options = Config.getInstance().getOptions();
+
     this.init();
   }
 

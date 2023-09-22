@@ -23,7 +23,9 @@ function rangeSlider(
     const container = this;
 
     const options = Config.set(container, opts).getOptions();
-    pluginInstance.config = Config.getInstance();
+    pluginInstance.id = options.instanceId as number;
+    // console.log(pluginInstance.id);
+    pluginInstance.config = Config.getInstanceById(pluginInstance.id);
     const id = options.instanceId as number;
     const rangeSliderView = new RangeSliderView(container);
     const rangeSliderModel = new RangeSlider();

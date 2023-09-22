@@ -24,10 +24,13 @@ export class Mediator implements IMediator {
   }
 
   public notifyThumbPositionChange(position: number): void {
-
     this.fillPresenter.onThumbPositionChange(position);
   }
   public setFill(position: number | number[]): void {
     this.fillPresenter.updateValue(position);
+  }
+  public getStartPointFromTrack(): { left: number; top: number } {
+    console.log(this.trackPresenter.getTrackStartPoint());
+    return this.trackPresenter.getTrackStartPoint();
   }
 }

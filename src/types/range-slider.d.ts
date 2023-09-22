@@ -10,6 +10,7 @@ interface JQuery<TElement = HTMLElement> {
   getPluginConfig(): { pluginId: number; config: IConf };
   getContainerId(): number;
   config: IConf;
+  id: number;
 }
 // interface PluginConfig extends JQuery<HTMLElement> {
 //   config: IConf;

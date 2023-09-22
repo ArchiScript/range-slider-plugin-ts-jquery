@@ -39,9 +39,7 @@ export class ThumbPresenter implements IThumbPresenter, IObserver {
     this.position = this.model.getPosition();
     this.value = this.model.getValue();
     this.isDoubleThumb = this.isDouble;
-    // this.model.addObserver(this);
     this.model.setPosition(this.position);
-    // this.addDragListeners(this);
     this.updateView();
   }
 
@@ -158,7 +156,9 @@ export class ThumbPresenter implements IThumbPresenter, IObserver {
       thumb = eventTarget;
     }
     this.activeThumb = thumb;
+    console.log(this.model.getValue());
     this.setActiveThumb(this.activeThumb);
+    console.log(this.activeThumb);
     this.model.enableDrag();
     this.dragBound = this.drag.bind(this) as EventListener;
     this.stopDragBound = this.stopDrag.bind(this) as EventListener;
@@ -171,6 +171,7 @@ export class ThumbPresenter implements IThumbPresenter, IObserver {
   setActiveThumb(thumb: HTMLElement) {
     if (!Array.isArray(this.view)) {
       thumb.classList.add("active");
+      this.view.isActive = true;
     } else {
       let thumbs = this.view.map((v) => v.getThumbElement());
       thumbs.forEach((thumb) => thumb.classList.remove("active"));
@@ -185,14 +186,20 @@ export class ThumbPresenter implements IThumbPresenter, IObserver {
     }
   }
 
-  public passTrackStartPoint(obj: { left: number; top: number }): void {
-    this.startPoint =
+
+  public getStartPointFromMediator(): number {
+    const obj = this.mediator?.getStartPointFromTrack() as {
+      left: number;
+      top: number;
+    };
+    
+    const startPoint =
       this.options.orientation === "horizontal" ? obj.left : obj.top;
-    this.options.containerViewportLeft = obj.left;
-    this.options.containerViewportTop = obj.top;
+    return startPoint;
   }
 
   private drag(event: MouseEvent | TouchEvent): void {
+    const startPoint = this.getStartPointFromMediator();
     event.preventDefault();
     let currentPosition: number;
 
@@ -208,7 +215,8 @@ export class ThumbPresenter implements IThumbPresenter, IObserver {
       currentPosition -
       this.model.getMin() -
       this.model.getThumbSize() / 2 -
-      this.startPoint!;
+      startPoint;
+    // this.startPoint!;
     movement = this.setStep(movement);
     movement = this.validateMinMax(movement);
 
@@ -256,14 +264,17 @@ export class ThumbPresenter implements IThumbPresenter, IObserver {
 
     if (viewArr[0].isActive && movement > currentPositionArr[1]) {
       movement = currentPositionArr[1] - this.model.getStep();
-      console.log(`----=---${this.model.getStep()}`);
     } else if (viewArr[1].isActive && movement < currentPositionArr[0]) {
       movement = currentPositionArr[0] + this.model.getStep();
     }
+    // console.log(`___before update ----${currentPositionArr}`);
+    // // ----------
+    // console.log(`${viewArr[0].isActive}`);
+    // console.log(`${viewArr[1].isActive}`);
     newPositionArr = viewArr[0].isActive
       ? [movement, currentPositionArr[1]]
       : [currentPositionArr[0], movement];
-
+    // console.log(`____after update ----  ${newPositionArr}`);
     return newPositionArr;
   }
 

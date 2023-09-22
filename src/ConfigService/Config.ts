@@ -38,6 +38,7 @@ export class Config implements IConfig {
     this.instanceId = Config.instanceId;
     this.userOptions = options;
     this.container = container;
+    container?.setAttribute("data-id", `${this.instanceId}`);
   }
   public static set(container: HTMLElement, options?: IOptions): Config {
     if (!options?.instanceId) {

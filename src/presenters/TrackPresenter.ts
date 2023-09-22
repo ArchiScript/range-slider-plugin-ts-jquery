@@ -26,7 +26,6 @@ export class TrackPresenter implements ITrackPresenter, IObserver {
   }
   init(): void {
     this.$trackElement = this.trackView.getTrackElement();
-
     this.tickStep = this.options.tickStep
       ? this.options.tickStep
       : this.trackView
@@ -58,10 +57,8 @@ export class TrackPresenter implements ITrackPresenter, IObserver {
         this.options.orientation === "horizontal"
           ? e.clientX - startPoint + (this.options.thumbSize as number) / 2
           : e.clientY - startPoint + (this.options.thumbSize as number) / 2;
-      console.log(`startPoint ----${startPoint}`);
-      console.log(
-        `---containerViewportLeft: ${this.$trackElement.offsetLeft}\n ---containerViewportTop: ${this.$trackElement.offsetTop}`
-      );
+      console.log(`startPoint __   ${startPoint}`);
+      
       console.log(position);
 
       this.mediator?.notifyTrackClick(position);

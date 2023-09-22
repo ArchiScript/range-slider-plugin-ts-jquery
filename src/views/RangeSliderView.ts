@@ -36,10 +36,14 @@ export class RangeSliderView implements IRangeSliderView {
     if (!this.$thumbView) {
       this.$thumbView = this.getThumbViews();
     }
+
     if (!this.$fillView) {
       this.$fillView = new FillView(this.$trackElement);
       this.$fillElement = this.$fillView.getFillElement();
     }
+
+    // Check container/instance id
+    // console.log(this.$container.dataset.id == this.options.instanceId);
   }
 
   updateOptions(id: number): void {
@@ -48,13 +52,21 @@ export class RangeSliderView implements IRangeSliderView {
   }
   getThumbViews(): ThumbView | ThumbView[] {
     if (!this.options.doublePoint) {
-      return new ThumbView(this.$pluginElement) as ThumbView;
-    } else {
-      let thumbs = [];
-      for (let i = 1; i <= 2; i++) {
-        thumbs.push(new ThumbView(this.$pluginElement));
+      if (!this.$thumbView) {
+        return new ThumbView(this.$pluginElement) as ThumbView;
+      } else {
+        return this.$thumbView;
       }
-      return thumbs as ThumbView[];
+    } else {
+      if (!this.$thumbView) {
+        let thumbs = [];
+        for (let i = 1; i <= 2; i++) {
+          thumbs.push(new ThumbView(this.$pluginElement));
+        }
+        return thumbs as ThumbView[];
+      } else {
+        return this.$thumbView;
+      }
     }
   }
 

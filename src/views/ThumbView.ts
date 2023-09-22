@@ -5,22 +5,36 @@ export class ThumbView implements IThumbView {
   private $thumb: HTMLElement;
   private $parent: HTMLElement;
   private $tooltip!: HTMLElement;
-  public static id: number = 0;
+  public static id: number = 1;
   private id!: number;
+  private static idBuffer: number[] = [];
 
   public isActive: boolean = false;
   private options: IOptions;
 
   constructor(parentElement: HTMLElement) {
     this.options = Config.getInstance().getOptions();
-    ThumbView.id++;
-    if (ThumbView.id > 2) {
+
+    if (this.options.doublePoint) {
+      if (ThumbView.idBuffer.length == 0 || ThumbView.id > 2) {
+        ThumbView.id = 1;
+      }
+      ThumbView.idBuffer.push(ThumbView.id);
+    } else {
       ThumbView.id = 1;
+      ThumbView.idBuffer = [];
     }
+
     this.id = ThumbView.id;
+
+    // console.log(
+    //   `----instance ${this.options.instanceId}\n----this.id-${this.id}\n ---- doublepoint ${this.options.doublePoint}`
+    // );
     this.$parent = parentElement;
     this.$thumb = document.createElement("div");
+
     this.init();
+    ThumbView.id++;
   }
   init(): void {
     this.$thumb.setAttribute(

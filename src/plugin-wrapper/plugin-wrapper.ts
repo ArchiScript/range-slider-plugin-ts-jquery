@@ -71,6 +71,7 @@ function rangeSlider(
     ): JQuery<HTMLElement> {
       // Config.getInstance().updateOptions(options);
       pluginInstance.config.updateOptionsExact(pluginInstance.config, options);
+      console.log(pluginInstance.config.getOptions());
       update(container, id);
       return pluginInstance;
     };

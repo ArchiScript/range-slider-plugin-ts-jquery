@@ -186,13 +186,12 @@ export class ThumbPresenter implements IThumbPresenter, IObserver {
     }
   }
 
-
   public getStartPointFromMediator(): number {
     const obj = this.mediator?.getStartPointFromTrack() as {
       left: number;
       top: number;
     };
-    
+
     const startPoint =
       this.options.orientation === "horizontal" ? obj.left : obj.top;
     return startPoint;
@@ -220,7 +219,7 @@ export class ThumbPresenter implements IThumbPresenter, IObserver {
     movement = this.setStep(movement);
     movement = this.validateMinMax(movement);
 
-    if (Array.isArray(this.view)) {
+    if (Array.isArray(this.view) && this.options.doublePoint) {
       let newPositionArr: number[] = this.setDoubleThumbPosition(
         movement,
         this.view
@@ -260,21 +259,21 @@ export class ThumbPresenter implements IThumbPresenter, IObserver {
   setDoubleThumbPosition(movement: number, viewArr: ThumbView[]): number[] {
     let currentPositionArr: number[];
     let newPositionArr: number[] = [];
+    let step = this.model.getStep();
     currentPositionArr = viewArr.map((v) => v.getThumbCurrentPosition());
 
-    if (viewArr[0].isActive && movement > currentPositionArr[1]) {
-      movement = currentPositionArr[1] - this.model.getStep();
-    } else if (viewArr[1].isActive && movement < currentPositionArr[0]) {
-      movement = currentPositionArr[0] + this.model.getStep();
+    if (viewArr[0].isActive && movement >= currentPositionArr[1] - step) {
+      movement = currentPositionArr[1] - step;
+    } else if (
+      viewArr[1].isActive &&
+      movement <= currentPositionArr[0] + step
+    ) {
+      movement = currentPositionArr[0] + step;
     }
-    // console.log(`___before update ----${currentPositionArr}`);
-    // // ----------
-    // console.log(`${viewArr[0].isActive}`);
-    // console.log(`${viewArr[1].isActive}`);
+
     newPositionArr = viewArr[0].isActive
       ? [movement, currentPositionArr[1]]
       : [currentPositionArr[0], movement];
-    // console.log(`____after update ----  ${newPositionArr}`);
     return newPositionArr;
   }
 

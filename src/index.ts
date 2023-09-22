@@ -151,6 +151,7 @@ window.addEventListener("DOMContentLoaded", () => {
     // onSumbitOptions(plugin2);
     // onModifyButtonClick();
     const plugin9 = $(".container-9").rangeSlider({ orientation: "vertical" });
+    pluginsArr.push(plugin9);
 
     return pluginsArr;
   }

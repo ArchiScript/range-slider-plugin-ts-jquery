@@ -31,6 +31,7 @@ export class FillView implements IFillView {
           this.$fill.style.height = `${this.options.trackHeight as number}px`;
         } else {
           if (!this.options.reversedOrder) {
+            this.$fill.style.marginLeft = `0`;
             this.$fill.style.width = `${width}px`;
             this.$fill.style.height = `${this.options.trackHeight as number}px`;
           } else {
@@ -45,6 +46,7 @@ export class FillView implements IFillView {
           this.$fill.style.height = `${width}px`;
         } else {
           if (!this.options.reversedOrder) {
+            this.$fill.style.marginTop = `0`;
             this.$fill.style.height = `${width}px`;
           } else {
             this.$fill.style.marginTop = `${position}px`;

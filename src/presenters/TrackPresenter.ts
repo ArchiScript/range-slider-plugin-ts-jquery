@@ -57,9 +57,6 @@ export class TrackPresenter implements ITrackPresenter, IObserver {
         this.options.orientation === "horizontal"
           ? e.clientX - startPoint + (this.options.thumbSize as number) / 2
           : e.clientY - startPoint + (this.options.thumbSize as number) / 2;
-      console.log(`startPoint __   ${startPoint}`);
-      
-      console.log(position);
 
       this.mediator?.notifyTrackClick(position);
     }

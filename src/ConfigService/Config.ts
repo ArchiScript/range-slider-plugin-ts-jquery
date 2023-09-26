@@ -27,6 +27,7 @@ export class Config implements IConfig {
     doublePoint: false,
     ticks: true,
     tickBar: true,
+    tickFontSize: 11,
     thumbColor: "#E65837FF",
     trackColor: "#E5E5E5FF",
     fillColor: "#E65837FF",

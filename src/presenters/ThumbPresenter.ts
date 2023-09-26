@@ -69,11 +69,11 @@ export class ThumbPresenter implements IThumbPresenter, IObserver {
 
   private notifyObservers(): void {
     for (const observer of this.observers) {
-      if (typeof this.model.getValue() == "number") {
-        observer.update(this.model.getValue() as number);
-      } else if (Array.isArray(this.model.getValue())) {
-        observer.update(this.model.getValue() as number[]);
-      }
+      // if (typeof this.model.getValue() == "number") {
+      observer.update(this.model.getValue() as number);
+      // } else if (Array.isArray(this.model.getValue())) {
+      //   observer.update(this.model.getValue() as number[]);
+      // }
     }
   }
 
@@ -274,6 +274,10 @@ export class ThumbPresenter implements IThumbPresenter, IObserver {
     newPositionArr = viewArr[0].isActive
       ? [movement, currentPositionArr[1]]
       : [currentPositionArr[0], movement];
+
+    // if (this.options.reversedOrder) {
+    //   newPositionArr = newPositionArr.reverse();
+    // }
     return newPositionArr;
   }
 

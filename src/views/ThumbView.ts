@@ -27,9 +27,6 @@ export class ThumbView implements IThumbView {
 
     this.id = ThumbView.id;
 
-    // console.log(
-    //   `----instance ${this.options.instanceId}\n----this.id-${this.id}\n ---- doublepoint ${this.options.doublePoint}`
-    // );
     this.$parent = parentElement;
     this.$thumb = document.createElement("div");
 

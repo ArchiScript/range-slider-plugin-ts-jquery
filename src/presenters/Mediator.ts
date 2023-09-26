@@ -30,7 +30,6 @@ export class Mediator implements IMediator {
     this.fillPresenter.updateValue(position);
   }
   public getStartPointFromTrack(): { left: number; top: number } {
-    console.log(this.trackPresenter.getTrackStartPoint());
     return this.trackPresenter.getTrackStartPoint();
   }
 }

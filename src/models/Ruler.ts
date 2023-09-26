@@ -5,9 +5,11 @@ export class Ruler implements IRuler {
   private options: IOptions;
   private max: number;
   private maxTicks: number;
+  private tickFontSize: number;
   constructor() {
     this.options = Config.getInstance().getOptions();
     this.max = this.options.max as number;
+    this.tickFontSize = this.options.tickFontSize as number;
     this.maxTicks =
       this.options.orientation === "horizontal"
         ? (this.options.maxTicks as number) ?? 10
@@ -20,6 +22,7 @@ export class Ruler implements IRuler {
   updateOptions(id: number): void {
     this.options = Config.getInstanceById(id).getOptions();
     this.max = this.options.max as number;
+    this.tickFontSize = (this.options.tickFontSize as number) ?? 11;
     this.maxTicks =
       this.options.orientation === "horizontal"
         ? (this.options.maxTicks as number) ?? 10
@@ -159,6 +162,7 @@ export class Ruler implements IRuler {
       "class",
       `range-slider__tick-number range-slider__tick-number--${this.options.orientation}`
     );
+    tickNumber.style.fontSize = `${this.tickFontSize}px`;
     if (this.options.tickBar) {
       tick.appendChild(tickBar);
     }

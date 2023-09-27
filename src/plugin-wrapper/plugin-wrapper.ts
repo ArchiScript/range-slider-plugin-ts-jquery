@@ -12,6 +12,9 @@ import { FillView } from "../views/FillView";
 import { IOptions } from "../types/IConfigurationService/IOptions";
 import { Config } from "../ConfigService/Config";
 
+import { IChangeEvent } from "types/IChangeEvent";
+import { EventDispatcher } from "EventDispatcher";
+
 import $ from "jquery";
 function rangeSlider(
   this: JQuery<HTMLElement>,
@@ -66,6 +69,10 @@ function rangeSlider(
       thumbPresenter.externalSetValue(value);
       return pluginInstance;
     };
+    pluginInstance.getValue = function (): number | number[] {
+      const value = thumbPresenter.getValue();
+      return value;
+    };
     pluginInstance.updateOptions = function (
       options: IOptions
     ): JQuery<HTMLElement> {
@@ -78,6 +85,11 @@ function rangeSlider(
     pluginInstance.getOptions = function (): IOptions {
       return Config.getInstance().getOptions();
     };
+
+    pluginInstance.onChange = function (userHandler: Function): void {
+      thumbPresenter.ExternalAddOnChangeListener(userHandler);
+    };
+
     pluginInstance.getContainer = function (): HTMLElement {
       return container;
     };

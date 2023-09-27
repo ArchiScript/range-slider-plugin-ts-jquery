@@ -6,6 +6,8 @@ import { ThumbView } from "../views/ThumbView";
 import { Config } from "../ConfigService/Config";
 import { IOptions } from "../types/IConfigurationService/IOptions";
 import { Mediator } from "./Mediator";
+import { IChangeEvent } from "../types/IChangeEvent";
+import { EventDispatcher } from "../EventDispatcher";
 
 export class ThumbPresenter implements IThumbPresenter, IObserver {
   private model: IThumbModel;
@@ -20,11 +22,15 @@ export class ThumbPresenter implements IThumbPresenter, IObserver {
   private options: IOptions;
   private step!: number;
   private isDoubleThumb!: boolean;
+  private eventDispatcher: EventDispatcher;
+  private changeEvent: IChangeEvent;
   public startPoint?: number;
   constructor(model: IThumbModel, view: ThumbView | ThumbView[]) {
     this.options = Config.getInstance().getOptions();
     this.model = model;
     this.view = view;
+    this.eventDispatcher = new EventDispatcher();
+    this.changeEvent = {};
     this.model.addObserver(this);
     this.addDragListeners(this);
     this.init();
@@ -40,6 +46,7 @@ export class ThumbPresenter implements IThumbPresenter, IObserver {
     this.value = this.model.getValue();
     this.isDoubleThumb = this.isDouble;
     this.model.setPosition(this.position);
+
     this.updateView();
   }
 
@@ -53,7 +60,7 @@ export class ThumbPresenter implements IThumbPresenter, IObserver {
     }
   }
   getValue(): number | number[] {
-    return this.value;
+    return this.model.getValue();
   }
 
   get isDouble(): boolean {
@@ -69,11 +76,7 @@ export class ThumbPresenter implements IThumbPresenter, IObserver {
 
   private notifyObservers(): void {
     for (const observer of this.observers) {
-      // if (typeof this.model.getValue() == "number") {
       observer.update(this.model.getValue() as number);
-      // } else if (Array.isArray(this.model.getValue())) {
-      //   observer.update(this.model.getValue() as number[]);
-      // }
     }
   }
 
@@ -275,18 +278,22 @@ export class ThumbPresenter implements IThumbPresenter, IObserver {
       ? [movement, currentPositionArr[1]]
       : [currentPositionArr[0], movement];
 
-    // if (this.options.reversedOrder) {
-    //   newPositionArr = newPositionArr.reverse();
-    // }
     return newPositionArr;
   }
 
+  public ExternalAddOnChangeListener(handler: Function): void {
+    this.eventDispatcher.addEventListener((event: IChangeEvent) => {
+      handler();
+    });
+  }
   private stopDrag(): void {
     this.model.disableDrag();
     document.removeEventListener("mousemove", this.dragBound);
     document.removeEventListener("touchmove", this.dragBound);
     document.removeEventListener("mouseup", this.stopDragBound);
     document.removeEventListener("touchend", this.stopDragBound);
+
+    this.eventDispatcher.dispatchEvent(this.changeEvent);
   }
   private countContainerMax(): number {
     let max: number =
@@ -318,7 +325,6 @@ export class ThumbPresenter implements IThumbPresenter, IObserver {
     const maxPos = this.model.convertToPosition(
       this.options.max as number
     ) as number;
-    console.log(maxPos);
 
     if (!Array.isArray(this.model.getPosition())) {
       pos = this.setStep(clickPosition);
@@ -338,6 +344,7 @@ export class ThumbPresenter implements IThumbPresenter, IObserver {
     this.updatePosition(pos);
     this.mediator?.setFill(pos);
     this.notifyObservers();
+    this.eventDispatcher.dispatchEvent(this.changeEvent);
   }
 
   private test(): void {

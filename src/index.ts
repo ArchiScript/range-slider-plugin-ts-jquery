@@ -38,12 +38,16 @@ window.addEventListener("DOMContentLoaded", () => {
       // tooltipForm: "round"
     });
 
-    // plugin1.setValue([50, 420]);
+    plugin1.onChange(() => {
+      console.log("работает!");
+      console.log(plugin1.getValue());
+    });
     // plugin1.updateOptions({
     //   // orientation: "horizontal",
     //   tooltipColor: "orange",
     //   max: 1000
     // });
+    // plugin1.setValue([50, 420]);
     // plugin1.updateOptions({ tooltipColor: "blue" });
     pluginsArr.push(plugin1);
 

@@ -49,13 +49,40 @@ export class Dashboard {
   private renderForm(): void {
     const optsObj = this.getStringSettableOptions();
 
-    for (const [key, value] of Object.entries(optsObj)) {
-      this.rangeSliderForm.innerHTML += `
-      <div class="range-slider-controls__control">
-              <label for="${key}">${key}</label>
-              <input type="text" name="${key}" data-type="${value}"
-       class="range-slider-controls__input"></div>
-      `;
+    for (let [key, value] of Object.entries(optsObj)) {
+      let formInput: string;
+      let checked: string = !(key == "doublePoint" || key == "reversedOrder")
+        ? "checked"
+        : "";
+      if (value == "boolean") {
+        formInput = `
+        <div class="range-slider-controls__control">
+          <label for="${key}">${key}</label>
+          <input type="checkbox" class="range-slider-controls__input" name="${key}" data-type="${value}" ${checked}>
+          `;
+      } else if (key == "orientation" || key == "tooltipForm") {
+        value = value.toString().split("|");
+        let selectOptions: string = "";
+        for (let i of value) {
+          selectOptions += `<option value="${i}">${i}</option>`;
+        }
+        formInput = `
+        <div class="range-slider-controls__control">
+            <label for="${key}">${key}</label>
+            <select name="${key}" data-type="${value}"
+         class="range-slider-controls__input">
+          ${selectOptions}
+        </div>`;
+      } else {
+        formInput = `
+        <div class="range-slider-controls__control">
+            <label for="${key}">${key}</label>
+            <input type="text" name="${key}" data-type="${value}"
+         class="range-slider-controls__input"></div>
+        `;
+      }
+
+      this.rangeSliderForm.innerHTML += formInput;
     }
     this.rangeSliderForm.innerHTML += `
     <div class="range-slider-controls__control"><button class="range-slider-controls__button"
@@ -71,7 +98,7 @@ export class Dashboard {
 
   getStringSettableOptions(): propertyTypedStringOptions {
     return {
-      orientation: "string",
+      orientation: "horizontal|vertical",
       doublePoint: "boolean",
       trackHeight: "number",
       max: "number",
@@ -92,7 +119,7 @@ export class Dashboard {
       tooltipColor: "string",
       rulerColor: "string",
       tickFontSize: "number",
-      tooltipForm: "string",
+      tooltipForm: "square|round",
       fill: "boolean",
       tickBar: "boolean"
     };
@@ -115,7 +142,7 @@ export class Dashboard {
   ): string | number | boolean | number[] | string[] {
     let result: string | number | boolean | number[] | string[];
     switch (type) {
-      case "string":
+      case "string" || "horizontal|vertical" || "square|round":
         result = value.toString();
         break;
       case "string[]":
@@ -137,13 +164,15 @@ export class Dashboard {
           result = Number(value);
         }
         break;
-      case "boolean":
-        if (value === "true") {
-          result = true;
-        } else {
-          result = false;
-        }
-        break;
+      // case "boolean":
+      //   if (value == "true") {
+      //     console.log(value);
+      //     result = true;
+      //   } else {
+      //     console.log(value);
+      //     result = false;
+      //   }
+      //   break;
       default:
         result = value;
     }
@@ -157,11 +186,26 @@ export class Dashboard {
       {};
     for (let i = 0; i < form.elements.length; i++) {
       const formControl = form.elements[i];
-      if (formControl instanceof HTMLInputElement && formControl.value !== "") {
+
+      if (
+        (formControl instanceof HTMLInputElement ||
+          formControl instanceof HTMLSelectElement) &&
+        !(formControl.value == "")
+      ) {
+        console.log(formControl);
         const key = formControl.name;
         let value: string | number | boolean | number[] | string[];
+        let formControlValue: boolean | string =
+          formControl.type == "checkbox" &&
+          formControl instanceof HTMLInputElement
+            ? formControl.checked
+            : formControl.value;
+
+        console.log(`parseForm ----  ${formControl.name}\n
+          ----- ${formControlValue}`);
+
         value = this.parseValueByType(
-          formControl.value,
+          formControlValue,
           formControl.dataset.type as string
         );
         console.log(value);

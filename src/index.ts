@@ -28,10 +28,8 @@ window.addEventListener("DOMContentLoaded", () => {
       max: 800,
       value: [100, 250],
       // value: 47,
-
       step: 20,
       doublePoint: true,
-
       stringValues: ["small", "medium", "large", "giant"],
       orientation: "vertical",
       reversedOrder: true

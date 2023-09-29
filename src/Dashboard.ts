@@ -107,7 +107,6 @@ export class Dashboard {
       value: "number|number[]",
       ticks: "boolean",
       tickStep: "number",
-      maxTicks: "number",
       step: "number",
       tooltip: "boolean",
       label: "string",
@@ -164,15 +163,9 @@ export class Dashboard {
           result = Number(value);
         }
         break;
-      // case "boolean":
-      //   if (value == "true") {
-      //     console.log(value);
-      //     result = true;
-      //   } else {
-      //     console.log(value);
-      //     result = false;
-      //   }
-      //   break;
+      case "number":
+        result = Number(value);
+        break;
       default:
         result = value;
     }
@@ -192,17 +185,13 @@ export class Dashboard {
           formControl instanceof HTMLSelectElement) &&
         !(formControl.value == "")
       ) {
-        console.log(formControl);
         const key = formControl.name;
         let value: string | number | boolean | number[] | string[];
-        let formControlValue: boolean | string =
+        let formControlValue: string | number | boolean | number[] | string[] =
           formControl.type == "checkbox" &&
           formControl instanceof HTMLInputElement
             ? formControl.checked
             : formControl.value;
-
-        console.log(`parseForm ----  ${formControl.name}\n
-          ----- ${formControlValue}`);
 
         value = this.parseValueByType(
           formControlValue,
@@ -212,6 +201,7 @@ export class Dashboard {
         obj[key] = value;
       }
     }
+    console.log(obj);
     return obj;
   }
   private onFormSubmit(): void {

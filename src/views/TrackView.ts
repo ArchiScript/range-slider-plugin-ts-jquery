@@ -15,10 +15,9 @@ export class TrackView implements ITrackView {
     this.init();
   }
   init(): void {
-    if (!this.ruler) {
+    if (!this.ruler && this.options.ticks) {
       this.ruler = new Ruler();
     } else {
-      // this.ruler.updateOptions();
       this.ruler.updateOptions(this.options.instanceId as number);
     }
     let orientClass: string = `range-slider__track--${this.options.orientation}`;
@@ -27,6 +26,7 @@ export class TrackView implements ITrackView {
 
   updateOptions(id: number): void {
     this.options = Config.getInstanceById(id).getOptions();
+    console.log(this.options);
     this.init();
   }
   getTrackElement(): HTMLElement {
@@ -48,10 +48,12 @@ export class TrackView implements ITrackView {
       "--track-color",
       `${this.options.trackColor}`
     );
-
+    console.log(this.options.ticks);
     if (this.options.ticks) {
       this.$track.innerHTML = "";
       this.$track.appendChild(this.ruler.renderRuler(tickStep));
+    } else {
+      this.$track.innerHTML = "";
     }
   }
 

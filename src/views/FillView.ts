@@ -42,15 +42,21 @@ export class FillView implements IFillView {
         }
       } else {
         if (Array.isArray(position)) {
+          this.$fill.style.marginLeft = `0`;
           this.$fill.style.marginTop = `${position[0]}px`;
           this.$fill.style.height = `${width}px`;
+          this.$fill.style.width = `${this.options.trackHeight as number}px`;
         } else {
           if (!this.options.reversedOrder) {
+            this.$fill.style.marginLeft = `0`;
             this.$fill.style.marginTop = `0`;
             this.$fill.style.height = `${width}px`;
+            this.$fill.style.width = `${this.options.trackHeight as number}px`;
           } else {
             this.$fill.style.marginTop = `${position}px`;
+            this.$fill.style.marginLeft = `0`;
             this.$fill.style.height = `${width}px`;
+            this.$fill.style.width = `${this.options.trackHeight as number}px`;
           }
         }
       }

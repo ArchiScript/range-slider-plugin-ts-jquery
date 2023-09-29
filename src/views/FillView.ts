@@ -25,6 +25,7 @@ export class FillView implements IFillView {
     if (this.options.fill) {
       this.$parent.appendChild(this.$fill);
       if (this.options.orientation === "horizontal") {
+        this.$fill.style.marginTop = "0";
         if (Array.isArray(position)) {
           this.$fill.style.marginLeft = `${position[0]}px`;
           this.$fill.style.width = `${width}px`;

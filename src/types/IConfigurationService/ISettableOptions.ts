@@ -11,7 +11,9 @@ export interface ISettableOptions {
   maxTicks: number;
   step: number;
   tooltip: boolean;
-  label: string;
+  label: boolean;
+  labelString: string;
+  valueInLabel: boolean;
   stringValues: string[];
   reversedOrder: boolean;
   thumbColor: string;

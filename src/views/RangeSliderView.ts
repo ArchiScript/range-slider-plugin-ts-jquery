@@ -41,9 +41,6 @@ export class RangeSliderView implements IRangeSliderView {
       this.$fillView = new FillView(this.$trackElement);
       this.$fillElement = this.$fillView.getFillElement();
     }
-
-    // Check container/instance id
-    // console.log(this.$container.dataset.id == this.options.instanceId);
   }
 
   updateOptions(id: number): void {
@@ -73,9 +70,17 @@ export class RangeSliderView implements IRangeSliderView {
   render(value: number | number[]): void {
     let valueStr: string = value.toString();
 
-    const inner = `
-    RangeSlider--${valueStr}
-    `;
+    let inner: string = "";
+
+    if (this.options.label && this.options.labelString) {
+      if (this.options.valueInLabel) {
+        inner = `${this.options.labelString} -- ${valueStr}`;
+      } else {
+        inner = `${this.options.labelString}`;
+      }
+    } else {
+      inner = "";
+    }
 
     this.$label.textContent = inner;
     this.$container.appendChild(this.$label);

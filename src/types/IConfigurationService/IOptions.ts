@@ -11,7 +11,9 @@ export interface IOptions {
   maxTicks?: number;
   step?: number;
   tooltip?: boolean;
-  label?: string;
+  label?: boolean;
+  labelString?: string;
+  valueInLabel?: boolean;
   input?: boolean;
   containerWidth?: number;
   containerHeight?: number;

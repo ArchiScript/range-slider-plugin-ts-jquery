@@ -1,4 +1,4 @@
-import "./assets/styles/style.scss";
+import "./assets/styles/index.scss";
 import $ from "jquery";
 import "./plugin-wrapper/plugin-wrapper";
 import { IOptions } from "./components/components";
@@ -92,6 +92,7 @@ window.addEventListener("DOMContentLoaded", () => {
       trackColor: "linear-gradient(to right, white, green)"
     });
     pluginsArr.push(plugin4);
+
     const plugin5 = $(".container-5").rangeSlider({
       max: 1200,
       value: [320, 950],
@@ -122,6 +123,7 @@ window.addEventListener("DOMContentLoaded", () => {
       // trackColor: "linear-gradient(to right, green, red)"
     });
     pluginsArr.push(plugin6);
+
     const plugin7 = $(".container-7").rangeSlider({
       max: 1200,
       value: [322, 950],
@@ -190,4 +192,9 @@ window.addEventListener("DOMContentLoaded", () => {
       });
     });
   }
+
+  let displays = document.querySelectorAll(".range-slider-display");
+  displays.forEach((display) => {
+    console.log(window.getComputedStyle(display).height);
+  });
 });

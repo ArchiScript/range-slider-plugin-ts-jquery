@@ -66,6 +66,8 @@ export class Config implements IConfig {
     if (this.container) {
       this.containerWidth = parseInt(getComputedStyle(this.container).width);
       this.containerHeight = parseInt(getComputedStyle(this.container).height);
+      console.log(this.instanceId);
+      console.log(this.containerWidth, this.containerHeight);
       options.containerWidth = this.containerWidth;
       options.containerHeight = this.containerHeight;
 

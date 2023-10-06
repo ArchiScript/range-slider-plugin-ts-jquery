@@ -36,11 +36,19 @@ export class TrackView implements ITrackView {
   render(width: number, height: number, tickStep: number): void {
     this.$element.appendChild(this.$track);
 
+    // if (this.options.orientation === "horizontal") {
+    //   this.$track.style.width = `${width}%`;
+    //   this.$track.style.height = `${height}px`;
+    // } else {
+    //   this.$track.style.width = `${width}px`;
+    //   this.$track.style.height = `${this.options.containerHeight}px`;
+    // }
+
     if (this.options.orientation === "horizontal") {
-      this.$track.style.width = `${width}%`;
-      this.$track.style.height = `${height}px`;
+      this.$track.style.width = `${this.options.containerWidth}px`;
+      this.$track.style.height = `${this.options.trackHeight}px`;
     } else {
-      this.$track.style.width = `${width}px`;
+      this.$track.style.width = `${this.options.trackHeight}px`;
       this.$track.style.height = `${this.options.containerHeight}px`;
     }
 

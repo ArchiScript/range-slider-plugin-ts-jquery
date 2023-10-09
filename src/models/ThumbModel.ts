@@ -37,13 +37,9 @@ export class ThumbModel implements IThumbModel {
     this.containerWidth = this.getContainerWidth() - this.thumbSize;
     this.containerHeight = this.getContainerHeight() - this.thumbSize;
     this.value = this.options.value ? this.options.value : (0 as number);
-    // this.value = this.validateAscendingArr(this.value);
+
     this.containerOrientationValue = this.setContainerOrientationValue();
     this.position = this.setInitialPosition().pos;
-    console.log(`---pos--${this.position}`);
-    console.log(`---val--${this.value}`);
-    console.log(this.reversedOnce);
-    // this.position = this.validateAscendingArr(this.position);
   }
   validateAscendingArr(arr: number | number[]): number | number[] {
     if (Array.isArray(arr)) {
@@ -108,23 +104,9 @@ export class ThumbModel implements IThumbModel {
 
   setInitialPosition(): ValuePosObject {
     return this.mergeWithValue(this.options.value as number | number[]);
-    // if (!this.options.reversedOrder) {
-    //   return this.convertToPosition(this.options.value as number | number[]);
-    // } else {
-    // if (!this.reversedOnce) {
-    //   this.reversedOnce = true;
-    // return this.convertToPositionReversed(
-    //   this.options.value as number | number[]
-    // );
-    // } else {
-    //   return this.position;
-    // }
-    // }
   }
   test(): void {
     console.log(this.position);
-    // console.log(this.splitNum(800, 3));
-    // console.log(this.getValueString([400, 800]));
   }
 
   getStep(): number {
@@ -145,11 +127,6 @@ export class ThumbModel implements IThumbModel {
   }
   setPosition(position: number | number[]): void {
     this.position = position;
-    // if (this.options.reversedOrder) {
-    //   this.value = this.convertToValueReversed(position);
-    // } else {
-    //   this.value = this.convertToValue(position);
-    // }
     this.value = this.mergeWithPosition(position).val;
     this.notifyObservers();
   }
@@ -157,14 +134,6 @@ export class ThumbModel implements IThumbModel {
   setValue(value: number | number[]): void {
     this.value = value;
     this.position = this.mergeWithValue(value).pos;
-    // this.setPosition(this.mergePosValObject(value).pos);
-    // if (this.options.reversedOrder) {
-    //   this.value = Array.isArray(value) ? value.reverse() : value;
-    //   this.setPosition(this.convertToPositionReversed(value));
-    // } else {
-    //   this.value = value;
-    //   this.setPosition(this.convertToPosition(value));
-    // }
 
     this.notifyObservers();
   }

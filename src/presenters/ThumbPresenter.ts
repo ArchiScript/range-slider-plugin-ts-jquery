@@ -159,9 +159,7 @@ export class ThumbPresenter implements IThumbPresenter, IObserver {
       thumb = eventTarget;
     }
     this.activeThumb = thumb;
-    console.log(this.model.getValue());
     this.setActiveThumb(this.activeThumb);
-    console.log(this.activeThumb);
     this.model.enableDrag();
     this.dragBound = this.drag.bind(this) as EventListener;
     this.stopDragBound = this.stopDrag.bind(this) as EventListener;

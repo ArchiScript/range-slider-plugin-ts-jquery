@@ -29,6 +29,7 @@ export class Config implements IConfig {
     labelString: "Range-Slider",
     valueInLabel: true,
     ticks: true,
+    maxTicks: 20,
     tickBar: true,
     tickFontSize: 11,
     thumbColor: "#E65837FF",
@@ -66,8 +67,6 @@ export class Config implements IConfig {
     if (this.container) {
       this.containerWidth = parseInt(getComputedStyle(this.container).width);
       this.containerHeight = parseInt(getComputedStyle(this.container).height);
-      console.log(this.instanceId);
-      console.log(this.containerWidth, this.containerHeight);
       options.containerWidth = this.containerWidth;
       options.containerHeight = this.containerHeight;
 
@@ -78,7 +77,7 @@ export class Config implements IConfig {
   }
   public updateOptions(opt: IOptions): void {
     this.userOptions = Object.assign({}, this.userOptions, opt);
-    console.log(Config.instances);
+    // console.log(Config.instances);
   }
   public updateOptionsExact(config: Config, opt: IOptions): void {
     config.userOptions = Object.assign({}, config.userOptions, opt);

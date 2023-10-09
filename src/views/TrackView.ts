@@ -36,14 +36,6 @@ export class TrackView implements ITrackView {
   render(width: number, height: number, tickStep: number): void {
     this.$element.appendChild(this.$track);
 
-    // if (this.options.orientation === "horizontal") {
-    //   this.$track.style.width = `${width}%`;
-    //   this.$track.style.height = `${height}px`;
-    // } else {
-    //   this.$track.style.width = `${width}px`;
-    //   this.$track.style.height = `${this.options.containerHeight}px`;
-    // }
-
     if (this.options.orientation === "horizontal") {
       this.$track.style.width = `${this.options.containerWidth}px`;
       this.$track.style.height = `${this.options.trackHeight}px`;
@@ -56,7 +48,7 @@ export class TrackView implements ITrackView {
       "--track-color",
       `${this.options.trackColor}`
     );
-    console.log(this.options.ticks);
+
     if (this.options.ticks) {
       this.$track.innerHTML = "";
       this.$track.appendChild(this.ruler.renderRuler(tickStep));

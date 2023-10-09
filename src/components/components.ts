@@ -11,6 +11,6 @@ export { FillModel } from "../models/FillModel";
 export { FillPresenter } from "../presenters/FillPresenter";
 export { FillView } from "../views/FillView";
 export type { IOptions } from "../types/IConfigurationService/IOptions";
-export {Mediator } from "../presenters/Mediator";
+export { Mediator } from "../presenters/Mediator";
 export { Config } from "../ConfigService/Config";
-
+export { Ruler } from "../models/Ruler";

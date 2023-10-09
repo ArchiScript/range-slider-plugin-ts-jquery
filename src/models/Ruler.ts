@@ -12,8 +12,8 @@ export class Ruler implements IRuler {
     this.tickFontSize = this.options.tickFontSize as number;
     this.maxTicks =
       this.options.orientation === "horizontal"
-        ? (this.options.maxTicks as number) ?? 10
-        : (this.options.maxTicks as number) ?? 20;
+        ? (this.options.maxTicks as number)
+        : (this.options.maxTicks as number);
   }
 
   setMaxTicks(max: number): void {

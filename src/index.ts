@@ -192,9 +192,4 @@ window.addEventListener("DOMContentLoaded", () => {
       });
     });
   }
-
-  let displays = document.querySelectorAll(".range-slider-display");
-  displays.forEach((display) => {
-    console.log(window.getComputedStyle(display).height);
-  });
 });

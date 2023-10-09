@@ -14,7 +14,7 @@ export class FillModel implements IFillModel {
   }
   init(): void {
     this.thumbSize = this.options.thumbSize as number;
-    this.fillPosition = this.getProportionValue(
+    this.fillPosition = this.convertToFillPosition(
       this.options.value as number | number[]
     );
     this.fillLength = this.calculateFillLength(this.fillPosition);
@@ -65,7 +65,7 @@ export class FillModel implements IFillModel {
       observer.update(this.getFillPosition());
     }
   }
-  getProportionValue(value: number | number[]): number | number[] {
+  convertToFillPosition(value: number | number[]): number | number[] {
     const max: number = this.options.max as number;
     const min: number = this.options.min as number;
     const containerOrientationValue: number =

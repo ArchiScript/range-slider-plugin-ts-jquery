@@ -1,6 +1,6 @@
 import { ITrackView } from "../types/IViews/ITrackView";
 import { Config } from "../ConfigService/Config";
-import { IOptions } from "../components/components";
+import { IOptions, LabelStyles } from "../components/components";
 import { Ruler } from "../models/Ruler";
 
 export class TrackView implements ITrackView {
@@ -36,12 +36,20 @@ export class TrackView implements ITrackView {
   render(width: number, height: number, tickStep: number): void {
     this.$element.appendChild(this.$track);
 
+    const labelStyles = this.options.labelStyles as LabelStyles;
+    const subtractLabelHeight =
+      labelStyles.height + labelStyles.marginBottom + labelStyles.marginTop;
+    console.log(subtractLabelHeight);
+
     if (this.options.orientation === "horizontal") {
-      this.$track.style.width = `${this.options.containerWidth}px`;
+      // this.$track.style.width = `${this.options.containerWidth}px`;
+      this.$track.style.width = `${width}px`;
       this.$track.style.height = `${this.options.trackHeight}px`;
     } else {
       this.$track.style.width = `${this.options.trackHeight}px`;
-      this.$track.style.height = `${this.options.containerHeight}px`;
+      this.$track.style.height = `${
+        (this.options.containerHeight as number) - subtractLabelHeight
+      }px`;
     }
 
     this.$track.style.setProperty(

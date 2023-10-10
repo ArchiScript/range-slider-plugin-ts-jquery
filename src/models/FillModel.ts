@@ -37,7 +37,7 @@ export class FillModel implements IFillModel {
         if (!this.options.reversedOrder) {
           return fillPos + this.thumbSize;
         } else {
-          return (this.options.containerHeight as number) - fillPos;
+          return (this.options.pluginHeight as number) - fillPos; // Changed pluginHeight from containerHeight
         }
       }
     }
@@ -71,8 +71,8 @@ export class FillModel implements IFillModel {
     const containerOrientationValue: number =
       this.options.orientation === "horizontal"
         ? (this.options.containerWidth as number)
-        : (this.options.containerHeight as number);
-
+        : (this.options.pluginHeight as number);
+    // Changed pluginHeight from containerHeight
     if (Array.isArray(value)) {
       return value.map(
         (val) =>

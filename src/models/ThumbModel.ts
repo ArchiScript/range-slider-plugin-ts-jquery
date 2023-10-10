@@ -221,7 +221,7 @@ export class ThumbModel implements IThumbModel {
   }
 
   getContainerHeight(): number {
-    return this.options.containerHeight as number;
+    return this.options.pluginHeight as number;
   }
 
   getProportion(): number {

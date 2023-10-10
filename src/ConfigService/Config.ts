@@ -26,6 +26,11 @@ export class Config implements IConfig {
     thumbSize: 15,
     doublePoint: false,
     label: true,
+    labelStyles: {
+      height: 20,
+      marginTop: 10,
+      marginBottom: 30
+    },
     labelString: "Range-Slider",
     valueInLabel: true,
     ticks: true,
@@ -61,16 +66,19 @@ export class Config implements IConfig {
     return Config.instances[instanceId - 1];
   }
   private decorateUserOptions(options: IOptions): IOptions {
-    const $container__track: HTMLElement = this.container?.querySelector(
-      ".range-slider__track"
-    ) as HTMLElement;
     if (this.container) {
       this.containerWidth = parseInt(getComputedStyle(this.container).width);
       this.containerHeight = parseInt(getComputedStyle(this.container).height);
       options.containerWidth = this.containerWidth;
       options.containerHeight = this.containerHeight;
-
+      const labelHeight = this.defaultOptions.labelStyles
+        ? this.defaultOptions.labelStyles.height +
+          this.defaultOptions.labelStyles.marginBottom +
+          this.defaultOptions.labelStyles.marginTop
+        : this.containerHeight;
+      options.pluginHeight = this.containerHeight - labelHeight;
       options.instanceId = this.instanceId;
+      // options.containerHeight = this.containerHeight - labelHeight;
       return options;
     }
     return options;

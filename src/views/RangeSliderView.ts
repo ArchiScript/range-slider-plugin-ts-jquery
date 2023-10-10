@@ -2,7 +2,7 @@ import { IRangeSliderView } from "../types/IViews/IRangeSliderView";
 import { TrackView } from "./TrackView";
 import { ThumbView } from "./ThumbView";
 import { FillView } from "./FillView";
-import { IOptions } from "../types/IConfigurationService/IOptions";
+import { IOptions, LabelStyles } from "../types/IConfigurationService/IOptions";
 import { Config } from "../ConfigService/Config";
 export class RangeSliderView implements IRangeSliderView {
   private $container: HTMLElement;
@@ -84,6 +84,10 @@ export class RangeSliderView implements IRangeSliderView {
 
     this.$label.textContent = inner;
     this.$container.appendChild(this.$label);
+    let labelStyles = this.options.labelStyles as LabelStyles;
+    this.$label.style.height = `${labelStyles.height}px`;
+    this.$label.style.marginTop = `${labelStyles.marginTop}px`;
+    this.$label.style.marginBottom = `${labelStyles.marginBottom}px`;
     this.$container.appendChild(this.$pluginElement);
     this.$pluginElement.appendChild(this.$trackElement);
     if (this.$thumbView instanceof ThumbView) {

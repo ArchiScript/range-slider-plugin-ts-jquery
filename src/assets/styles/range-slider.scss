@@ -60,7 +60,6 @@
   }
 
   &__tick-bar {
-
     background-color: var(--tick-color);
 
     &--horizontal {
@@ -110,9 +109,11 @@
 
     }
 
-    &:hover::before {
+    &:hover::before,&.dragging::before {
       display: block;
     }
+
+    
   }
 
   &__tooltip {

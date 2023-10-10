@@ -8,6 +8,7 @@ export class ThumbView implements IThumbView {
   public static id: number = 1;
   private id!: number;
   private static idBuffer: number[] = [];
+  public dragging: boolean = false;
 
   public isActive: boolean = false;
   private options: IOptions;
@@ -34,9 +35,10 @@ export class ThumbView implements IThumbView {
     ThumbView.id++;
   }
   init(): void {
+    const draggingClass = this.isActive ? ` dragging` : "";
     this.$thumb.setAttribute(
       "class",
-      `range-slider__thumb range-slider__thumb--${this.options.orientation} thumb-${this.id}`
+      `range-slider__thumb range-slider__thumb--${this.options.orientation} thumb-${this.id}${draggingClass}`
     );
     this.$thumb.setAttribute("data-id", `${this.id}`);
     this.$parent.innerHTML = "";

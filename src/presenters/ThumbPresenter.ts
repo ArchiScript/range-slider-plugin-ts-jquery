@@ -149,16 +149,36 @@ export class ThumbPresenter implements IThumbPresenter, IObserver {
     }
   }
 
-  private startDrag(e: MouseEvent | TouchEvent): void {
-    e.preventDefault();
-    let eventTarget = e.target as HTMLElement;
+  getTargetThumb(event: MouseEvent | TouchEvent): HTMLElement {
+    event.preventDefault();
     let thumb: HTMLElement;
+    let eventTarget = event.target as HTMLElement;
     if (eventTarget.classList.contains("range-slider__tooltip")) {
       thumb = eventTarget.closest(".range-slider__thumb") as HTMLElement;
     } else {
       thumb = eventTarget;
     }
-    this.activeThumb = thumb;
+    return thumb;
+  }
+
+  removeDraggingThumbClass(): void {
+    const thumbs = this.getThumbs();
+    if (!Array.isArray(thumbs)) {
+      thumbs.classList.remove("dragging");
+    } else {
+      thumbs.forEach((thumb) => {
+        thumb.classList.remove("dragging");
+      });
+    }
+  }
+
+  setDraggingThumbClass(activeThumb: HTMLElement): void {
+    activeThumb.classList.add("dragging");
+  }
+
+  private startDrag(e: MouseEvent | TouchEvent): void {
+    this.activeThumb = this.getTargetThumb(e);
+
     this.setActiveThumb(this.activeThumb);
     this.model.enableDrag();
     this.dragBound = this.drag.bind(this) as EventListener;
@@ -169,6 +189,13 @@ export class ThumbPresenter implements IThumbPresenter, IObserver {
     document.addEventListener("touchend", this.stopDragBound);
   }
 
+  getThumbs(): HTMLElement | HTMLElement[] {
+    if (!Array.isArray(this.view)) {
+      return this.view.getThumbElement();
+    } else {
+      return this.view.map((v) => v.getThumbElement());
+    }
+  }
   setActiveThumb(thumb: HTMLElement) {
     if (!Array.isArray(this.view)) {
       thumb.classList.add("active");
@@ -199,6 +226,10 @@ export class ThumbPresenter implements IThumbPresenter, IObserver {
   }
 
   private drag(event: MouseEvent | TouchEvent): void {
+    const targetThumb = this.getTargetThumb(event);
+
+    this.setDraggingThumbClass(targetThumb);
+
     const startPoint = this.getStartPointFromMediator();
     event.preventDefault();
     let currentPosition: number;
@@ -286,6 +317,7 @@ export class ThumbPresenter implements IThumbPresenter, IObserver {
   }
   private stopDrag(): void {
     this.model.disableDrag();
+    this.removeDraggingThumbClass();
     document.removeEventListener("mousemove", this.dragBound);
     document.removeEventListener("touchmove", this.dragBound);
     document.removeEventListener("mouseup", this.stopDragBound);

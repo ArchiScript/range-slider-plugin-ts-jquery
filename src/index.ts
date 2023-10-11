@@ -113,6 +113,7 @@ window.addEventListener("DOMContentLoaded", () => {
       max: 1200,
       // value: [320, 950],
       value: 688,
+      trackBorder: true,
       // tickStep: 200,
       // reversedOrder: true,
 
@@ -188,7 +189,7 @@ window.addEventListener("DOMContentLoaded", () => {
         dashboard.setCurrentPluginId(
           parseInt(modifyButton.dataset.value as string)
         );
-        dashboard.updateTitle();
+        dashboard.update();
       });
     });
   }

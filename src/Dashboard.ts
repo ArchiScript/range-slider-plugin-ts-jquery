@@ -41,19 +41,37 @@ export class Dashboard {
     this.onFormSubmit();
   }
   update(): void {
+    this.updateTitle();
     this.renderForm();
   }
   updateTitle(): void {
     this.title.innerHTML = ` Setting plugin instance - ${this.currentPluginId}`;
   }
+
+  private destroyForm(): void {
+    if (!(this.rangeSliderForm.innerHTML == "")) {
+      this.rangeSliderForm.innerHTML = "";
+    }
+  }
   private renderForm(): void {
+    this.destroyForm();
     const optsObj = this.getStringSettableOptions();
 
     for (let [key, value] of Object.entries(optsObj)) {
       let formInput: string;
-      let checked: string = !(key == "doublePoint" || key == "reversedOrder")
-        ? "checked"
-        : "";
+      let currentPluginOpts = this.currentPlugin.config.getOptions() as Record<
+        string,
+        number | string | boolean | number[] | string[]
+      >;
+      let optVal: number | string | boolean | number[] | string[];
+      if (key in currentPluginOpts) {
+        optVal = currentPluginOpts[key];
+      } else {
+        optVal = "";
+      }
+
+      let checked: string =
+        value == "boolean" && optVal == true ? "checked" : "";
       if (value == "boolean") {
         formInput = `
         <div class="range-slider-controls__control">
@@ -63,8 +81,11 @@ export class Dashboard {
       } else if (key == "orientation" || key == "tooltipForm") {
         value = value.toString().split("|");
         let selectOptions: string = "";
+
         for (let i of value) {
-          selectOptions += `<option value="${i}">${i}</option>`;
+          let selected: number | string | boolean | number[] | string[] =
+            i == optVal ? "selected" : "";
+          selectOptions += `<option value="${i}" ${selected}>${i}</option>`;
         }
         formInput = `
         <div class="range-slider-controls__control">
@@ -78,7 +99,7 @@ export class Dashboard {
         <div class="range-slider-controls__control">
             <label for="${key}">${key}</label>
             <input type="text" name="${key}" data-type="${value}"
-         class="range-slider-controls__input"></div>
+         class="range-slider-controls__input" value="${optVal}"></div>
         `;
       }
 
@@ -101,6 +122,8 @@ export class Dashboard {
       orientation: "horizontal|vertical",
       doublePoint: "boolean",
       trackHeight: "number",
+      trackBorder: "boolean",
+      trackBorderColor: "string",
       max: "number",
       min: "number",
       thumbSize: "number",

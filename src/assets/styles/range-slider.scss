@@ -6,7 +6,9 @@
 
   &__track {
     --track-color: #D8D8D8FF;
+    --track-border: 1px solid gray;
     position: relative;
+    border: var(--track-border);
     background: var(--track-color);
     border-radius: 5px;
     z-index: 1;
@@ -92,7 +94,7 @@
     border-radius: 50%;
     background-color: var(--thumb-color);
     z-index: 2;
-
+    
     &::before {
       content: "";
       position: relative;

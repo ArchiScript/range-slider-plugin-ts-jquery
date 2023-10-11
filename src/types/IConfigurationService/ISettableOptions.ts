@@ -2,6 +2,8 @@ export interface ISettableOptions {
   orientation: "horizontal" | "vertical";
   doublePoint: boolean;
   trackHeight: number;
+  trackBorder: boolean;
+  trackBorderColor: string;
   max: number;
   min: number;
   thumbSize: number;

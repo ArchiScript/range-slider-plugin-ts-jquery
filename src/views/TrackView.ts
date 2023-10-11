@@ -57,6 +57,15 @@ export class TrackView implements ITrackView {
       `${this.options.trackColor}`
     );
 
+    if (this.options.trackBorder) {
+      this.$track.style.setProperty(
+        "border",
+        `1px solid ${this.options.trackBorderColor}`
+      );
+    } else {
+      this.$track.style.setProperty("border", "none");
+    }
+
     if (this.options.ticks) {
       this.$track.innerHTML = "";
       this.$track.appendChild(this.ruler.renderRuler(tickStep));

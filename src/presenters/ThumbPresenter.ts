@@ -242,11 +242,7 @@ export class ThumbPresenter implements IThumbPresenter, IObserver {
         event instanceof MouseEvent ? event.clientY : event.touches[0].clientY;
     }
 
-    let movement =
-      currentPosition -
-      this.model.getMin() -
-      this.model.getThumbSize() / 2 -
-      startPoint;
+    let movement = currentPosition - this.model.getThumbSize() / 2 - startPoint;
     // this.startPoint!;
     movement = this.setStep(movement);
     movement = this.validateMinMax(movement);
@@ -292,6 +288,8 @@ export class ThumbPresenter implements IThumbPresenter, IObserver {
     let currentPositionArr: number[];
     let newPositionArr: number[] = [];
     let step = this.model.getStep();
+    let min = this.model.getMin();
+    console.log(min);
     currentPositionArr = viewArr.map((v) => v.getThumbCurrentPosition());
 
     if (viewArr[0].isActive && movement >= currentPositionArr[1] - step) {
@@ -334,6 +332,7 @@ export class ThumbPresenter implements IThumbPresenter, IObserver {
   }
   validateMinMax(pos: number): number {
     const max = this.countContainerMax();
+    const min = this.model.getMin();
     if (pos < 0) {
       pos = 0;
     } else if (pos > max) {
@@ -352,9 +351,6 @@ export class ThumbPresenter implements IThumbPresenter, IObserver {
     clickPosition -= this.model.getThumbSize();
     clickPosition = this.validateMinMax(clickPosition);
     let intersection: number = 0;
-    const maxPos = this.model.convertToPosition(
-      this.options.max as number
-    ) as number;
 
     if (!Array.isArray(this.model.getPosition())) {
       pos = this.setStep(clickPosition);

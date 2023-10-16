@@ -36,9 +36,10 @@ export class ThumbModel implements IThumbModel {
     this.thumbSize = this.options.thumbSize as number;
     this.containerWidth = this.getContainerWidth() - this.thumbSize;
     this.containerHeight = this.getContainerHeight() - this.thumbSize;
-    this.value = this.options.value ? this.options.value : (0 as number);
+    this.value = this.options.value ? this.options.value : this.min;
 
     this.containerOrientationValue = this.setContainerOrientationValue();
+    // this.position = this.convertToPosition(this.value);
     this.position = this.setInitialPosition().pos;
   }
   validateAscendingArr(arr: number | number[]): number | number[] {
@@ -141,18 +142,20 @@ export class ThumbModel implements IThumbModel {
   convertToValueReversed(position: number | number[]): number | number[] {
     const convertedVal = this.convertToValue(position);
     if (Array.isArray(convertedVal)) {
-      return convertedVal.map((v) => this.getMax() - v);
+      return convertedVal.map((p) => this.getMax() - p + this.min);
     } else {
-      return this.getMax() - convertedVal;
+      return this.getMax() - convertedVal + this.min;
     }
   }
   convertToValue(position: number | number[]): number | number[] {
     if (Array.isArray(position)) {
-      return position.map((v) => Math.round(v / this.getProportion()));
+      return position.map((p) =>
+        Math.round(p / this.getProportion() + this.min)
+      );
     } else if (position == 0) {
       return position;
     } else {
-      return Math.round(position / this.getProportion());
+      return Math.round(position / this.getProportion() + this.min);
     }
   }
 
@@ -161,13 +164,16 @@ export class ThumbModel implements IThumbModel {
     const min = this.getMin();
     if (Array.isArray(value)) {
       return value.map(
-        (val) => ((val - min) / (max - min)) * this.containerOrientationValue
+        (val) =>
+          (val / (max - min)) * this.containerOrientationValue -
+          min * this.getProportion()
       );
-    } else if (value === 0) {
-      return value;
+    } else if (value === 0 || value < min) {
+      return min;
     } else {
       const proportionValue =
-        ((value - min) / (max - min)) * this.containerOrientationValue;
+        (value / (max - min)) * this.containerOrientationValue -
+        min * this.getProportion();
       return proportionValue;
     }
   }
@@ -275,8 +281,6 @@ export class ThumbModel implements IThumbModel {
   validateStep(step: number): number {
     if (step > this.max) {
       step = this.max;
-    } else if (step <= this.min) {
-      step = this.min;
     }
     return step;
   }

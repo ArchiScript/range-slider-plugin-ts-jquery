@@ -4,11 +4,13 @@ import { IRuler } from "../types/IModels/IRuler";
 export class Ruler implements IRuler {
   private options: IOptions;
   private max: number;
+  private min: number;
   private maxTicks: number;
   private tickFontSize: number;
   constructor() {
     this.options = Config.getInstance().getOptions();
     this.max = this.options.max as number;
+    this.min = this.options.min as number;
     this.tickFontSize = this.options.tickFontSize as number;
     this.maxTicks =
       this.options.orientation === "horizontal"
@@ -22,6 +24,8 @@ export class Ruler implements IRuler {
   updateOptions(id: number): void {
     this.options = Config.getInstanceById(id).getOptions();
     this.max = this.options.max as number;
+    this.min = this.options.min as number;
+
     this.tickFontSize = (this.options.tickFontSize as number) ?? 11;
     this.maxTicks =
       this.options.orientation === "horizontal"
@@ -56,6 +60,7 @@ export class Ruler implements IRuler {
         }
       }
     }
+    console.log(multipliers.sort((a, b) => a - b));
     return multipliers.sort((a, b) => a - b);
   }
 
@@ -123,8 +128,9 @@ export class Ruler implements IRuler {
     $ruler.style.paddingLeft = `${rulerPadding}px`;
     $ruler.style.paddingRight = `${rulerPadding}px`;
     let i: number, max: number;
+
     if (!this.options.reversedOrder) {
-      i = 0;
+      i = this.options.min as number;
       max = this.options.max as number;
 
       while (i <= max) {

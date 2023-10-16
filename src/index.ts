@@ -28,7 +28,7 @@ window.addEventListener("DOMContentLoaded", () => {
       max: 800,
       value: [100, 250],
       // value: 47,
-
+      min: 100,
       step: 20,
       doublePoint: true,
       stringValues: ["small", "medium", "large", "giant"],
@@ -52,6 +52,7 @@ window.addEventListener("DOMContentLoaded", () => {
 
     const plugin2 = $(".container-2").rangeSlider({
       max: 500,
+      min: 50,
       // value: 288,
       value: [100, 250],
       // tickStep: 100,

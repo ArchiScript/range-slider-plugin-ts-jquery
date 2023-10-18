@@ -15,6 +15,9 @@ export class TrackView implements ITrackView {
     this.init();
   }
   init(): void {
+    // // if (this.options.ticks) {
+    // this.ruler = new Ruler();
+    // // }
     if (!this.ruler && this.options.ticks) {
       this.ruler = new Ruler();
     } else {
@@ -34,6 +37,7 @@ export class TrackView implements ITrackView {
   }
 
   render(width: number, height: number, tickStep: number): void {
+    const min = this.options.min as number;
     this.$element.appendChild(this.$track);
 
     const labelStyles = this.options.labelStyles as LabelStyles;
@@ -68,7 +72,7 @@ export class TrackView implements ITrackView {
 
     if (this.options.ticks) {
       this.$track.innerHTML = "";
-      this.$track.appendChild(this.ruler.renderRuler(tickStep));
+      this.$track.appendChild(this.ruler.renderRuler());
     } else {
       this.$track.innerHTML = "";
     }

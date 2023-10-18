@@ -8,10 +8,10 @@ describe("Test Ruler Calculations", () => {
   let ruler: Ruler = new Ruler();
   describe("Ruler GetCalculatedTickStep", () => {
     it("getCalculatedTickStep() should have tickStep 100 if max 800", () => {
-      expect(ruler.getCalculatedTickStep(800)).to.equal(100);
+      expect(ruler.getCalculatedTickStep()).to.equal(100);
     });
     it("getCalculatedTickStep() should have tickStep 1 if max 8", () => {
-      expect(ruler.getCalculatedTickStep(8)).to.equal(1);
+      expect(ruler.getCalculatedTickStep()).to.equal(1);
     });
     it("getCalculatedTickStep() should have tickStep 50 if max 850", () => {
       expect(ruler.getCalculatedTickStep(850)).to.equal(50);

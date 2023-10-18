@@ -65,20 +65,57 @@ export class Config implements IConfig {
   public static getInstanceById(instanceId: number): Config {
     return Config.instances[instanceId - 1];
   }
-  private decorateUserOptions(options: IOptions): IOptions {
+
+  private getCurrentContainerProportions(): number {
+    let max = this.userOptions?.max
+      ? (this.userOptions.max as number)
+      : this.defaultOptions.max;
+    let min = this.userOptions?.min
+      ? (this.userOptions.min as number)
+      : this.defaultOptions.min;
+    (max = max as number), (min = min as number);
+    const proportion = this.getCurrentOrientationValue() / (max - min);
+    return proportion;
+  }
+  private getCurrentOrientationValue(): number {
+    return this.userOptions?.orientation &&
+      this.userOptions?.orientation == "horizontal"
+      ? this.getContainerSize().containerWidth
+      : this.getPluginHeight();
+  }
+  private getContainerSize(): {
+    containerHeight: number;
+    containerWidth: number;
+  } {
     if (this.container) {
       this.containerWidth = parseInt(getComputedStyle(this.container).width);
       this.containerHeight = parseInt(getComputedStyle(this.container).height);
-      options.containerWidth = this.containerWidth;
-      options.containerHeight = this.containerHeight;
-      const labelHeight = this.defaultOptions.labelStyles
-        ? this.defaultOptions.labelStyles.height +
-          this.defaultOptions.labelStyles.marginBottom +
-          this.defaultOptions.labelStyles.marginTop
-        : this.containerHeight;
-      options.pluginHeight = this.containerHeight - labelHeight;
+    }
+    return {
+      containerHeight: this.containerHeight as number,
+      containerWidth: this.containerWidth as number
+    };
+  }
+  private getLabelHeight(): number {
+    const labelHeight = this.defaultOptions.labelStyles
+      ? this.defaultOptions.labelStyles.height +
+        this.defaultOptions.labelStyles.marginBottom +
+        this.defaultOptions.labelStyles.marginTop
+      : this.containerHeight;
+    return labelHeight as number;
+  }
+  private getPluginHeight(): number {
+    return this.getContainerSize().containerHeight - this.getLabelHeight();
+  }
+  private decorateUserOptions(options: IOptions): IOptions {
+    if (this.container) {
+      options.containerWidth = this.getContainerSize().containerWidth;
+      options.containerHeight = this.getContainerSize().containerHeight;
+
+      options.pluginHeight = this.getPluginHeight();
       options.instanceId = this.instanceId;
-      // options.containerHeight = this.containerHeight - labelHeight;
+      options.containerProportion = this.getCurrentContainerProportions();
+
       return options;
     }
     return options;

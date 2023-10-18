@@ -41,6 +41,8 @@ export class ThumbModel implements IThumbModel {
     this.containerOrientationValue = this.setContainerOrientationValue();
     // this.position = this.convertToPosition(this.value);
     this.position = this.setInitialPosition().pos;
+    console.log(this.getProportion());
+    console.log(this.options.containerProportion);
   }
   validateAscendingArr(arr: number | number[]): number | number[] {
     if (Array.isArray(arr)) {

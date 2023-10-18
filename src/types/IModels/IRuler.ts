@@ -1,5 +1,5 @@
 export interface IRuler {
-  getCalculatedTickStep(max: number): number;
+  getCalculatedTickStep(): number;
   isFirstDigitPlain(num: number): boolean;
   getValidMultipliers(max: number): number[];
   isValidPartition(tickStep: number, max: number): boolean;

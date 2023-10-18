@@ -28,9 +28,7 @@ export class TrackPresenter implements ITrackPresenter, IObserver {
     this.$trackElement = this.trackView.getTrackElement();
     this.tickStep = this.options.tickStep
       ? this.options.tickStep
-      : this.trackView
-          .getRuler()
-          .getCalculatedTickStep(this.options.max as number);
+      : this.trackView.getRuler().getCalculatedTickStep();
     this.trackModel.addObserver(this);
     this.trackView.addPositionChangeListener(this.trackClickHandler.bind(this));
     this.updateView();

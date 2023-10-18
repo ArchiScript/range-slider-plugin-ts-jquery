@@ -35,6 +35,7 @@ export interface IOptions {
   tickBar?: boolean;
   labelStyles?: LabelStyles;
   pluginHeight?: number;
+  containerProportion?: number;
 }
 
 export type LabelStyles = {

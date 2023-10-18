@@ -1,30 +1,45 @@
 import { Config } from "../ConfigService/Config";
 import { IOptions } from "../components/components";
 import { IRuler } from "../types/IModels/IRuler";
+
 export class Ruler implements IRuler {
   private options: IOptions;
-  private max: number;
-  private min: number;
+  private max!: number;
+  private min!: number;
   private maxTicks: number;
+  private tickStep!: number;
   private tickFontSize: number;
+  private static id: number = 0;
+  private id: number;
   constructor() {
+    Ruler.id++;
+    this.id = Ruler.id;
     this.options = Config.getInstance().getOptions();
-    this.max = this.options.max as number;
-    this.min = this.options.min as number;
+
     this.tickFontSize = this.options.tickFontSize as number;
     this.maxTicks =
       this.options.orientation === "horizontal"
         ? (this.options.maxTicks as number)
         : (this.options.maxTicks as number);
+    this.init();
   }
 
+  init() {
+    this.max = this.options.max as number;
+    this.min = this.options.min as number;
+    this.tickStep = this.options.tickStep
+      ? this.options.tickStep
+      : this.getCalculatedTickStep();
+    this.renderRuler();
+    console.log(`min ---- ${this.min}`);
+    console.log(this.tickStep);
+  }
   setMaxTicks(max: number): void {
     this.maxTicks = max;
   }
   updateOptions(id: number): void {
     this.options = Config.getInstanceById(id).getOptions();
-    this.max = this.options.max as number;
-    this.min = this.options.min as number;
+    this.init();
 
     this.tickFontSize = (this.options.tickFontSize as number) ?? 11;
     this.maxTicks =
@@ -32,18 +47,33 @@ export class Ruler implements IRuler {
         ? (this.options.maxTicks as number) ?? 10
         : (this.options.maxTicks as number) ?? 20;
   }
-  getCalculatedTickStep(max: number): number {
+
+  getCalculatedTickStep(): number {
     let tickStep: number = 1;
+    const significantNum = this.removeTrailingZeros(this.max).num;
+    const significantNumTickstep = this.max / significantNum;
 
-    const significantNum = this.removeTrailingZeros(max).num;
+    // if (this.isValidPartition(significantNumTickstep, this.max)) {
+    //   // tickStep = this.min < significantNumTickstep ? tickStep : this.min;
+    //   // return tickStep;
+    //   return significantNumTickstep;
+    // } else {
+    //   const validTicksSteps: number[] = this.getValidTickStepsArr(this.max);
+    //   tickStep = this.getFavorableTickStep(validTicksSteps, this.max);
+    //   return tickStep;
+    // }
 
-    if (this.isValidPartition(max / significantNum, max)) {
-      return (tickStep = max / significantNum);
+    if (
+      this.isValidPartition(significantNumTickstep, this.max) &&
+      this.min == 0
+    ) {
+      tickStep = significantNumTickstep;
     } else {
-      const validTicksSteps: number[] = this.getValidTickStepsArr(max);
-      tickStep = this.getFavorableTickStep(validTicksSteps, max);
-      return tickStep;
+      const validTicksSteps: number[] = this.getValidTickStepsArr(this.max);
+      tickStep = this.getFavorableTickStep(validTicksSteps, this.max);
     }
+
+    return tickStep;
   }
   isFirstDigitPlain(num: number): boolean {
     return this.removeTrailingZeros(num).num / 10 < 1;
@@ -52,15 +82,16 @@ export class Ruler implements IRuler {
   getValidMultipliers(max: number): number[] {
     const multipliers: number[] = [];
     const sqrtMax = Math.sqrt(max);
+
     for (let i = 1; i <= sqrtMax; i++) {
-      if (max % i === 0) {
+      if (this.max % i === 0) {
         multipliers.push(i);
         if (i !== max / i && i !== 1) {
           multipliers.push(max / i);
         }
       }
     }
-    console.log(multipliers.sort((a, b) => a - b));
+
     return multipliers.sort((a, b) => a - b);
   }
 
@@ -72,22 +103,37 @@ export class Ruler implements IRuler {
   }
 
   getFavorableTickStep(validTicksSteps: number[], max: number): number {
-    let result: number = 0;
-    for (let tick of validTicksSteps) {
-      if (this.isFirstDigitPlain(tick)) {
+    let result: number | undefined = undefined;
+    let isMinTickStep: boolean = false;
+
+    for (const tick of validTicksSteps) {
+      if (tick === this.min) {
+        isMinTickStep = true;
         result = tick;
+        break;
       }
     }
-    result = result
-      ? result
-      : validTicksSteps.filter((num) => max / num == 10)[0] ??
-        validTicksSteps[0];
-    return result;
+    if (!isMinTickStep) {
+      for (const tick of validTicksSteps) {
+        if (this.isFirstDigitPlain(tick)) {
+          result = tick;
+          break;
+        }
+      }
+    }
+
+    if (result === undefined) {
+      result = validTicksSteps.find((num) => max / num === 10);
+    }
+
+    return (
+      result ?? validTicksSteps[Math.round(validTicksSteps.length) / 2 - 1]
+    );
   }
 
   getValidTickStepsArr(max: number): number[] {
     const tickStep: number = 1;
-    const validTicksSteps: number[] = [];
+    let validTicksSteps: number[] = [];
     const magnitudes = this.getValidMultipliers(max);
 
     for (const magnitude of magnitudes) {
@@ -97,6 +143,9 @@ export class Ruler implements IRuler {
         validTicksSteps.push(newTickStep);
       }
     }
+    validTicksSteps = validTicksSteps.filter((t) => t >= this.min);
+    console.log(validTicksSteps);
+    console.log(this.options.instanceId);
     return validTicksSteps;
   }
 
@@ -112,8 +161,23 @@ export class Ruler implements IRuler {
       grade: grade
     };
   }
-  renderRuler(tickStep: number): HTMLElement {
+
+  validateIfTickStepMismatch(num: number): number {
+    let result: number | undefined;
+    let diff: number;
+    if (num > this.min && num - this.tickStep < this.min) {
+      diff = this.tickStep - this.min;
+      result = diff;
+    } else if (num < this.max && num + this.tickStep > this.max) {
+      diff = num + this.tickStep - this.max;
+      result = this.tickStep - diff;
+    }
+    return result ?? this.tickStep;
+  }
+  renderRuler(): HTMLElement {
     let $ruler = document.createElement("div");
+
+    console.log(`tickstep ------${this.tickStep}`);
     $ruler.setAttribute(
       "class",
       `range-slider__ruler range-slider__ruler--${this.options.orientation} `
@@ -136,7 +200,9 @@ export class Ruler implements IRuler {
       while (i <= max) {
         let tick = this.renderEachTick(i);
         $ruler.appendChild(tick);
-        i += tickStep;
+        console.log(this.validateIfTickStepMismatch(i));
+        i += this.tickStep;
+        console.log(i);
       }
     } else {
       i = this.options.max as number;
@@ -144,7 +210,10 @@ export class Ruler implements IRuler {
       while (i >= min) {
         let tick = this.renderEachTick(i);
         $ruler.appendChild(tick);
-        i -= tickStep;
+        console.log(this.validateIfTickStepMismatch(i));
+        i -= this.tickStep;
+
+        console.log(i);
       }
     }
 
@@ -152,17 +221,30 @@ export class Ruler implements IRuler {
   }
 
   renderEachTick(i: number): HTMLElement {
+    const currentProportion = this.options.containerProportion as number;
     let tick = document.createElement("div");
     tick.setAttribute(
       "class",
       `range-slider__tick range-slider__tick--${this.options.orientation}`
     );
 
+    // tick.style.position = "absolute";
+    // if (this.options.orientation == "horizontal") {
+    //   tick.style.left = `${
+    //     i * currentProportion - this.min * currentProportion
+    //   }px`;
+    // } else {
+    //   tick.style.top = `${
+    //     i * currentProportion - this.min * currentProportion
+    //   }px`;
+    // }
+
     let tickBar = document.createElement("div");
     tickBar.setAttribute(
       "class",
       `range-slider__tick-bar range-slider__tick-bar--${this.options.orientation}`
     );
+
     let tickNumber = document.createElement("div");
     tickNumber.setAttribute(
       "class",

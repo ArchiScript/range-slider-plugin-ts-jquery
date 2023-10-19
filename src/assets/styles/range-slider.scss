@@ -43,6 +43,12 @@
     }
   }
 
+  &__ruler-ticks{
+    position: relative;
+    height: 100%;
+    width: 100%;
+  }
+
   &__tick {
     --tick-color: rgb(179, 179, 179);
     display: flex;
@@ -60,8 +66,8 @@
     &--vertical {
       flex-direction: row;
       align-items: center;
-      height: 12px;
-      // width: 5px;
+      // height: 12px;
+      width: 5px;
     }
   }
 

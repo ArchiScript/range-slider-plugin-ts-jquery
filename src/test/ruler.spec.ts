@@ -8,31 +8,40 @@ describe("Test Ruler Calculations", () => {
   let ruler: Ruler = new Ruler();
   describe("Ruler GetCalculatedTickStep", () => {
     it("getCalculatedTickStep() should have tickStep 100 if max 800", () => {
+      ruler.setMax(800);
       expect(ruler.getCalculatedTickStep()).to.equal(100);
     });
     it("getCalculatedTickStep() should have tickStep 1 if max 8", () => {
+      ruler.setMax(8);
       expect(ruler.getCalculatedTickStep()).to.equal(1);
     });
     it("getCalculatedTickStep() should have tickStep 50 if max 850", () => {
-      expect(ruler.getCalculatedTickStep(850)).to.equal(50);
+      ruler.setMax(850);
+      expect(ruler.getCalculatedTickStep()).to.equal(50);
     });
     it("getCalculatedTickStep() should have tickStep 500 if max 3500", () => {
-      expect(ruler.getCalculatedTickStep(3500)).to.equal(500);
+      ruler.setMax(3500);
+      expect(ruler.getCalculatedTickStep()).to.equal(500);
     });
     it("getCalculatedTickStep() should have tickStep 5 if max 30", () => {
-      expect(ruler.getCalculatedTickStep(30)).to.equal(5);
+      ruler.setMax(30);
+      expect(ruler.getCalculatedTickStep()).to.equal(5);
     });
     it("getCalculatedTickStep() should have tickStep 10 if max 90", () => {
-      expect(ruler.getCalculatedTickStep(90)).to.equal(10);
+      ruler.setMax(90);
+      expect(ruler.getCalculatedTickStep()).to.equal(10);
     });
     it("getCalculatedTickStep() should have tickStep 200 if max 2200", () => {
-      expect(ruler.getCalculatedTickStep(2200)).to.equal(200);
+      ruler.setMax(2200);
+      expect(ruler.getCalculatedTickStep()).to.equal(200);
     });
     it("getCalculatedTickStep() should have tickStep 183 if max 1830", () => {
-      expect(ruler.getCalculatedTickStep(1830)).to.equal(183);
+      ruler.setMax(1830);
+      expect(ruler.getCalculatedTickStep()).to.equal(183);
     });
     it("getCalculatedTickStep() should have tickStep 3 if max 27", () => {
-      expect(ruler.getCalculatedTickStep(27)).to.equal(3);
+      ruler.setMax(27);
+      expect(ruler.getCalculatedTickStep()).to.equal(3);
     });
   });
   describe("Test Ruler helper calculations", () => {

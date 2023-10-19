@@ -11,11 +11,12 @@ export class Ruler implements IRuler {
   private tickFontSize: number;
   private static id: number = 0;
   private id: number;
+  private thumbSize: number;
   constructor() {
     Ruler.id++;
     this.id = Ruler.id;
     this.options = Config.getInstance().getOptions();
-
+    this.thumbSize = this.options.thumbSize as number;
     this.tickFontSize = this.options.tickFontSize as number;
     this.maxTicks =
       this.options.orientation === "horizontal"
@@ -27,6 +28,7 @@ export class Ruler implements IRuler {
   init() {
     this.max = this.options.max as number;
     this.min = this.options.min as number;
+    this.thumbSize = this.options.thumbSize as number;
     this.tickStep = this.options.tickStep
       ? this.options.tickStep
       : this.getCalculatedTickStep();
@@ -47,21 +49,13 @@ export class Ruler implements IRuler {
         ? (this.options.maxTicks as number) ?? 10
         : (this.options.maxTicks as number) ?? 20;
   }
-
+  setMax(max: number): void {
+    this.max = max;
+  }
   getCalculatedTickStep(): number {
     let tickStep: number = 1;
     const significantNum = this.removeTrailingZeros(this.max).num;
     const significantNumTickstep = this.max / significantNum;
-
-    // if (this.isValidPartition(significantNumTickstep, this.max)) {
-    //   // tickStep = this.min < significantNumTickstep ? tickStep : this.min;
-    //   // return tickStep;
-    //   return significantNumTickstep;
-    // } else {
-    //   const validTicksSteps: number[] = this.getValidTickStepsArr(this.max);
-    //   tickStep = this.getFavorableTickStep(validTicksSteps, this.max);
-    //   return tickStep;
-    // }
 
     if (
       this.isValidPartition(significantNumTickstep, this.max) &&
@@ -182,16 +176,22 @@ export class Ruler implements IRuler {
       "class",
       `range-slider__ruler range-slider__ruler--${this.options.orientation} `
     );
+    let rulerPadding = this.options.thumbSize! / 2;
     if (this.options.orientation === "horizontal") {
       $ruler.style.width = `100%`;
+
+      $ruler.style.paddingLeft = `${rulerPadding}px`;
+      $ruler.style.paddingRight = `${rulerPadding}px`;
     } else {
       $ruler.style.height = `100%`;
+      $ruler.style.paddingTop = `${rulerPadding}px`;
+      $ruler.style.paddingBottom = `${rulerPadding}px`;
     }
 
-    let rulerPadding = this.options.thumbSize! / 2;
-    $ruler.style.paddingLeft = `${rulerPadding}px`;
-    $ruler.style.paddingRight = `${rulerPadding}px`;
     let i: number, max: number;
+
+    let $rulerTicks = document.createElement("div");
+    $rulerTicks.setAttribute("class", "range-slider__ruler-ticks");
 
     if (!this.options.reversedOrder) {
       i = this.options.min as number;
@@ -199,9 +199,10 @@ export class Ruler implements IRuler {
 
       while (i <= max) {
         let tick = this.renderEachTick(i);
-        $ruler.appendChild(tick);
+        $rulerTicks.appendChild(tick);
         console.log(this.validateIfTickStepMismatch(i));
-        i += this.tickStep;
+        // i += this.tickStep;
+        i += this.validateIfTickStepMismatch(i);
         console.log(i);
       }
     } else {
@@ -209,35 +210,59 @@ export class Ruler implements IRuler {
       let min = this.options.min as number;
       while (i >= min) {
         let tick = this.renderEachTick(i);
-        $ruler.appendChild(tick);
+        $rulerTicks.appendChild(tick);
         console.log(this.validateIfTickStepMismatch(i));
-        i -= this.tickStep;
+        // i -= this.tickStep;
+        i -= this.validateIfTickStepMismatch(i);
 
         console.log(i);
       }
     }
-
+    $ruler.appendChild($rulerTicks);
     return $ruler;
   }
+  private getRulerProportion(): number {
+    return this.options.orientation === "horizontal"
+      ? (this.options.containerWidth as number) / (this.max - this.min)
+      : (this.options.pluginHeight as number) / (this.max - this.min);
+  }
 
+  private getEachTickPercentPos(num: number): number {
+    return (
+      (this.getEachTickPixelPos(num) /
+        ((this.max - this.min) * this.getRulerProportion())) *
+      100
+    );
+  }
+  private getEachTickPixelPos(num: number): number {
+    const currentProportion = this.getRulerProportion();
+    return num * currentProportion - this.min * currentProportion;
+  }
+  private setEachTickStyle(i: number, tick: HTMLElement): void {
+    //
+    tick.style.position = "absolute";
+    if (!this.options.reversedOrder) {
+      if (this.options.orientation == "horizontal") {
+        tick.style.left = `${this.getEachTickPercentPos(i)}%`;
+      } else {
+        tick.style.top = `${this.getEachTickPercentPos(i)}%`;
+      }
+    } else {
+      if (this.options.orientation == "horizontal") {
+        tick.style.right = `${this.getEachTickPercentPos(i)}%`;
+      } else {
+        tick.style.bottom = `${this.getEachTickPercentPos(i)}%`;
+      }
+    }
+  }
   renderEachTick(i: number): HTMLElement {
-    const currentProportion = this.options.containerProportion as number;
     let tick = document.createElement("div");
     tick.setAttribute(
       "class",
       `range-slider__tick range-slider__tick--${this.options.orientation}`
     );
 
-    // tick.style.position = "absolute";
-    // if (this.options.orientation == "horizontal") {
-    //   tick.style.left = `${
-    //     i * currentProportion - this.min * currentProportion
-    //   }px`;
-    // } else {
-    //   tick.style.top = `${
-    //     i * currentProportion - this.min * currentProportion
-    //   }px`;
-    // }
+    this.setEachTickStyle(i, tick);
 
     let tickBar = document.createElement("div");
     tickBar.setAttribute(

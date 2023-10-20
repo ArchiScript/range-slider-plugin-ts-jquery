@@ -81,29 +81,45 @@ export class ThumbView implements IThumbView {
     value: number | number[],
     stringValue?: string | string[]
   ): void {
-    this.applyThumbStyles(this.$thumb);
-    if (Array.isArray(position) && Array.isArray(value)) {
-      const thisId: number = this.id - 1;
-      this.setOrientationPos(position);
-      if (this.options.tooltip) {
-        if (stringValue) {
-          this.$tooltip.innerHTML = `${stringValue[thisId]}`;
-        } else {
-          this.$tooltip.innerHTML = `${value[thisId]}`;
-        }
-      }
+    if (this.options.thumbAnimation) {
+      this.applyThumbAnimatingStyles(this.$thumb);
     } else {
+      this.thumbAnimationOff(this.$thumb);
+    }
+
+    this.applyThumbStyles(this.$thumb);
+
+    requestAnimationFrame(() => {
       this.setOrientationPos(position);
-      if (this.options.tooltip) {
-        if (stringValue) {
-          this.$tooltip.innerHTML = `${stringValue as string}`;
-        } else {
-          this.$tooltip.innerHTML = `${value}`;
+      if (Array.isArray(position) && Array.isArray(value)) {
+        const thisId: number = this.id - 1;
+        // this.setOrientationPos(position);
+        if (this.options.tooltip) {
+          if (stringValue) {
+            this.$tooltip.innerHTML = `${stringValue[thisId]}`;
+          } else {
+            this.$tooltip.innerHTML = `${value[thisId]}`;
+          }
+        }
+      } else {
+        // this.setOrientationPos(position);
+        if (this.options.tooltip) {
+          if (stringValue) {
+            this.$tooltip.innerHTML = `${stringValue as string}`;
+          } else {
+            this.$tooltip.innerHTML = `${value}`;
+          }
         }
       }
-    }
+    });
   }
 
+  private applyThumbAnimatingStyles(el: HTMLElement): void {
+    el.style.transition = "all 0.4s";
+  }
+  private thumbAnimationOff(el: HTMLElement): void {
+    el.style.transition = "none";
+  }
   private applyThumbStyles(thumb: HTMLElement): void {
     thumb.style.width = `${this.options.thumbSize}px`;
     thumb.style.height = `${this.options.thumbSize}px`;
@@ -114,7 +130,34 @@ export class ThumbView implements IThumbView {
     } else {
       thumb.style.left = `-${thumbSize / 2 - trackHeight / 2}px`;
     }
+
     thumb.style.setProperty("--thumb-color", `${this.options.thumbColor}`);
+
+    if (this.options.thumbBorder) {
+      thumb.style.setProperty(
+        "--thumb-border",
+        `${this.options.thumbBorderStyle}`
+      );
+    } else {
+      thumb.style.setProperty("--thumb-border", `none`);
+    }
+
+    if (this.options.thumbShadow) {
+      thumb.style.setProperty("--thumb-shadow", "block");
+      if (this.options.thumbShadowColor) {
+        thumb.style.setProperty(
+          "--thumb-shadow-color",
+          `${this.options.thumbShadowColor}`
+        );
+      } else {
+        thumb.style.setProperty(
+          "--thumb-shadow-color",
+          `${this.options.thumbColor}`
+        );
+      }
+    } else {
+      thumb.style.setProperty("--thumb-shadow", "none");
+    }
   }
   setOrientationPos(position: number | number[]): void {
     const thisId: number = this.id - 1;

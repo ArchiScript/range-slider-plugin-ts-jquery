@@ -38,6 +38,8 @@ export class Config implements IConfig {
     tickBar: true,
     tickFontSize: 11,
     thumbColor: "#E65837FF",
+    thumbShadow: true,
+    thumbAnimation: true,
     trackColor: "#E5E5E5FF",
     fillColor: "#E65837FF",
     tooltipColor: "#E65837FF",

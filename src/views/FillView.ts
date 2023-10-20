@@ -24,47 +24,68 @@ export class FillView implements IFillView {
   render(position: number | number[], width: number): void {
     if (this.options.fill) {
       this.$parent.appendChild(this.$fill);
-      if (this.options.orientation === "horizontal") {
-        this.$fill.style.marginTop = "0";
-        if (Array.isArray(position)) {
-          this.$fill.style.marginLeft = `${position[0]}px`;
-          this.$fill.style.width = `${width}px`;
-          this.$fill.style.height = `${this.options.trackHeight as number}px`;
-        } else {
-          if (!this.options.reversedOrder) {
-            this.$fill.style.marginLeft = `0`;
-            this.$fill.style.width = `${width}px`;
-            this.$fill.style.height = `${this.options.trackHeight as number}px`;
-          } else {
-            this.$fill.style.marginLeft = `${position}px`;
-            this.$fill.style.width = `${width}px`;
-            this.$fill.style.height = `${this.options.trackHeight as number}px`;
-          }
-        }
+      if (this.options.thumbAnimation) {
+        this.applyFillAnimatingStyle(this.$fill);
       } else {
-        if (Array.isArray(position)) {
-          this.$fill.style.marginLeft = `0`;
-          this.$fill.style.marginTop = `${position[0]}px`;
-          this.$fill.style.height = `${width}px`;
-          this.$fill.style.width = `${this.options.trackHeight as number}px`;
+        this.fillAnimationOff(this.$fill);
+      }
+
+      requestAnimationFrame(() => {
+        if (this.options.orientation === "horizontal") {
+          this.$fill.style.marginTop = "0";
+          if (Array.isArray(position)) {
+            this.$fill.style.marginLeft = `${position[0]}px`;
+            this.$fill.style.width = `${width}px`;
+            this.$fill.style.height = `${this.options.trackHeight as number}px`;
+          } else {
+            if (!this.options.reversedOrder) {
+              this.$fill.style.marginLeft = `0`;
+              this.$fill.style.width = `${width}px`;
+              this.$fill.style.height = `${
+                this.options.trackHeight as number
+              }px`;
+            } else {
+              this.$fill.style.marginLeft = `${position}px`;
+              this.$fill.style.width = `${width}px`;
+              this.$fill.style.height = `${
+                this.options.trackHeight as number
+              }px`;
+            }
+          }
         } else {
-          if (!this.options.reversedOrder) {
+          if (Array.isArray(position)) {
             this.$fill.style.marginLeft = `0`;
-            this.$fill.style.marginTop = `0`;
+            this.$fill.style.marginTop = `${position[0]}px`;
             this.$fill.style.height = `${width}px`;
             this.$fill.style.width = `${this.options.trackHeight as number}px`;
           } else {
-            this.$fill.style.marginTop = `${position}px`;
-            this.$fill.style.marginLeft = `0`;
-            this.$fill.style.height = `${width}px`;
-            this.$fill.style.width = `${this.options.trackHeight as number}px`;
+            if (!this.options.reversedOrder) {
+              this.$fill.style.marginLeft = `0`;
+              this.$fill.style.marginTop = `0`;
+              this.$fill.style.height = `${width}px`;
+              this.$fill.style.width = `${
+                this.options.trackHeight as number
+              }px`;
+            } else {
+              this.$fill.style.marginTop = `${position}px`;
+              this.$fill.style.marginLeft = `0`;
+              this.$fill.style.height = `${width}px`;
+              this.$fill.style.width = `${
+                this.options.trackHeight as number
+              }px`;
+            }
           }
         }
-      }
+      });
     }
     this.$fill.style.setProperty("--fill-color", `${this.options.fillColor}`);
   }
-
+  private applyFillAnimatingStyle(fill: HTMLElement): void {
+    fill.style.transition = "all 0.4s";
+  }
+  private fillAnimationOff(fill: HTMLElement): void {
+    fill.style.transition = "none";
+  }
   getFillElement(): HTMLElement {
     return this.$fill;
   }

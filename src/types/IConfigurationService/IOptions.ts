@@ -25,6 +25,11 @@ export interface IOptions {
   stringValues?: string[];
   reversedOrder?: boolean;
   thumbColor?: string;
+  thumbShadow?: boolean;
+  thumbShadowColor?: string;
+  thumbBorder?: boolean;
+  thumbBorderStyle?: string;
+  thumbAnimation?: boolean;
   trackColor?: string;
   fillColor?: string;
   tooltipColor?: string;

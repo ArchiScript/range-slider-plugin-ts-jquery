@@ -60,7 +60,10 @@ body {
   font-family: "MontserratRegular";
 
   &:hover {
-    @extend .range-slider-display__modify-button, .active
+    // @extend .range-slider-display__modify-button, .active;
+    background-color: rgb(149, 235, 212);
+    color: white;
+    border: none;
   }
 
   &.active {
@@ -135,17 +138,18 @@ body {
     width: 100%;
     display: flex;
     justify-content: space-between;
-    .label{
+    label{
       width: 100px;
     }
-  }
 
+  }
+ 
   &__input {
     margin-left: 15px;
     width: 70px;
     border: 1px solid #bbbbbb;
     border-radius: 4px;
-    height: 21px;
+    height: 20px;
     font-size: 12px;
     color: rgb(88, 88, 88);
 

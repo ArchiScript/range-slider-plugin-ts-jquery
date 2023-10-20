@@ -59,8 +59,8 @@ window.addEventListener("DOMContentLoaded", () => {
       // tickStep: 100,
       // reversedOrder: true,
       doublePoint: true,
-      thumbSize: 15,
-      trackHeight: 6,
+      thumbSize: 10,
+      trackHeight: 4,
       tooltipForm: "round"
       // orientation: "vertical"
       // trackColor: "linear-gradient(to right, green, red)"
@@ -101,9 +101,17 @@ window.addEventListener("DOMContentLoaded", () => {
       tickStep: 200,
       // reversedOrder: true,
       doublePoint: true,
-      thumbSize: 15,
+      thumbSize: 16,
       trackHeight: 6,
-      tooltipColor: "green"
+      trackColor: "transparent",
+      trackBorder: true,
+      trackBorderColor: "#c7c7cf",
+      thumbColor: "linear-gradient(180deg, #6FCF97 0%, #66D2EA 100%)",
+      fillColor: "linear-gradient(180deg, #6FCF97 0%, #66D2EA 100%)",
+      tickBar: false,
+      thumbBorder: true,
+      thumbBorderStyle: "2px solid white",
+      tooltip: false
       // trackColor: "linear-gradient(to right, green, red)"
     });
     pluginsArr.push(plugin5);
@@ -122,6 +130,8 @@ window.addEventListener("DOMContentLoaded", () => {
       doublePoint: false,
       thumbSize: 15,
       trackHeight: 6,
+      trackColor: "transparent",
+      trackBorderColor: "#E5E5E5FC",
       tooltipColor: "green"
       // trackColor: "linear-gradient(to right, green, red)"
     });

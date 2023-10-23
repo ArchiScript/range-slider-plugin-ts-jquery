@@ -6,7 +6,6 @@ import { Mediator } from "./Mediator";
 import { Config } from "../ConfigService/Config";
 import { IOptions } from "../types/IConfigurationService/IOptions";
 import { Ruler } from "../models/Ruler";
-import { config } from "chai";
 
 export class TrackPresenter implements ITrackPresenter, IObserver {
   private mediator?: Mediator;
@@ -14,6 +13,7 @@ export class TrackPresenter implements ITrackPresenter, IObserver {
   private ruler!: Ruler;
   private tickStep!: number;
   private $trackElement!: HTMLElement;
+
   constructor(private trackModel: ITrackModel, private trackView: ITrackView) {
     this.options = Config.getInstance().getOptions();
     this.trackModel = trackModel;

@@ -4,28 +4,26 @@ import { IRuler } from "../types/IModels/IRuler";
 
 export class Ruler implements IRuler {
   private options: IOptions;
-  private max!: number;
-  private min!: number;
-  private maxTicks: number;
-  private tickStep!: number;
-  private tickFontSize: number;
+  private max: number = 0;
+  private min: number = 0;
+  private maxTicks: number = 0;
+  private tickStep: number = 0;
+  private tickFontSize: number = 0;
   private static id: number = 0;
-  private id: number;
-  private thumbSize: number;
+  private id: number = 0;
+  private thumbSize: number = 0;
   constructor() {
     Ruler.id++;
     this.id = Ruler.id;
     this.options = Config.getInstance().getOptions();
     this.thumbSize = this.options.thumbSize as number;
     this.tickFontSize = this.options.tickFontSize as number;
-    this.maxTicks =
-      this.options.orientation === "horizontal"
-        ? (this.options.maxTicks as number)
-        : (this.options.maxTicks as number);
+    this.maxTicks = this.options.maxTicks as number;
+
     this.init();
   }
 
-  init() {
+  init(): void {
     this.max = this.options.max as number;
     this.min = this.options.min as number;
     this.thumbSize = this.options.thumbSize as number;
@@ -33,8 +31,6 @@ export class Ruler implements IRuler {
       ? this.options.tickStep
       : this.getCalculatedTickStep();
     this.renderRuler();
-    console.log(`min ---- ${this.min}`);
-    console.log(this.tickStep);
   }
   setMaxTicks(max: number): void {
     this.maxTicks = max;
@@ -121,7 +117,7 @@ export class Ruler implements IRuler {
     }
 
     return (
-      result ?? validTicksSteps[Math.round(validTicksSteps.length) / 2 - 1]
+      result ?? validTicksSteps[Math.round(validTicksSteps.length / 2) - 1]
     );
   }
 
@@ -171,12 +167,11 @@ export class Ruler implements IRuler {
   renderRuler(): HTMLElement {
     let $ruler = document.createElement("div");
 
-    console.log(`tickstep ------${this.tickStep}`);
     $ruler.setAttribute(
       "class",
       `range-slider__ruler range-slider__ruler--${this.options.orientation} `
     );
-    let rulerPadding = this.options.thumbSize! / 2;
+    let rulerPadding = (this.options.thumbSize as number) / 2;
     if (this.options.orientation === "horizontal") {
       $ruler.style.width = `100%`;
 
@@ -200,8 +195,6 @@ export class Ruler implements IRuler {
       while (i <= max) {
         let tick = this.renderEachTick(i);
         $rulerTicks.appendChild(tick);
-        console.log(this.validateIfTickStepMismatch(i));
-        // i += this.tickStep;
         i += this.validateIfTickStepMismatch(i);
         console.log(i);
       }
@@ -211,13 +204,10 @@ export class Ruler implements IRuler {
       while (i >= min) {
         let tick = this.renderEachTick(i);
         $rulerTicks.appendChild(tick);
-        console.log(this.validateIfTickStepMismatch(i));
-        // i -= this.tickStep;
         i -= this.validateIfTickStepMismatch(i);
-
-        console.log(i);
       }
     }
+
     $ruler.appendChild($rulerTicks);
     return $ruler;
   }
@@ -239,7 +229,7 @@ export class Ruler implements IRuler {
     return num * currentProportion - this.min * currentProportion;
   }
   private setEachTickStyle(i: number, tick: HTMLElement): void {
-    //
+
     tick.style.position = "absolute";
     if (!this.options.reversedOrder) {
       if (this.options.orientation == "horizontal") {

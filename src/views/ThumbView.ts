@@ -1,6 +1,9 @@
 import { IThumbView } from "../types/IViews/IThumbView";
 import { IOptions } from "../components/components";
 import { Config } from "../components/components";
+
+type NumberOrArray = number | number[];
+
 export class ThumbView implements IThumbView {
   private $thumb: HTMLElement;
   private $parent: HTMLElement;
@@ -9,7 +12,6 @@ export class ThumbView implements IThumbView {
   private id!: number;
   private static idBuffer: number[] = [];
   public dragging: boolean = false;
-
   public isActive: boolean = false;
   private options: IOptions;
 
@@ -27,10 +29,8 @@ export class ThumbView implements IThumbView {
     }
 
     this.id = ThumbView.id;
-
     this.$parent = parentElement;
     this.$thumb = document.createElement("div");
-
     this.init();
     ThumbView.id++;
   }
@@ -40,10 +40,10 @@ export class ThumbView implements IThumbView {
       "class",
       `range-slider__thumb range-slider__thumb--${this.options.orientation} thumb-${this.id}${draggingClass}`
     );
-    this.$thumb.setAttribute("data-id", `${this.id}`);
+    this.$thumb.dataset.id = this.id.toString();
+    this.$thumb.dataset.value = "0";
     this.$parent.innerHTML = "";
     this.$parent.appendChild(this.$thumb);
-    this.$thumb.setAttribute("data-value", `0`);
     this.$thumb.innerHTML = "";
 
     if (this.options.tooltip) {
@@ -70,15 +70,17 @@ export class ThumbView implements IThumbView {
   }
 
   applyTooltipStyle(): void {
-    this.$tooltip.style.setProperty(
-      "--tooltip-color",
-      `${this.options.tooltipColor}`
-    );
+    if (this.$tooltip) {
+      this.$tooltip.style.setProperty(
+        "--tooltip-color",
+        this.options.tooltipColor as string
+      );
+    }
   }
 
   render(
-    position: number | number[],
-    value: number | number[],
+    position: NumberOrArray,
+    value: NumberOrArray,
     stringValue?: string | string[]
   ): void {
     if (this.options.thumbAnimation) {
@@ -89,11 +91,9 @@ export class ThumbView implements IThumbView {
 
     this.applyThumbStyles(this.$thumb);
 
-    requestAnimationFrame(() => {
-      this.setOrientationPos(position);
+    const updateTooltipContent = () => {
       if (Array.isArray(position) && Array.isArray(value)) {
         const thisId: number = this.id - 1;
-        // this.setOrientationPos(position);
         if (this.options.tooltip) {
           if (stringValue) {
             this.$tooltip.innerHTML = `${stringValue[thisId]}`;
@@ -102,7 +102,6 @@ export class ThumbView implements IThumbView {
           }
         }
       } else {
-        // this.setOrientationPos(position);
         if (this.options.tooltip) {
           if (stringValue) {
             this.$tooltip.innerHTML = `${stringValue as string}`;
@@ -111,6 +110,10 @@ export class ThumbView implements IThumbView {
           }
         }
       }
+    };
+    requestAnimationFrame(() => {
+      this.setOrientationPos(position);
+      updateTooltipContent();
     });
   }
 
@@ -143,20 +146,14 @@ export class ThumbView implements IThumbView {
     }
 
     if (this.options.thumbShadow) {
-      thumb.style.setProperty("--thumb-shadow", "block");
-      if (this.options.thumbShadowColor) {
-        thumb.style.setProperty(
-          "--thumb-shadow-color",
-          `${this.options.thumbShadowColor}`
-        );
-      } else {
-        thumb.style.setProperty(
-          "--thumb-shadow-color",
-          `${this.options.thumbColor}`
-        );
-      }
+      this.$thumb.style.setProperty("--thumb-shadow", "block");
+      this.$thumb.style.setProperty(
+        "--thumb-shadow-color",
+        (this.options.thumbShadowColor as string) ||
+          (this.options.thumbColor as string)
+      );
     } else {
-      thumb.style.setProperty("--thumb-shadow", "none");
+      this.$thumb.style.setProperty("--thumb-shadow", "none");
     }
   }
   setOrientationPos(position: number | number[]): void {
@@ -201,6 +198,6 @@ export class ThumbView implements IThumbView {
     return this.$thumb;
   }
   getTooltipElement(): HTMLElement {
-    return this.$tooltip;
+    return this.$tooltip as HTMLElement;
   }
 }

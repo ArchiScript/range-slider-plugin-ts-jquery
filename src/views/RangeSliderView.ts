@@ -4,16 +4,16 @@ import { ThumbView } from "./ThumbView";
 import { FillView } from "./FillView";
 import { IOptions, LabelStyles } from "../types/IConfigurationService/IOptions";
 import { Config } from "../ConfigService/Config";
+
 export class RangeSliderView implements IRangeSliderView {
   private $container: HTMLElement;
   private $pluginElement: HTMLElement;
-  private $title: HTMLElement;
   private $trackView!: TrackView;
   private $label: HTMLElement;
+  private $title: HTMLElement;
   private $thumbView!: ThumbView | ThumbView[];
   private $trackElement!: HTMLElement;
   private $fillView!: FillView;
-  private $fillElement!: HTMLElement;
   private options: IOptions;
 
   constructor(container: HTMLElement) {
@@ -22,82 +22,73 @@ export class RangeSliderView implements IRangeSliderView {
     this.$pluginElement = document.createElement("div");
     this.$label = document.createElement("div");
     this.$title = document.createElement("h1");
+    this.$trackView = new TrackView(this.$pluginElement);
+    this.$thumbView = this.getThumbViews();
+    this.$fillView = new FillView(this.$trackView.getTrackElement());
     this.init();
   }
   init(): void {
-    let classStr: string = `range-slider--${this.options.orientation}`;
+    const classStr: string = `range-slider--${this.options.orientation}`;
     this.$pluginElement.setAttribute("class", `range-slider ${classStr}`);
     this.$label.setAttribute("class", "range-slider__label");
-    if (!this.$thumbView) {
-      this.$trackView = new TrackView(this.$pluginElement);
-      this.$trackElement = this.$trackView.getTrackElement();
-    }
-
-    if (!this.$thumbView) {
-      this.$thumbView = this.getThumbViews();
-    }
-
-    if (!this.$fillView) {
-      this.$fillView = new FillView(this.$trackElement);
-      this.$fillElement = this.$fillView.getFillElement();
-    }
+    this.renderLabel();
+    this.render();
   }
 
   updateOptions(id: number): void {
     this.options = Config.getInstanceById(id).getOptions();
     this.init();
   }
+
   getThumbViews(): ThumbView | ThumbView[] {
     if (!this.options.doublePoint) {
-      if (!this.$thumbView) {
-        return new ThumbView(this.$pluginElement) as ThumbView;
-      } else {
-        return this.$thumbView;
-      }
+      return new ThumbView(this.$pluginElement) as ThumbView;
     } else {
-      if (!this.$thumbView) {
-        let thumbs = [];
-        for (let i = 1; i <= 2; i++) {
-          thumbs.push(new ThumbView(this.$pluginElement));
-        }
-        return thumbs as ThumbView[];
-      } else {
-        return this.$thumbView;
+      const thumbs = [];
+      for (let i = 1; i <= 2; i++) {
+        thumbs.push(new ThumbView(this.$pluginElement));
       }
+      return thumbs as ThumbView[];
     }
   }
 
-  render(value: number | number[]): void {
-    let valueStr: string = value.toString();
-
-    let inner: string = "";
-
-    if (this.options.label && this.options.labelString) {
-      if (this.options.valueInLabel) {
-        inner = `${this.options.labelString} -- ${valueStr}`;
-      } else {
-        inner = `${this.options.labelString}`;
-      }
-    } else {
-      inner = "";
+  private renderLabel(): void {
+    const valueStr = this.options.labelString ? this.options.labelString : "";
+    if (this.options.label && valueStr) {
+      const inner = this.options.valueInLabel
+        ? `${valueStr} -- ${valueStr}`
+        : valueStr;
+      this.$label.textContent = inner;
+      const labelStyles = this.options.labelStyles as LabelStyles;
+      this.applyLabelStyles(labelStyles);
+      this.$container.appendChild(this.$label);
     }
+  }
 
-    this.$label.textContent = inner;
-    this.$container.appendChild(this.$label);
-    let labelStyles = this.options.labelStyles as LabelStyles;
+  private applyLabelStyles(labelStyles: LabelStyles): void {
     this.$label.style.height = `${labelStyles.height}px`;
     this.$label.style.marginTop = `${labelStyles.marginTop}px`;
     this.$label.style.marginBottom = `${labelStyles.marginBottom}px`;
+  }
+
+  render(): void {
     this.$container.appendChild(this.$pluginElement);
-    this.$pluginElement.appendChild(this.$trackElement);
+    this.$pluginElement.appendChild(this.$trackView.getTrackElement());
+    this.renderThumbView();
+  }
+
+  private renderThumbView(): void {
     if (this.$thumbView instanceof ThumbView) {
-      this.$trackElement.appendChild(this.$thumbView.getThumbElement());
-    } else {
+      this.$trackView
+        .getTrackElement()
+        .appendChild(this.$thumbView.getThumbElement());
+    } else if (Array.isArray(this.$thumbView)) {
       this.$thumbView.forEach((view) =>
-        this.$trackElement.appendChild(view.getThumbElement())
+        this.$trackView.getTrackElement().appendChild(view.getThumbElement())
       );
     }
   }
+
   getTrackView(): TrackView {
     return this.$trackView;
   }

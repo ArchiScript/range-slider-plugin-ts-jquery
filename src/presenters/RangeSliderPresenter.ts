@@ -9,9 +9,12 @@ import { IOptions } from "../types/IConfigurationService/IOptions";
 import { Config } from "../ConfigService/Config";
 import { Mediator } from "./Mediator";
 
+type NumberOrArray = number | number[];
+
 export class RangeSliderPresenter implements IPresenter, IObserver {
   private mediator: Mediator;
   private options: IOptions;
+
   constructor(
     private model: IRangeSlider,
     private view: IRangeSliderView,
@@ -44,17 +47,16 @@ export class RangeSliderPresenter implements IPresenter, IObserver {
     this.fillPresenter.setMediator(this.mediator);
 
     this.updateView();
-    const thumbPos: number | number[] =
+    const thumbPos: NumberOrArray =
       this.thumbPresenter.getCurrentFillPosition();
     this.fillPresenter.updateValue(thumbPos);
     this.thumbPresenter.updateView();
-    
   }
   getMediator() {
     return this.mediator;
   }
 
-  update(value: number | number[]): void {
+  update(value: NumberOrArray): void {
     if (Array.isArray(value) && value[0] > value[1]) {
       value = value.reverse();
     }

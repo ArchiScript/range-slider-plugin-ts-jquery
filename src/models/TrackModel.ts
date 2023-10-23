@@ -17,10 +17,8 @@ export class TrackModel implements ITrackModel {
   init(): void {
     if (this.options.orientation === "horizontal") {
       this.height = this.options.trackHeight as number;
-      // this.width = 100;
       this.width = this.options.containerWidth as number;
     } else {
-      // this.height = 100;
       this.height = this.options.containerHeight as number;
       this.width = this.options.trackHeight as number;
     }
@@ -51,10 +49,4 @@ export class TrackModel implements ITrackModel {
   removeObserver(observer: IObserver): void {
     this.observers = this.observers.filter((obs) => obs !== observer);
   }
-
-  // notifyObservers(): void {
-  //   for (let observer of this.observers) {
-  //     observer.update();
-  //   }
-  // }
 }

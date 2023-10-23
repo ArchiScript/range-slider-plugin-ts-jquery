@@ -3,11 +3,12 @@ import { IOptions } from "../types/IConfigurationService/IOptions";
 import { Config } from "../ConfigService/Config";
 import { IObserver } from "../types/IObserver";
 export class FillModel implements IFillModel {
-  private fillPosition!: number | number[];
-  private fillLength!: number;
+  private fillPosition: number | number[] = 0;
+  private fillLength: number = 0;
+  private thumbSize: number = 0;
   private options: IOptions;
   private observers: IObserver[] = [];
-  private thumbSize!: number;
+
   constructor() {
     this.options = Config.getInstance().getOptions();
     this.init();
@@ -27,18 +28,20 @@ export class FillModel implements IFillModel {
     if (Array.isArray(fillPos)) {
       return fillPos[1] - fillPos[0] + this.thumbSize;
     } else {
-      if (this.options.orientation === "horizontal") {
-        if (!this.options.reversedOrder) {
-          return fillPos + this.thumbSize;
-        } else {
-          return (this.options.containerWidth as number) - fillPos;
-        }
+      const isHorizontal = this.options.orientation === "horizontal";
+      const isReversed = this.options.reversedOrder;
+      const containerSize = isHorizontal
+        ? (this.options.containerWidth as number)
+        : (this.options.pluginHeight as number);
+
+      if (isHorizontal && !isReversed) {
+        return fillPos + this.thumbSize;
+      } else if (isHorizontal && isReversed) {
+        return containerSize - fillPos;
+      } else if (!isHorizontal && !isReversed) {
+        return fillPos + this.thumbSize;
       } else {
-        if (!this.options.reversedOrder) {
-          return fillPos + this.thumbSize;
-        } else {
-          return (this.options.pluginHeight as number) - fillPos; // Changed pluginHeight from containerHeight
-        }
+        return containerSize - fillPos;
       }
     }
   }
@@ -68,19 +71,17 @@ export class FillModel implements IFillModel {
   convertToFillPosition(value: number | number[]): number | number[] {
     const max: number = this.options.max as number;
     const min: number = this.options.min as number;
-    const containerOrientationValue: number =
+    const containerSize =
       this.options.orientation === "horizontal"
         ? (this.options.containerWidth as number)
         : (this.options.pluginHeight as number);
-    // Changed pluginHeight from containerHeight
+
     if (Array.isArray(value)) {
       return value.map(
-        (val) =>
-          ((val - min) / (max - min)) * (containerOrientationValue as number)
+        (val) => ((val - min) / (max - min)) * (containerSize as number)
       );
     }
-    const proportionValue =
-      ((value - min) / (max - min)) * containerOrientationValue;
+    const proportionValue = ((value - min) / (max - min)) * containerSize;
     return proportionValue;
   }
 }

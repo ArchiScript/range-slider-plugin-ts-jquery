@@ -9,13 +9,15 @@ import { Mediator } from "./Mediator";
 import { IChangeEvent } from "../types/IChangeEvent";
 import { EventDispatcher } from "../EventDispatcher";
 
+type NumberOrArray = number | number[];
+
 export class ThumbPresenter implements IThumbPresenter, IObserver {
   private model: IThumbModel;
   private view: ThumbView | ThumbView[];
   private mediator?: Mediator;
-  private position!: number | number[];
+  private position!: NumberOrArray;
   private activeThumb?: HTMLElement;
-  private value!: number | number[];
+  private value!: NumberOrArray;
   private dragBound!: EventListenerOrEventListenerObject;
   private stopDragBound!: EventListenerOrEventListenerObject;
   private observers: IObserver[] = [];
@@ -25,6 +27,7 @@ export class ThumbPresenter implements IThumbPresenter, IObserver {
   private eventDispatcher: EventDispatcher;
   private changeEvent: IChangeEvent;
   public startPoint?: number;
+
   constructor(model: IThumbModel, view: ThumbView | ThumbView[]) {
     this.options = Config.getInstance().getOptions();
     this.model = model;
@@ -46,7 +49,6 @@ export class ThumbPresenter implements IThumbPresenter, IObserver {
     this.value = this.model.getValue();
     this.isDoubleThumb = this.isDouble;
     this.model.setPosition(this.position);
-
     this.updateView();
   }
 
@@ -59,7 +61,7 @@ export class ThumbPresenter implements IThumbPresenter, IObserver {
       });
     }
   }
-  getValue(): number | number[] {
+  getValue(): NumberOrArray {
     return this.model.getValue();
   }
 
@@ -84,12 +86,12 @@ export class ThumbPresenter implements IThumbPresenter, IObserver {
     this.updateView();
   }
 
-  updatePosition(value: number | number[]): void {
+  updatePosition(value: NumberOrArray): void {
     this.model.setPosition(value);
   }
 
   setThumbDataValue(thumb: ThumbView | ThumbView[]): void {
-    const currentVal: number | number[] = this.model.getValue();
+    const currentVal: NumberOrArray = this.model.getValue();
     const stringVal: string | string[] | undefined = this.options.stringValues
       ? this.model.getValueString(currentVal)
       : undefined;
@@ -140,8 +142,7 @@ export class ThumbPresenter implements IThumbPresenter, IObserver {
   }
 
   public getCurrentFillPosition(): number | number[] {
-    let posArr: number | number[] = this.getCurrentPosition();
-    let thumbSize = this.options.thumbSize as number;
+    let posArr: NumberOrArray = this.getCurrentPosition();
     if (Array.isArray(posArr)) {
       return [posArr[0], posArr[1]];
     } else {
@@ -243,7 +244,7 @@ export class ThumbPresenter implements IThumbPresenter, IObserver {
     }
 
     let movement = currentPosition - this.model.getThumbSize() / 2 - startPoint;
-    // this.startPoint!;
+
     movement = this.setStep(movement);
     movement = this.validateMinMax(movement);
 
@@ -265,7 +266,7 @@ export class ThumbPresenter implements IThumbPresenter, IObserver {
     this.notifyObservers();
   }
 
-  externalSetValue(value: number | number[]): void {
+  externalSetValue(value: NumberOrArray): void {
     if (Array.isArray(value) && this.options.reversedOrder) {
       value = value.reverse();
     }
@@ -289,7 +290,7 @@ export class ThumbPresenter implements IThumbPresenter, IObserver {
     let newPositionArr: number[] = [];
     let step = this.model.getStep();
     let min = this.model.getMin();
-    console.log(min);
+
     currentPositionArr = viewArr.map((v) => v.getThumbCurrentPosition());
 
     if (viewArr[0].isActive && movement >= currentPositionArr[1] - step) {
@@ -373,9 +374,6 @@ export class ThumbPresenter implements IThumbPresenter, IObserver {
     this.eventDispatcher.dispatchEvent(this.changeEvent);
   }
 
-  private test(): void {
-    console.log(`---------options.value  ${this.options.value}`);
-  }
   setTestActiveThumb(thumb: HTMLElement, thumbViews: ThumbView[]): void {
     if (Array.isArray(thumbViews)) {
       thumbViews.forEach((v) => {

@@ -4,28 +4,24 @@ import { IOptions } from "../types/IConfigurationService/IOptions";
 import { Config } from "../ConfigService/Config";
 
 type NumberOrArray = number | number[];
-type ValType = number | number[];
-type PosType = number | number[];
 type ValuePosObject = { val: number | number[]; pos: number | number[] };
 
 export class ThumbModel implements IThumbModel {
-  private position!: number | number[];
+  private position: NumberOrArray = 0;
   private observers: IObserver[] = [];
   private dragging: boolean = false;
-  private thumbSize!: number;
-  private min!: number;
-  private max!: number;
-  private value?: number | number[];
-  private containerWidth!: number;
-  private containerHeight!: number;
-  private step!: number;
+  private thumbSize: number = 0;
+  private min: number = 0;
+  private max: number = 0;
+  private value?: NumberOrArray;
+  private containerWidth: number = 0;
+  private containerHeight: number = 0;
+  private step: number = 0;
   private options: IOptions;
-  private containerOrientationValue!: number;
-  private reversedOnce: boolean = false;
+  private containerOrientationValue: number = 0;
 
   constructor() {
     this.options = Config.getInstance().getOptions();
-
     this.init();
   }
 
@@ -39,15 +35,11 @@ export class ThumbModel implements IThumbModel {
     this.value = this.options.value ? this.options.value : this.min;
 
     this.containerOrientationValue = this.setContainerOrientationValue();
-    // this.position = this.convertToPosition(this.value);
     this.position = this.setInitialPosition().pos;
-    console.log(this.getProportion());
-    console.log(this.options.containerProportion);
   }
-  validateAscendingArr(arr: number | number[]): number | number[] {
+  validateAscendingArr(arr: NumberOrArray): NumberOrArray {
     if (Array.isArray(arr)) {
       if (arr[0] > arr[1]) {
-        console.log("reversed val");
         return arr.reverse();
       } else {
         return arr;
@@ -55,43 +47,21 @@ export class ThumbModel implements IThumbModel {
     } else return arr;
   }
 
-  mergeWithPosition(pos: number | number[]): {
-    val: number | number[];
-    pos: number | number[];
-  } {
-    let v: number | number[], p: number | number[];
-    let temp: number | number[];
-    if (Array.isArray(pos)) {
-      p = this.validateAscendingArr(pos);
-
-      // p = pos;
-      temp = !this.options.reversedOrder
-        ? this.convertToValue(pos)
-        : this.convertToValueReversed(pos);
-      // v = this.validateAscendingArr(temp as number[]);
-      v = temp;
-    } else {
-      p = pos;
-      v = this.convertToValue(pos);
-    }
+  mergeWithPosition(pos: NumberOrArray): ValuePosObject {
+    const p: NumberOrArray = this.validateAscendingArr(pos);
+    const temp: NumberOrArray = !this.options.reversedOrder
+      ? this.convertToValue(pos)
+      : this.convertToValueReversed(pos);
+    const v: NumberOrArray = temp;
     return { val: v, pos: p };
   }
 
-  mergeWithValue(val: number | number[]): ValuePosObject {
-    let v: number | number[], p: number | number[];
-    let temp: number | number[];
-    if (Array.isArray(val)) {
-      // v = this.validateAscendingArr(val);
-      v = val;
-      temp = !this.options.reversedOrder
-        ? this.convertToPosition(val)
-        : this.convertToPositionReversed(val);
-      // p = this.validateAscendingArr(temp as number[]);
-      p = temp;
-    } else {
-      v = val;
-      p = this.convertToPosition(val);
-    }
+  mergeWithValue(val: NumberOrArray): ValuePosObject {
+    const v: NumberOrArray = val;
+    const temp: NumberOrArray = !this.options.reversedOrder
+      ? this.convertToPosition(val)
+      : this.convertToPositionReversed(val);
+    const p: NumberOrArray = temp;
     return { val: v, pos: p };
   }
 
@@ -106,10 +76,7 @@ export class ThumbModel implements IThumbModel {
   }
 
   setInitialPosition(): ValuePosObject {
-    return this.mergeWithValue(this.options.value as number | number[]);
-  }
-  test(): void {
-    console.log(this.position);
+    return this.mergeWithValue(this.options.value as NumberOrArray);
   }
 
   getStep(): number {
@@ -125,23 +92,22 @@ export class ThumbModel implements IThumbModel {
   getMax(): number {
     return this.max;
   }
-  getPosition(): number | number[] {
+  getPosition(): NumberOrArray {
     return this.position;
   }
-  setPosition(position: number | number[]): void {
+  setPosition(position: NumberOrArray): void {
     this.position = position;
     this.value = this.mergeWithPosition(position).val;
     this.notifyObservers();
   }
 
-  setValue(value: number | number[]): void {
+  setValue(value: NumberOrArray): void {
     this.value = value;
     this.position = this.mergeWithValue(value).pos;
-
     this.notifyObservers();
   }
 
-  convertToValueReversed(position: number | number[]): number | number[] {
+  convertToValueReversed(position: NumberOrArray): NumberOrArray {
     const convertedVal = this.convertToValue(position);
     if (Array.isArray(convertedVal)) {
       return convertedVal.map((p) => this.getMax() - p + this.min);
@@ -149,7 +115,7 @@ export class ThumbModel implements IThumbModel {
       return this.getMax() - convertedVal + this.min;
     }
   }
-  convertToValue(position: number | number[]): number | number[] {
+  convertToValue(position: NumberOrArray): NumberOrArray {
     if (Array.isArray(position)) {
       return position.map((p) =>
         Math.round(p / this.getProportion() + this.min)
@@ -161,7 +127,7 @@ export class ThumbModel implements IThumbModel {
     }
   }
 
-  convertToPosition(value: number | number[]): number | number[] {
+  convertToPosition(value: NumberOrArray): NumberOrArray {
     const max = this.getMax();
     const min = this.getMin();
     if (Array.isArray(value)) {
@@ -179,21 +145,21 @@ export class ThumbModel implements IThumbModel {
       return proportionValue;
     }
   }
-  convertToPositionReversed(value: number | number[]): number | number[] {
-    let proportionMax: number,
-      proportionVal: number | number[],
-      reverseVal: number | number[];
+  convertToPositionReversed(value: NumberOrArray): NumberOrArray {
+    const proportionMax: number = this.convertToPosition(this.max) as number;
+    const proportionVal: NumberOrArray = this.convertToPosition(value);
+    let reverseVal: NumberOrArray;
 
-    proportionMax = this.convertToPosition(this.max) as number;
-    proportionVal = this.convertToPosition(value);
-    reverseVal = Array.isArray(proportionVal)
-      ? proportionVal.map((val) => proportionMax - val)
-      : proportionMax - proportionVal;
-
+    if (Array.isArray(proportionVal)) {
+      reverseVal = proportionVal.map((val) => proportionMax - val);
+    } else {
+      reverseVal = proportionMax - proportionVal;
+    }
     return reverseVal;
   }
-  getValue(): number | number[] {
-    return this.value as number | number[];
+
+  getValue(): NumberOrArray {
+    return this.value as NumberOrArray;
   }
   enableDrag(): void {
     this.dragging = true;

@@ -12,9 +12,6 @@ import { FillView } from "../views/FillView";
 import { IOptions } from "../types/IConfigurationService/IOptions";
 import { Config } from "../ConfigService/Config";
 
-import { IChangeEvent } from "types/IChangeEvent";
-import { EventDispatcher } from "EventDispatcher";
-
 import $ from "jquery";
 function rangeSlider(
   this: JQuery<HTMLElement>,
@@ -27,7 +24,6 @@ function rangeSlider(
 
     const options = Config.set(container, opts).getOptions();
     pluginInstance.id = options.instanceId as number;
-    // console.log(pluginInstance.id);
     pluginInstance.config = Config.getInstanceById(pluginInstance.id);
     const id = options.instanceId as number;
     const rangeSliderView = new RangeSliderView(container);

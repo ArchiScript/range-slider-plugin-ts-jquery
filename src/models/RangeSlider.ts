@@ -3,7 +3,7 @@ import { IObserver } from "../types/IObserver";
 import { IOptions } from "../types/IConfigurationService/IOptions";
 import { Config } from "../ConfigService/Config";
 export class RangeSlider implements IRangeSlider {
-  private value!: number;
+  private value: number = 0;
   private observers: IObserver[] = [];
   private options!: IOptions;
 

@@ -257,10 +257,10 @@ export class ThumbPresenter implements IThumbPresenter, IObserver {
       this.updatePosition(newPositionArr);
       let fillThumbWidth = newPositionArr[1];
       newPositionArr = [newPositionArr[0], fillThumbWidth];
-      this.mediator?.setFill(newPositionArr);
+      this.mediator?.notifyFillPosition(newPositionArr);
     } else {
       this.updatePosition(movement);
-      this.mediator?.setFill(movement);
+      this.mediator?.notifyFillPosition(movement);
     }
 
     this.notifyObservers();
@@ -272,7 +272,7 @@ export class ThumbPresenter implements IThumbPresenter, IObserver {
     }
     this.model.setValue(value);
 
-    this.mediator?.setFill(this.model.getPosition());
+    this.mediator?.notifyFillPosition(this.model.getPosition());
     this.notifyObservers();
   }
 
@@ -369,7 +369,7 @@ export class ThumbPresenter implements IThumbPresenter, IObserver {
     }
 
     this.updatePosition(pos);
-    this.mediator?.setFill(pos);
+    this.mediator?.notifyFillPosition(pos);
     this.notifyObservers();
     this.eventDispatcher.dispatchEvent(this.changeEvent);
   }

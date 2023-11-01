@@ -52,7 +52,7 @@ export class RangeSliderPresenter implements IPresenter, IObserver {
     this.fillPresenter.updateValue(thumbPos);
     this.thumbPresenter.updateView();
   }
-  getMediator() {
+  getMediator(): Mediator {
     return this.mediator;
   }
 

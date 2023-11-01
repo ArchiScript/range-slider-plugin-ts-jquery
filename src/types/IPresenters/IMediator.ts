@@ -1,5 +1,5 @@
 export interface IMediator {
   notifyTrackClick(clickPosition: number): void;
   notifyThumbPositionChange(position: number): void;
-  setFill(position: number | number[]): void;
+  notifyFillPosition(position: number | number[]): void;
 }

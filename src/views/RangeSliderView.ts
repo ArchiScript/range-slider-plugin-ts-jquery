@@ -31,8 +31,8 @@ export class RangeSliderView implements IRangeSliderView {
     const classStr: string = `range-slider--${this.options.orientation}`;
     this.$pluginElement.setAttribute("class", `range-slider ${classStr}`);
     this.$label.setAttribute("class", "range-slider__label");
-    this.renderLabel();
-    this.render();
+    // this.renderLabel();
+    // this.render();
   }
 
   updateOptions(id: number): void {
@@ -52,11 +52,11 @@ export class RangeSliderView implements IRangeSliderView {
     }
   }
 
-  private renderLabel(): void {
+  private renderLabel(value: number | number[]): void {
     const valueStr = this.options.labelString ? this.options.labelString : "";
     if (this.options.label && valueStr) {
       const inner = this.options.valueInLabel
-        ? `${valueStr} -- ${valueStr}`
+        ? `${valueStr} -- ${value}`
         : valueStr;
       this.$label.textContent = inner;
       const labelStyles = this.options.labelStyles as LabelStyles;
@@ -71,7 +71,8 @@ export class RangeSliderView implements IRangeSliderView {
     this.$label.style.marginBottom = `${labelStyles.marginBottom}px`;
   }
 
-  render(): void {
+  render(value: number | number[]): void {
+    this.renderLabel(value);
     this.$container.appendChild(this.$pluginElement);
     this.$pluginElement.appendChild(this.$trackView.getTrackElement());
     this.renderThumbView();

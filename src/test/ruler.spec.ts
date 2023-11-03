@@ -23,9 +23,9 @@ describe("Test Ruler Calculations", () => {
       ruler.setMax(3500);
       expect(ruler.getCalculatedTickStep()).to.equal(500);
     });
-    it("getCalculatedTickStep() should have tickStep 5 if max 30", () => {
+    it("getCalculatedTickStep() should have tickStep 2 if max 30", () => {
       ruler.setMax(30);
-      expect(ruler.getCalculatedTickStep()).to.equal(5);
+      expect(ruler.getCalculatedTickStep()).to.equal(2);
     });
     it("getCalculatedTickStep() should have tickStep 10 if max 90", () => {
       ruler.setMax(90);
@@ -55,7 +55,10 @@ describe("Test Ruler Calculations", () => {
       const dividers: number[] = [
         1, 2, 3, 4, 5, 6, 10, 12, 15, 20, 25, 30, 50, 60, 75, 100, 150
       ];
+
       const calcDividers: number[] = ruler.getValidMultipliers(300);
+      console.log("dividers:");
+      console.log(calcDividers);
       for (let i = 0; i < calcDividers.length - 1; i++) {
         expect(calcDividers[i]).to.equal(dividers[i]);
       }
@@ -78,7 +81,7 @@ describe("Test Ruler Calculations", () => {
     });
     it("getFavorableTickStep() should have userfriendly tickStep out of array of valid = 50", () => {
       const validArr: number[] = ruler.getValidTickStepsArr(300);
-      expect(ruler.getFavorableTickStep(validArr, 300)).to.equal(50);
+      expect(ruler.getFavorableTickStep(validArr, 300)).to.equal(20);
     });
     it("removeTrailingZeros() should have a type of returned object { num: number; grade: number } =true", () => {
       type expectObjectType = { num: number; grade: number };

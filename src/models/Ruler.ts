@@ -18,7 +18,10 @@ export class Ruler implements IRuler {
     this.options = Config.getInstance().getOptions();
     this.thumbSize = this.options.thumbSize as number;
     this.tickFontSize = this.options.tickFontSize as number;
-    this.maxTicks = this.options.maxTicks as number;
+    this.maxTicks =
+      this.options.orientation === "horizontal"
+        ? (this.options.maxTicks as number) ?? 10
+        : (this.options.maxTicks as number) ?? 20;
 
     this.init();
   }
@@ -31,10 +34,15 @@ export class Ruler implements IRuler {
       ? this.options.tickStep
       : this.getCalculatedTickStep();
     this.renderRuler();
+    // this.test();
   }
   setMaxTicks(max: number): void {
     this.maxTicks = max;
   }
+  // test(): void {
+  //   console.log("___valid pult 300 ");
+  //   console.log(this.getValidMultipliers(300));
+  // }
   updateOptions(id: number): void {
     this.options = Config.getInstanceById(id).getOptions();
     this.init();
@@ -74,7 +82,7 @@ export class Ruler implements IRuler {
     const sqrtMax = Math.sqrt(max);
 
     for (let i = 1; i <= sqrtMax; i++) {
-      if (this.max % i === 0) {
+      if (max % i === 0) {
         multipliers.push(i);
         if (i !== max / i && i !== 1) {
           multipliers.push(max / i);
@@ -196,7 +204,6 @@ export class Ruler implements IRuler {
         let tick = this.renderEachTick(i);
         $rulerTicks.appendChild(tick);
         i += this.validateIfTickStepMismatch(i);
-        console.log(i);
       }
     } else {
       i = this.options.max as number;
@@ -229,7 +236,6 @@ export class Ruler implements IRuler {
     return num * currentProportion - this.min * currentProportion;
   }
   private setEachTickStyle(i: number, tick: HTMLElement): void {
-
     tick.style.position = "absolute";
     if (!this.options.reversedOrder) {
       if (this.options.orientation == "horizontal") {

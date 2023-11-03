@@ -111,10 +111,15 @@ export class ThumbView implements IThumbView {
         }
       }
     };
-    requestAnimationFrame(() => {
+    if (this.options.thumbAnimation) {
+      requestAnimationFrame(() => {
+        this.setOrientationPos(position);
+        updateTooltipContent();
+      });
+    } else {
       this.setOrientationPos(position);
       updateTooltipContent();
-    });
+    }
   }
 
   private applyThumbAnimatingStyles(el: HTMLElement): void {

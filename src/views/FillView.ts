@@ -34,7 +34,7 @@ export class FillView implements IFillView {
         this.fillAnimationOff(this.$fill);
       }
 
-      requestAnimationFrame(() => {
+      const fillRender = () => {
         if (this.options.orientation === "horizontal") {
           this.renderHorizontal(position, width);
         } else {
@@ -45,7 +45,14 @@ export class FillView implements IFillView {
           "--fill-color",
           `${this.options.fillColor}`
         );
-      });
+      };
+      if (this.options.thumbAnimation) {
+        requestAnimationFrame(() => {
+          fillRender();
+        });
+      } else {
+        fillRender();
+      }
     }
   }
 

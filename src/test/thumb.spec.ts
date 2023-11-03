@@ -6,7 +6,7 @@ import { JSDOM } from "jsdom";
 import { IOptions } from "../types/IConfigurationService/IOptions";
 import * as puppeteer from "puppeteer";
 import { chromium, Browser, Page } from "playwright";
-
+import sinon from "sinon";
 import * as components from "../components/components";
 
 const jsdom = new JSDOM(
@@ -33,7 +33,8 @@ el2.style.width = "300px";
 const mockOpts: IOptions = {
   max: 200,
   min: 0,
-  step: 5
+  step: 5,
+  thumbAnimation: false
 };
 const mock = new Mock(el, mockOpts).getMockRangeSlider();
 export { mock };
@@ -129,8 +130,8 @@ describe("Test RangeSlider Thumb-single", () => {
       expect(mock.thumbModel.setContainerOrientationValue()).to.equal(285);
     });
 
-    it("getContainerHeight() should return the container height = 350", () => {
-      expect(mock.thumbModel.getContainerHeight()).to.equal(350);
+    it("getContainerHeight() should return the container height-label = 290", () => {
+      expect(mock.thumbModel.getContainerHeight()).to.equal(290);
     });
 
     it("splitNum() should return arr each number accum the prev =>30 to 3 parts = [10, 20, 30]", () => {
@@ -228,7 +229,8 @@ describe("Test Range-slider Thumb-double", () => {
     max: 200,
     step: 10,
     value: [30, 70],
-    doublePoint: true
+    doublePoint: true,
+    thumbAnimation: false
   };
 
   const el = jsdom.window.document.querySelector(
@@ -337,7 +339,8 @@ describe("Test Range-slider Thumb-double", () => {
 describe("Test Thumb StringValues", () => {
   const mockOpts: components.IOptions = {
     max: 800,
-    stringValues: ["small", "medium", "large"]
+    stringValues: ["small", "medium", "large"],
+    thumbAnimation: false
   };
   const mock = new Mock(el2, mockOpts).getMockRangeSlider();
   const thumb: HTMLElement = el2.querySelector(

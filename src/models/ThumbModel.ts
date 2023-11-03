@@ -249,6 +249,8 @@ export class ThumbModel implements IThumbModel {
   validateStep(step: number): number {
     if (step > this.max) {
       step = this.max;
+    } else if (step < this.min && this.min == 0) {
+      step = this.min;
     }
     return step;
   }

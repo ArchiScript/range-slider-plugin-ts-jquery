@@ -10,7 +10,8 @@ import Mock from "./Mock";
 const mockOpts: components.IOptions = {
   max: 200,
   step: 5,
-  trackHeight: 10
+  trackHeight: 10,
+  thumbAnimation: false
 };
 const mock = new Mock(el, mockOpts).getMockRangeSlider();
 

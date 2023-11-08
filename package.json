@@ -54,7 +54,6 @@
     "puppeteer": "^20.9.0",
     "sass": "^1.63.4",
     "sass-loader": "^13.3.2",
-    "sinon": "^17.0.1",
     "style-loader": "^3.3.3",
     "ts-loader": "^9.4.3",
     "ts-node": "^10.9.1",

@@ -1,3 +1,4 @@
+import type { LabelStyles } from "./IOptions";
 export interface ISettableOptions {
   orientation: "horizontal" | "vertical";
   doublePoint: boolean;
@@ -16,6 +17,7 @@ export interface ISettableOptions {
   label: boolean;
   labelString: string;
   valueInLabel: boolean;
+  labelStyles: LabelStyles;
   stringValues: string[];
   reversedOrder: boolean;
   thumbColor: string;

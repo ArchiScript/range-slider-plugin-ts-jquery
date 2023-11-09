@@ -35,6 +35,8 @@ window.addEventListener("DOMContentLoaded", () => {
       reversedOrder: true
     });
 
+    const result = plugin1.getValue();
+
     plugin1.onChange(() => {
       console.log("работает!");
       console.log(plugin1.getValue());

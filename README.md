@@ -7,8 +7,21 @@
 ![GitHub repo size](https://img.shields.io/github/repo-size/ArchiScript/range-slider-plugin-ts-jquery?logo=github)&nbsp;![GitHub last commit (by committer)](https://img.shields.io/github/last-commit/ArchiScript/range-slider-plugin-ts-jquery?logo=github)&nbsp;![GitHub language count](https://img.shields.io/github/languages/count/ArchiScript/range-slider-plugin-ts-jquery?logo=github)&nbsp;![Static Badge](https://img.shields.io/badge/pattern-MVP-blue)
 
 
+#####  Table of contents
+
+- [Description](#description)
+- [Features](#features)
+- [References](#references)
+- [Build details](#build-details)
+- [Installation](#installation)
+- [Use](#use)
+- [Options](#options)
+  - [Value](#value)
+  - 
 
 
+
+## Description
 &emsp;The Range Slider Plugin is a flexible and customizable slider  component for web applications. It allows users to select a range of values or a single value within a specified range.
 &emsp; The project is written in typescript for JQuery and uses an MVP pattern with passive view.(see [Diagram](#structure-details))
 &#10;
@@ -115,14 +128,13 @@ npm run test
 &#13;
 &#13;
 
+
 ## Use  !!!! NOT FINISHED)
-
-
 
 On downloading the source files import the plugin jquery wrapper
 
 ```
-import "rangeSlider/plugin-wrapper/plugin-wrapper";  (!!!! NOT FINISHED)
+import "plugin-wrapper/plugin-wrapper";  (!!!! NOT FINISHED)
 ```
 ```JavaScript
 $(".container-1").rangeSlider({
@@ -150,7 +162,7 @@ $(".container-2").rangeSlider({
       tickBar: false
     });    
 ```
-![rs-vertical](src/assets/images/rs-vertical-readme.png)![rs-vertical](src/assets/images/rs-horizontal-readme.png)
+![rs-vertical](src/assets/images/rs-vertical-readme.png)![rs-horizontal](src/assets/images/rs-horizontal-readme.png)
 
 
 
@@ -158,7 +170,7 @@ $(".container-2").rangeSlider({
 ## Options 
 
 
-**value** ```number | number[]``` 
+### **value** ```number | number[]``` 
 
 Setting value makes plugin to initiate with the predefined value
 
@@ -169,13 +181,30 @@ value: 200
 In case of range values, when user wants to choose between start and end values, an array of values should be provided
 
 ```JS
+value: 455
 value: [100,450]
 ```
 Making range values also requires to set a **doublePoint** option to ```true```
 &#13;
 &#13;
 
-**doublePoint** ```boolean``` 
+#### **stringValues** ```string[]``` 
+
+Setting the string representation of number values. Also, string values are set as the thumb's data-value. It's up to you to choose the strings and the array length - the array is associated regarding to the min and max values and splits the range accordingly.
+
+```JS
+
+stringValues: ["Gendalf", "Cat", "Fairy", "Awesome", "biggest"]
+```
+
+![rs-horizontal](src/assets/images/string-values.png)
+
+&#13;
+&#13;
+
+#### **doublePoint** ```boolean``` 
+
+Sets the double-thumb rendering so as to provide setting double values
 
 ```JS
 doublePoint: true
@@ -183,7 +212,7 @@ doublePoint: true
 &#13;
 &#13;
 
-**orientation:** ```"horizontal" | "vertical"```
+#### **orientation** ```"horizontal" | "vertical"```
 
 The orientation option sets the vertical or horizontal position of the plugin
 
@@ -193,7 +222,363 @@ orientation: "horizontal"
 &#13;
 &#13;
 
+#### **trackHeight** ```number```
+default: ```6```
+The track height option sets the track height in pixels. In the case of a vertical orientation height means the thickness of the track.
 
+```JS 
+trackHeight: 10
+```
+&#13;
+&#13;
+
+### **trackColor** ```string```
+default: ```lightgray```
+
+Sets the track color.
+
+```JS
+trackColor: "transparent"
+```
+&#13;
+&#13;
+
+
+#### **trackBorder** ```boolean```
+
+The styling option sets the border of the track.
+By default, the track border is set to ```false```
+
+```JS
+trackBorder: true
+```
+&#13;
+&#13;
+
+#### **trackBorderColor** ```string```
+
+The border styling option admits any color string
+
+```JS
+trackBorderColor: "rgba(255, 255, 255)"
+trackBorderColor: "black"
+trackBorderColor: "lightgray"
+trackBorderColor: "#004242FF"
+```
+&#13;
+&#13;
+
+#### **max**  ```number```
+
+Sets the maximum possible value
+
+```JS 
+max: 1000
+```
+&#13;
+&#13;
+
+#### **min**  ```number```
+
+Sets the minimum possible value
+
+```JS 
+min: 50
+```
+&#13;
+&#13;
+
+#### **thumbSize** ```number```
+
+Sets the thumb size in pixels
+
+```JS 
+thumbSize: 15
+```
+&#13;
+&#13;
+
+#### **thumbColor** ```string```
+
+Sets the thumb color
+
+```JS 
+thumbColor: "red"
+thumbColor: "linear-gradient(180deg, #6FCF97 0%, #66D2EA 100%)"
+```
+&#13;
+&#13;
+
+#### **thumbShadow** ```boolean```
+
+Sets the thumb shadow-glow around, switching on when hovering or dragging
+default: ```true```
+
+```JS 
+thumbShadow: true
+```
+&#13;
+&#13;
+
+
+#### **thumbShadowColor** ```string```
+
+Sets the thumb shadow-glow color
+by default the color is the same as thumb color
+```JS 
+thumbShadowColor: "green"
+```
+&#13;
+&#13;
+
+#### **thumbBorder** ```boolean```
+
+Sets the possibility ty style a thumb border 
+default: ```false```
+
+```JS 
+thumbBorder: "true"
+```
+&#13;
+&#13;
+
+#### **thumbBorderStyle** ```string```
+
+Sets the style of a border. Option admits css style enumaration.
+
+```JS 
+thumbBorderStyle: "1px solid black"
+```
+&#13;
+&#13;
+
+#### **thumbAnimation** ```boolean```
+
+Sets the animation of thumb (slide on track click)
+default: ```true```
+
+```JS 
+thumbAnimation: false
+```
+&#13;
+&#13;
+
+### **ticks** ```boolean```
+
+Sets the ruler with ticks under the track (horizontal) or to the left of the track (vertical)
+default: ```true```
+
+```JS
+ticks: true
+```
+
+&#13;
+&#13;
+
+### **tickBar** ```boolean```
+
+Sets the small tick lines to make the ruler partition more evident.
+default: ```true```
+
+```JS
+tickBar: false
+```
+&#13;
+&#13;
+
+### **rulerColor** ```string```
+
+Sets the ruler ticks color
+
+```JS
+rulerColor: "black"
+```
+&#13;
+&#13;
+
+### **tickStep** ```number```
+
+Adjusts the step of the ticks on the ruler
+By default, ticks are calculated regarding the min and max values
+
+```JS
+tickStep: 100
+```
+
+&#13;
+&#13;
+
+### **tickFontSize** ```number```
+default: ```11```
+
+Sets the ruler tick-number font-size.
+
+```JS
+tickFontSize: 16
+```
+
+&#13;
+&#13;
+
+### **step** ```number```
+default: ```1```
+Sets the minimal distance a thumb is able to move while dragging or on track click. If the min and max values are not compatible with the step, the closest distance to min or max values becomes the step value.
+
+```JS
+max: 100,
+min: 0,
+step: 10
+```
+
+&#13;
+&#13;
+
+### **tooltip** ```boolean```
+
+Sets the tooltip of the thumb. Contains value changing on drag and appearing above the thumb (horizontal) or to the right (vertical).
+default: ```true```
+
+```JS
+tooltip: true
+```
+&#13;
+&#13;
+
+### **tooltipColor** ```string```
+
+Sets the tooltip color
+```JS
+tooltipColor: "green"
+```
+&#13;
+&#13;
+
+### **tooltipForm** ```square | round```
+default: ```square```
+
+Sets the tooltip form
+
+```JS
+tooltipForm: "round"
+```
+&#13;
+&#13;
+
+### **fill** ```boolean```
+default: ```true```
+
+Sets the progress representation of the track. When value is single, fill starts from beginning and ends with the thumb position. If doublePoint is true and the value is an array, the fill is in the intersection of both thumbs values. Otherwise if fill set to false, the progress is not displayed.
+
+```JS
+fill: false
+```
+&#13;
+&#13;
+
+### **fillColor** ```string```
+
+Sets the fill color if fill is set to true.
+
+```JS
+fillColor: "blue"
+```
+&#13;
+&#13;
+
+
+
+### **reversedOrder** ```boolean```
+default: ```false```
+
+Enables the reversed order of the track, including the ruler ticks reorganized and the start and end values recalculated from end to start. Most useful for vertical orientation.
+
+```JS
+reversedOrder: true
+```
+&#13;
+&#13;
+
+### **label** ```boolean```
+default: ```true```
+
+Sets the label on top of the plugin with the possibility to include current value.
+
+```JS
+label: false
+```
+&#13;
+&#13;
+
+
+### **labelString** ```string```
+default: ```Range-Slider```
+
+Defines the label string if the label option is true.
+
+```JS
+labelString: "My awesome range slider Label"
+```
+&#13;
+&#13;
+
+### **valueInLabel** ```boolean```
+default: ```true```
+
+Includes the current value into label string if the label option is true.
+
+```JS
+valueInLabel: "false"
+```
+&#13;
+&#13;
+
+
+## Methods
+
+### **getValue()**
+
+Returns the current plugin instance value whether it is a single number or an array of two numbers.
+
+```JS 
+const plugin1 = $(".container-1").rangeSlider({value: 500});
+
+const result = plugin1.getValue();
+```
+&#13;
+&#13;
+
+### **setValue(value:number | number[])**
+
+Sets the value for the current plugin instance. The argument should be a number or an array of two numbers.
+
+```JS 
+plugin1.setValue([50, 420]);
+```
+&#13;
+&#13;
+
+### **updateOptions(options)**
+
+Updates the current plugin instance options with the user provided object of options and returns the plugin instance.
+
+```JS 
+plugin1.updateOptions({ tooltipColor: "blue" });
+```
+&#13;
+&#13;
+
+### **onChange(handler)**
+
+Runs a plugin method or a function provided by the user on change event, fired when a thumb is moved or track clicked.
+
+```JS 
+plugin1.onChange(() => {
+      console.log(plugin1.getValue());
+    });
+```
+
+&#13;
+&#13;
 
 ## Structure details
 <details>

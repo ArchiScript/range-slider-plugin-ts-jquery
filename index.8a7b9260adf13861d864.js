@@ -1,2 +1,0 @@
-!function(){"use strict";var e={21:function(e,o,t){t.r(o)}},o={};function t(r){var n=o[r];if(void 0!==n)return n.exports;var i=o[r]={exports:{}};return e[r](i,i.exports,t),i.exports}t.r=function(e){"undefined"!=typeof Symbol&&Symbol.toStringTag&&Object.defineProperty(e,Symbol.toStringTag,{value:"Module"}),Object.defineProperty(e,"__esModule",{value:!0})},t(21),console.log("hi ts webpack!")}();
-//# sourceMappingURL=index.8a7b9260adf13861d864.js.map

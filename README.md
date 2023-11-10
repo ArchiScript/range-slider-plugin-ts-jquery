@@ -4,10 +4,10 @@
 *... makes choosing smoothing*
 
 
-![GitHub repo size](https://img.shields.io/github/repo-size/ArchiScript/range-slider-plugin-ts-jquery?logo=github)&nbsp;![GitHub last commit (by committer)](https://img.shields.io/github/last-commit/ArchiScript/range-slider-plugin-ts-jquery?logo=github)&nbsp;![GitHub language count](https://img.shields.io/github/languages/count/ArchiScript/range-slider-plugin-ts-jquery?logo=github)&nbsp;![Static Badge](https://img.shields.io/badge/pattern-MVP-blue)
+![GitHub repo size](https://img.shields.io/github/repo-size/ArchiScript/range-slider-plugin-ts-jquery?logo=github)&nbsp;![GitHub last commit (by committer)](https://img.shields.io/github/last-commit/ArchiScript/range-slider-plugin-ts-jquery?logo=github)&nbsp;![GitHub language count](https://img.shields.io/github/languages/count/ArchiScript/range-slider-plugin-ts-jquery?logo=github)&nbsp;![Static Badge](https://img.shields.io/badge/pattern-MVP-blue)&nbsp;![Static Badge](https://img.shields.io/badge/tech_stack-typescript_%2F_webpack_%2F_scss_%2F_JQuery-orange)
 
 
-#####  Table of contents
+#### Table of contents
 
 - [Description](#description)
 - [Features](#features)
@@ -16,17 +16,21 @@
 - [Installation](#installation)
 - [Use](#use)
 - [Options](#options)
-  - [Value](#value)
-  - 
-
+- [Methods](#methods)
+- [Project structure](#structure-details)
+------------------
 
 
 ## Description
-&emsp;The Range Slider Plugin is a flexible and customizable slider  component for web applications. It allows users to select a range of values or a single value within a specified range.
-&emsp; The project is written in typescript for JQuery and uses an MVP pattern with passive view.(see [Diagram](#structure-details))
+
+&emsp;The Range Slider Plugin is a flexible and highly customizable slider  component for web applications. It allows users to select a range of values or a single value within a specified range.
+&emsp; The project is written in typescript for JQuery and uses an MVP pattern with passive view.(see [diagram](#structure-details))
+
 &#10;
 &#10;
+
 ## Features
+
 
 - **Range Selection:** Users can select a range of values by dragging the slider thumbs.
 - **Customization:** The plugin is highly customizable, allowing you to adjust the appearance and behavior to fit your needs.
@@ -42,7 +46,7 @@
 ## References
 
 
-- **[Watch Range Slider on GitHub Pages][gh-pages]**
+- **[Watch Range Slider Demo Page on GitHub Pages][gh-pages]**
  - **[Skomarohov Arthur - GitHub source code][repo]**
 
 &#13;
@@ -59,48 +63,46 @@
 
 ```
 "@babel/plugin-transform-typescript": "^7.22.5",
-    "@babel/preset-env": "^7.22.5",
-    "@babel/preset-typescript": "^7.21.5",
-    "@types/chai": "^4.3.5",
-    "@types/jquery": "^3.5.16",
-    "@types/jsdom": "^21.1.1",
-    "@types/lodash": "^4.14.198",
-    "@types/mocha": "^10.0.1",
-    "@types/sinon": "^10.0.20",
-    "@typescript-eslint/eslint-plugin": "^5.59.11",
-    "babel-loader": "^9.1.2",
-    "chai": "^4.3.7",
-    "clean-webpack-plugin": "^4.0.0",
-    "copy-webpack-plugin": "^11.0.0",
-    "cross-env": "^7.0.3",
-    "css-loader": "^6.8.1",
-    "cz-conventional-changelog": "^3.3.0",
-    "eslint": "^8.43.0",
-    "eslint-config-standard-with-typescript": "^35.0.0",
-    "eslint-plugin-import": "^2.26.0",
-    "eslint-plugin-n": "^15.7.0",
-    "eslint-plugin-promise": "^6.1.1",
-    "html-loader": "^4.2.0",
-    "html-webpack-plugin": "^5.5.3",
-    "jquery": "^3.7.0",
-    "jsdom": "^22.1.0",
-    "mini-css-extract-plugin": "^2.7.6",
-    "mocha": "^10.2.0",
-    "playwright": "^1.36.2",
-    "postcss": "^8.4.24",
-    "postcss-loader": "^7.3.3",
-    "postcss-preset-env": "^8.5.0",
-    "puppeteer": "^20.9.0",
-    "sass": "^1.63.4",
-    "sass-loader": "^13.3.2",
-    "style-loader": "^3.3.3",
-    "ts-loader": "^9.4.3",
-    "ts-node": "^10.9.1",
-    "tsconfig-paths": "^4.2.0",
-    "typescript": "^5.1.3",
-    "webpack": "^5.87.0",
-    "webpack-cli": "^5.1.4",
-    "webpack-dev-server": "^4.15.1"
+"@babel/preset-env": "^7.22.5",
+"@babel/preset-typescript": "^7.21.5",
+"@types/chai": "^4.3.5",
+"@types/jquery": "^3.5.16",
+"@types/jsdom": "^21.1.1",
+"@types/lodash": "^4.14.198",
+"@types/mocha": "^10.0.1",
+"@types/sinon": "^10.0.20",
+"@typescript-eslint/eslint-plugin": "^5.59.11",
+"babel-loader": "^9.1.2",
+"chai": "^4.3.7",
+"clean-webpack-plugin": "^4.0.0",
+"copy-webpack-plugin": "^11.0.0",
+"cross-env": "^7.0.3",
+"css-loader": "^6.8.1",
+"cz-conventional-changelog": "^3.3.0",
+"eslint": "^8.43.0",
+"eslint-config-standard-with-typescript": "^35.0.0",
+"eslint-plugin-import": "^2.26.0",
+"eslint-plugin-n": "^15.7.0",
+"eslint-plugin-promise": "^6.1.1",
+"html-loader": "^4.2.0",
+"html-webpack-plugin": "^5.5.3",
+"jquery": "^3.7.0",
+"jsdom": "^22.1.0",
+"mini-css-extract-plugin": "^2.7.6",
+"mocha": "^10.2.0",
+"postcss": "^8.4.24",
+"postcss-loader": "^7.3.3",
+"postcss-preset-env": "^8.5.0",
+"sass": "^1.63.4",
+"sass-loader": "^13.3.2",
+"style-loader": "^3.3.3",
+"ts-loader": "^9.4.3",
+"ts-node": "^10.9.1",
+"tsconfig-paths": "^4.2.0",
+"typescript": "^5.1.3",
+"webpack": "^5.87.0",
+"webpack-cli": "^5.1.4",
+"webpack-dev-server": "^4.15.1"
 ```
 
 ## Installation

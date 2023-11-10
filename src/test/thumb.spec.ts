@@ -4,8 +4,6 @@ import { assert, expect } from "chai";
 import Mock from "./Mock";
 import { JSDOM } from "jsdom";
 import { IOptions } from "../types/IConfigurationService/IOptions";
-import * as puppeteer from "puppeteer";
-import { chromium, Browser, Page } from "playwright";
 import sinon from "sinon";
 import * as components from "../components/components";
 

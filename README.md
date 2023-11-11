@@ -13,7 +13,7 @@
 - [Features](#features)
 - [References](#references)
 - [Build details](#build-details)
-- [Installation](#installation)
+- [Commands](#commands)
 - [Use](#use)
 - [Options](#options)
 - [Methods](#methods)
@@ -46,8 +46,8 @@
 ## References
 
 
-- **[Watch Range Slider Demo Page on GitHub Pages][gh-pages]**
- - **[Skomarohov Arthur - GitHub source code][repo]**
+- **[Watch Range-Slider Demo Page on GitHub Pages][gh-pages]**
+- **[Skomarohov Arthur - GitHub source code][repo]**
 
 &#13;
 &#13;
@@ -84,6 +84,7 @@
 "eslint-plugin-import": "^2.26.0",
 "eslint-plugin-n": "^15.7.0",
 "eslint-plugin-promise": "^6.1.1",
+"gh-pages": "^6.0.0",
 "html-loader": "^4.2.0",
 "html-webpack-plugin": "^5.5.3",
 "jquery": "^3.7.0",
@@ -105,8 +106,9 @@
 "webpack-dev-server": "^4.15.1"
 ```
 
-## Installation
+## Commands
 
+**Installation**
 ```
 npm install
  ```
@@ -190,7 +192,7 @@ Making range values also requires to set a **doublePoint** option to ```true```
 &#13;
 &#13;
 
-#### **stringValues** ```string[]``` 
+### **stringValues** ```string[]``` 
 
 Setting the string representation of number values. Also, string values are set as the thumb's data-value. It's up to you to choose the strings and the array length - the array is associated regarding to the min and max values and splits the range accordingly.
 
@@ -204,7 +206,7 @@ stringValues: ["Gendalf", "Cat", "Fairy", "Awesome", "biggest"]
 &#13;
 &#13;
 
-#### **doublePoint** ```boolean``` 
+### **doublePoint** ```boolean``` 
 
 Sets the double-thumb rendering so as to provide setting double values
 
@@ -214,7 +216,7 @@ doublePoint: true
 &#13;
 &#13;
 
-#### **orientation** ```"horizontal" | "vertical"```
+### **orientation** ```"horizontal" | "vertical"```
 
 The orientation option sets the vertical or horizontal position of the plugin
 
@@ -224,7 +226,7 @@ orientation: "horizontal"
 &#13;
 &#13;
 
-#### **trackHeight** ```number```
+### **trackHeight** ```number```
 default: ```6```
 The track height option sets the track height in pixels. In the case of a vertical orientation height means the thickness of the track.
 
@@ -246,7 +248,7 @@ trackColor: "transparent"
 &#13;
 
 
-#### **trackBorder** ```boolean```
+### **trackBorder** ```boolean```
 
 The styling option sets the border of the track.
 By default, the track border is set to ```false```
@@ -257,7 +259,7 @@ trackBorder: true
 &#13;
 &#13;
 
-#### **trackBorderColor** ```string```
+### **trackBorderColor** ```string```
 
 The border styling option admits any color string
 
@@ -270,7 +272,7 @@ trackBorderColor: "#004242FF"
 &#13;
 &#13;
 
-#### **max**  ```number```
+### **max**  ```number```
 
 Sets the maximum possible value
 
@@ -280,7 +282,7 @@ max: 1000
 &#13;
 &#13;
 
-#### **min**  ```number```
+### **min**  ```number```
 
 Sets the minimum possible value
 
@@ -290,7 +292,7 @@ min: 50
 &#13;
 &#13;
 
-#### **thumbSize** ```number```
+### **thumbSize** ```number```
 
 Sets the thumb size in pixels
 
@@ -300,7 +302,7 @@ thumbSize: 15
 &#13;
 &#13;
 
-#### **thumbColor** ```string```
+### **thumbColor** ```string```
 
 Sets the thumb color
 
@@ -311,7 +313,7 @@ thumbColor: "linear-gradient(180deg, #6FCF97 0%, #66D2EA 100%)"
 &#13;
 &#13;
 
-#### **thumbShadow** ```boolean```
+### **thumbShadow** ```boolean```
 
 Sets the thumb shadow-glow around, switching on when hovering or dragging
 default: ```true```
@@ -323,7 +325,7 @@ thumbShadow: true
 &#13;
 
 
-#### **thumbShadowColor** ```string```
+### **thumbShadowColor** ```string```
 
 Sets the thumb shadow-glow color
 by default the color is the same as thumb color
@@ -333,7 +335,7 @@ thumbShadowColor: "green"
 &#13;
 &#13;
 
-#### **thumbBorder** ```boolean```
+### **thumbBorder** ```boolean```
 
 Sets the possibility ty style a thumb border 
 default: ```false```
@@ -344,7 +346,7 @@ thumbBorder: "true"
 &#13;
 &#13;
 
-#### **thumbBorderStyle** ```string```
+### **thumbBorderStyle** ```string```
 
 Sets the style of a border. Option admits css style enumaration.
 
@@ -354,7 +356,7 @@ thumbBorderStyle: "1px solid black"
 &#13;
 &#13;
 
-#### **thumbAnimation** ```boolean```
+### **thumbAnimation** ```boolean```
 
 Sets the animation of thumb (slide on track click)
 default: ```true```
@@ -611,7 +613,7 @@ plugin1.onChange(() => {
 <details>
   <summary><b>Project class diagram</b></summary>
   
- ![UML](src/assets/images/UML2.svg)
+ ![UML](src/assets/images/UML.svg)
   
 </details>
 

@@ -1,5 +1,6 @@
 const path = require("path");
 const webpack = require("webpack");
+const { IgnorePlugin } = require("webpack");
 const fs = require("fs");
 const HtmlWebpackPlugin = require("html-webpack-plugin");
 const MiniCssExtractPlugin = require("mini-css-extract-plugin");
@@ -20,7 +21,17 @@ module.exports = {
   output: {
     path: path.resolve(__dirname, "dist"),
     filename: "[name].[contenthash].js",
-    assetModuleFilename: "assets/[hash][ext][query]",
+    assetModuleFilename: (pathData) => {
+      const isFavicon = pathData.filename.includes("favicons");
+      const isImage = pathData.filename.includes("images");
+      const isFont = pathData.filename.includes("fonts");
+      if (isFavicon || isImage || isFont) {
+        const relativePath = path.relative(path.resolve(__dirname, "src"), pathData.filename);
+        console.log(pathData.filename + "_____" + relativePath);
+        return `${relativePath}`;
+      }
+      return "assets/[hash][ext][query]";
+    },
     clean: true
   },
   devtool: "source-map",
@@ -57,18 +68,6 @@ module.exports = {
         },
         include: [path.resolve(__dirname, "src")]
       },
-      // {
-      //   test: /\.(js|jsx|tsx|ts)$/,
-      //   exclude: /node_modules/,
-      //   use: {
-      //     loader: "babel-loader",
-      //     options: {
-      //       presets: [
-      //         ["@babel/preset-env", { targets: "defaults" }], "@babel/preset-typescript"
-      //       ]
-      //     }
-      //   }
-      // },
       {
         test: /\.html$/i,
         loader: "html-loader"
@@ -95,23 +94,23 @@ module.exports = {
           },
           "sass-loader"
         ]
-      },
-      {
-        test: /favicon\.ico$/,
-        type: "asset/resource",
-        generator: {
-          filename: "assets/favicons/[hash][ext][query]"
-        }
-      },
-
-      {
-        test: /\.(png|svg|jpg|jpeg|gif)/i,
-        type: "asset/resource"
-      },
-      {
-        test: /\.(ttf|eot|svg|gif|woff|woff2)(\?v=[0-9]\.[0-9]\.[0-9])?$/i,
-        type: "asset/resource"
       }
+      // {
+      //   test: /favicon\.ico$/,
+      //   type: "asset/resource",
+      //   generator: {
+      //     filename: "assets/favicons/[hash][ext][query]"
+      //   }
+      // },
+
+      // {
+      //   test: /\.(png|svg|jpg|jpeg|gif)/i,
+      //   type: "asset/resource"
+      // },
+      // {
+      //   test: /\.(ttf|eot|svg|gif|woff|woff2)(\?v=[0-9]\.[0-9]\.[0-9])?$/i,
+      //   type: "asset/resource"
+      // }
     ]
   },
   plugins: [
@@ -129,20 +128,35 @@ module.exports = {
       filename: "[name].[contenthash].css"
     }),
     // new CleanWebpackPlugin({
-    //   cleanOnceBeforeBuildPatterns: [path.join(__dirname, "dist/**/*")],
-    //   dangerouslyAllowCleanPatternsOutsideProject: true
+    //   // cleanOnceBeforeBuildPatterns: [path.join(__dirname, "dist/**/*")]
     // }
     // ),
     new CopyWebpackPlugin({
       patterns: [
+        // {
+        //   from: path
+        //     .resolve(__dirname, "src/assets/favicons/favicon.ico")
+        //     .replace(/\\/g, "/"),
+        //   to: path
+        //     .resolve(__dirname, "dist/assets/favicons")
+        //     .replace(/\\/g, "/")
+        // },
         {
           from: path
-            .resolve(__dirname, "src/assets/favicons/favicon.ico")
+            .resolve(__dirname, "src/assets/images")
             .replace(/\\/g, "/"),
           to: path
-            .resolve(__dirname, "dist/assets/favicons")
+            .resolve(__dirname, "dist/assets/images")
             .replace(/\\/g, "/")
         }
+        // {
+        //   from: path
+        //     .resolve(__dirname, "src/assets/fonts")
+        //     .replace(/\\/g, "/"),
+        //   to: path
+        //     .resolve(__dirname, "dist/assets/fonts")
+        //     .replace(/\\/g, "/")
+        // }
       ]
     })
   ]

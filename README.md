@@ -166,7 +166,7 @@ $(".container-2").rangeSlider({
       tickBar: false
     });    
 ```
-![rs-vertical](src/assets/images/rs-vertical-readme.png)![rs-horizontal](src/assets/images/rs-horizontal-readme.png)
+![rs-vertical](assets/images/rs-vertical-readme.png)![rs-horizontal](assets/images/rs-horizontal-readme.png)
 
 
 
@@ -201,7 +201,7 @@ Setting the string representation of number values. Also, string values are set 
 stringValues: ["Gendalf", "Cat", "Fairy", "Awesome", "biggest"]
 ```
 
-![rs-horizontal](src/assets/images/string-values.png)
+![rs-horizontal](./assets/../src/assets/images/rs-horizontal-readme.png)
 
 &#13;
 &#13;

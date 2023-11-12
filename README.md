@@ -133,13 +133,17 @@ npm run test
 &#13;
 
 
-## Use  !!!! NOT FINISHED)
+## Use  
 
-On downloading the source files import the plugin jquery wrapper
+Download the range-slider plugin package
+Install jquery to you project
 
+import range-slider-plugin
+```javascript
+
+import "./range-slider-plugin/range-slider-plugin";
 ```
-import "plugin-wrapper/plugin-wrapper";  (!!!! NOT FINISHED)
-```
+
 ```JavaScript
 $(".container-1").rangeSlider({
       max: 800,
@@ -201,7 +205,7 @@ Setting the string representation of number values. Also, string values are set 
 stringValues: ["Gendalf", "Cat", "Fairy", "Awesome", "biggest"]
 ```
 
-![rs-horizontal](/src/assets/images/rs-horizontal-readme.PNG)
+![rs-horizontal](/src/assets/images/string-values.PNG)
 
 &#13;
 &#13;

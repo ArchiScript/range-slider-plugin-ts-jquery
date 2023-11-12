@@ -34,15 +34,12 @@ export class Ruler implements IRuler {
       ? this.options.tickStep
       : this.getCalculatedTickStep();
     this.renderRuler();
-    // this.test();
+   
   }
   setMaxTicks(max: number): void {
     this.maxTicks = max;
   }
-  // test(): void {
-  //   console.log("___valid pult 300 ");
-  //   console.log(this.getValidMultipliers(300));
-  // }
+ 
   updateOptions(id: number): void {
     this.options = Config.getInstanceById(id).getOptions();
     this.init();
@@ -142,8 +139,7 @@ export class Ruler implements IRuler {
       }
     }
     validTicksSteps = validTicksSteps.filter((t) => t >= this.min);
-    console.log(validTicksSteps);
-    console.log(this.options.instanceId);
+
     return validTicksSteps;
   }
 

@@ -57,8 +57,7 @@ describe("Test Ruler Calculations", () => {
       ];
 
       const calcDividers: number[] = ruler.getValidMultipliers(300);
-      console.log("dividers:");
-      console.log(calcDividers);
+
       for (let i = 0; i < calcDividers.length - 1; i++) {
         expect(calcDividers[i]).to.equal(dividers[i]);
       }

@@ -1,6 +1,6 @@
 import "./assets/styles/index.scss";
 import $ from "jquery";
-import "./plugin-wrapper/plugin-wrapper";
+import "./range-slider-plugin/range-slider-plugin";
 import { IOptions } from "./components/components";
 import { Dashboard } from "./Dashboard";
 
@@ -82,10 +82,15 @@ window.addEventListener("DOMContentLoaded", () => {
       tickStep: 200,
       fill: false,
       doublePoint: true,
-      thumbSize: 15,
-      trackHeight: 6,
+      thumbSize: 20,
+      thumbColor: "green",
+      thumbBorder: true,
+      thumbBorderStyle: "3px solid white",
+      trackHeight: 5,
       tooltipColor: "green",
-      trackColor: "linear-gradient(to right, white, green)"
+      trackColor: "linear-gradient(to right, lightgreen, darkgreen)",
+      labelString: "Enjoy the slide...",
+      valueInLabel: false
     });
     pluginsArr.push(plugin4);
 
@@ -113,11 +118,15 @@ window.addEventListener("DOMContentLoaded", () => {
       value: 688,
       trackBorder: true,
       doublePoint: false,
-      thumbSize: 15,
-      trackHeight: 6,
+      reversedOrder: true,
+      thumbSize: 10,
+      trackHeight: 5,
       trackColor: "transparent",
-      trackBorderColor: "#E5E5E5FC",
-      tooltipColor: "green"
+      trackBorderColor: "#CCABDAFF",
+      fillColor: "#CCABDAFF",
+      tooltipColor: "#CCABDAFF",
+      thumbColor: "#9E85A9FF",
+      tickStep: 200
     });
     pluginsArr.push(plugin6);
 
@@ -129,7 +138,11 @@ window.addEventListener("DOMContentLoaded", () => {
       thumbSize: 15,
       trackHeight: 6,
       orientation: "vertical",
-      tooltipColor: "green"
+      fillColor: "#FC887BFF",
+      thumbColor: "#FC887BFF",
+      tooltipColor: "#FC887BFF",
+      tickBar: false,
+      tickFontSize: 14
     });
     pluginsArr.push(plugin7);
 
@@ -142,12 +155,15 @@ window.addEventListener("DOMContentLoaded", () => {
       doublePoint: true,
       thumbSize: 15,
       trackHeight: 6,
-      tooltipColor: "green",
-      orientation: "vertical"
+      orientation: "vertical",
+      tooltipForm: "round"
     });
     pluginsArr.push(plugin8);
 
-    const plugin9 = $(".container-9").rangeSlider({ orientation: "vertical" });
+    const plugin9 = $(".container-9").rangeSlider({
+      orientation: "vertical",
+      tickStep: 10
+    });
     pluginsArr.push(plugin9);
 
     return pluginsArr;

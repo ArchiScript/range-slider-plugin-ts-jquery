@@ -158,7 +158,7 @@ export class Dashboard {
     this.currentPluginId = pluginId;
     this.setDashboardDataValue(this.currentPluginId);
     this.currentPlugin = this.pluginInstances[this.currentPluginId - 1];
-    console.log(this.currentPlugin);
+    
   }
 
   getCurrentPluginId(): number {
@@ -188,7 +188,7 @@ export class Dashboard {
             .split(/[.,]/)
             .map((val) => Number(val));
           result = strToArrNum;
-          console.log(result);
+          
         } else {
           result = Number(value);
         }
@@ -227,11 +227,11 @@ export class Dashboard {
           formControlValue,
           formControl.dataset.type as string
         );
-        console.log(value);
+       
         obj[key] = value;
       }
     }
-    console.log(obj);
+    
     return obj;
   }
   private onFormSubmit(): void {

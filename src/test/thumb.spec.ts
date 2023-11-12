@@ -363,6 +363,6 @@ describe("Test Thumb StringValues", () => {
 
   it("getValueString() should return the string value 5 = small", () => {
     expect(mock.thumbModel.getValueString(5)).to.equal("small");
-    console.log(mock.thumbModel.getValueString(5));
+    
   });
 });
